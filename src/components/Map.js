@@ -6,12 +6,25 @@ import React, { useEffect, useRef, useState } from "react";
 const Map = () => {
     const [places, setPlaces] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [type, setType] = useState("전체");
     const container = useRef(null);
     let map = {};
     const options = {
         center: new kakao.maps.LatLng(33.3817, 126.5492), //지도의 중심좌표.
         level: 10 //지도의 레벨(확대, 축소 정도)
     }
+
+    const mouseOverHandler = (map, marker, infowindow) => {
+        return function () {
+            infowindow.open(map, marker);
+        }
+    };
+
+    const mouseOutHandler = (infowindow) => {
+        return function () {
+            infowindow.close();
+        }
+    };
 
     const makeMarker = (place) => {
         const content = (
@@ -30,18 +43,6 @@ const Map = () => {
             content,
             removeable: true
         })
-
-        const mouseOverHandler = (map, marker, infowindow) => {
-            return function () {
-                infowindow.open(map, marker);
-            }
-        };
-
-        const mouseOutHandler = (infowindow) => {
-            return function () {
-                infowindow.close();
-            }
-        };
 
         kakao.maps.event.addListener(marker, 'mouseover', mouseOverHandler(map, marker, infowindow));
         kakao.maps.event.addListener(marker, 'mouseout', mouseOutHandler(infowindow));
@@ -62,18 +63,46 @@ const Map = () => {
         })
     }
 
+    const onTypeChange = (event) => {
+        const {target : { value } } = event;
+        setType(value)
+    }
     useEffect(() => {
         getPlaces();
         if (loading) {
             makeMap();
             places.map(place => {
-                makeMarker(place)
+                if(type === "전체" || place.type === type) {
+                    makeMarker(place)
+                }
             })
         }
-    }, [loading]);
+    }, [loading, type]);
     return (
         <>
-            {loading ? <div className="map" style={{width:"650px", height:"500px"}} ref={container}></div> : "Loading..."}
+            {loading 
+            ? (
+            <div className="map__container">
+                <div className="map" style={{width:"650px", height:"500px"}} ref={container} ></div>
+                <div className="map-radio__container">
+                    <div className="map-radio__content">
+                        <input type="radio" name="input__place-type" value="전체" defaultChecked onChange={onTypeChange}/><label htmlFor="전체">전체</label>
+                    </div>
+                    <div className="map-radio__content">
+                        <input type="radio" name="input__place-type" value="맛집" onChange={onTypeChange}/><label htmlFor="전체">맛집</label>
+                    </div>
+                    <div className="map-radio__content">
+                        <input type="radio" name="input__place-type" value="카페 & 베이커리" onChange={onTypeChange}/><label htmlFor="전체">카페 & 베이커리</label>
+                    </div>
+                    <div className="map-radio__content">
+                        <input type="radio" name="input__place-type" value="풍경" onChange={onTypeChange}/><label htmlFor="전체">풍경</label>
+                    </div>
+                    <div className="map-radio__content">
+                        <input type="radio" name="input__place-type" value="그 외 가볼만한 곳" onChange={onTypeChange}/><label htmlFor="전체">그 외 가볼만한 곳</label>
+                    </div>
+                </div>
+            </div>
+            ) : "Loading..."}
         </>
     )
 }

@@ -1,3 +1,5 @@
+@import "css/variables.css";
+@import "css/Home.css";
 @import "css/Auth.css";
 @import "css/Post.css";
 @import "css/Map.css";
@@ -9,6 +11,7 @@ body {
 }
 
 body {
+  background-color: var(--seacolor);
   margin: 0;
 }
 

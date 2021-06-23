@@ -1,4 +1,16 @@
+.map__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .place-infowindow {
   padding: 10px;
   font-size: 0.9rem;
+}
+
+.map-radio__container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
