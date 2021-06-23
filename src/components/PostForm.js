@@ -96,7 +96,7 @@ const PostForm = ({userObj}) => {
     
     const makeGeocode = (result, status) => {
         if (status === kakao.maps.services.Status.OK) {
-            const geocodeArray = [result[0].x, result[0].y]
+            const geocodeArray = [result[0].y, result[0].x]
             setGeocode(geocodeArray)
         }
     }
