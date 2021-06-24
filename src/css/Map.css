@@ -4,13 +4,43 @@
   align-items: center;
 }
 
-.place-infowindow {
-  padding: 10px;
+.map {
+  width: 700px;
+  height: 500px;
+}
+
+.place__infowindow {
   font-size: 0.9rem;
+  font-family: serif;
+  border-radius: 5px;
+  padding: 8px;
+  background-color: white;
 }
 
 .map-radio__container {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+}
+
+.map__detail {
+  position: relative;
+  display: flex;
   align-items: flex-start;
+  justify-content: flex-start;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 10px 30px;
+  margin-left: 20px;
+  height: 100%;
+  width: 250px;
+  word-break: keep-all;
+}
+
+.map__detail-clear {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.map__detail-clear:hover {
+  cursor: pointer;
 }
