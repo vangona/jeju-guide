@@ -35,6 +35,35 @@
   word-break: keep-all;
 }
 
+.map-detail__img-btn__container {
+  height: 4vh;
+  width: 100%;
+  position: relative;
+}
+
+.prev,
+.next {
+  position: absolute;
+}
+
+.prev {
+  left: 0;
+}
+
+.next {
+  right: 0;
+}
+
+.map-detail__img-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 1.5rem;
+}
+
+.map-detail__img-btn:hover {
+  cursor: pointer;
+}
+
 .map__detail-clear {
   position: absolute;
   bottom: 1rem;

@@ -8,11 +8,25 @@ const Map = () => {
     const [loading, setLoading] = useState(false);
     const [type, setType] = useState("전체");
     const [detail, setDetail] = useState(null);
+    const [imgPage, setImgPage] = useState(0);
+    const [mouseState, setMouseState] = useState(false);
     const container = useRef(null);
     let map = {};
     const options = {
         center: new kakao.maps.LatLng(33.3817, 126.5602), //지도의 중심좌표.
         level: 10 //지도의 레벨(확대, 축소 정도)
+    }
+
+    const clickNextImg = () => {
+        if (imgPage < 4) {
+            setImgPage(prev => prev + 1);
+        }
+    }
+
+    const clickPrevImg = () => {
+        if (imgPage > 0) {
+            setImgPage(prev => prev - 1);
+        }
     }
 
     const clickHandler = (place) => {
@@ -24,12 +38,14 @@ const Map = () => {
     const mouseOverHandler = (map, overlay) => {
         return function () {
             overlay.setMap(map);
+            setMouseState(true)
         }
     };
 
     const mouseOutHandler = (overlay) => {
         return function () {
             overlay.setMap(null)
+            setMouseState(false)
         }
     };
 
@@ -98,14 +114,26 @@ const Map = () => {
                             <input type="radio" name="input__place-type" value="맛집" onChange={onTypeChange}/><label htmlFor="전체">맛집</label>
                             <input type="radio" name="input__place-type" value="카페 & 베이커리" onChange={onTypeChange}/><label htmlFor="전체">카페 & 베이커리</label>
                             <input type="radio" name="input__place-type" value="풍경" onChange={onTypeChange}/><label htmlFor="전체">풍경</label>
+                            <input type="radio" name="input__place-type" value="술집" onChange={onTypeChange}/><label htmlFor="전체">술집</label>
                             <input type="radio" name="input__place-type" value="그 외 가볼만한 곳" onChange={onTypeChange}/><label htmlFor="전체">그 외 가볼만한 곳</label>
                     </div>
+                    {mouseState && <span>더 알아보시려면 마커를 클릭해주세요.</span>}
                 </div>
                 {detail && (
                     <div className="map__detail vertical">
                         <h3>{detail.name}</h3>
+                        {detail.attachmentUrlArray[0] && (
+                            <>
+                                <img src={detail.attachmentUrlArray[imgPage]} alt="detail-img" width="100%" height="auto"/>
+                                <div className="map-detail__img-btn__container">
+                                    {imgPage !== 0 && <button className="map-detail__img-btn prev" onClick={clickPrevImg}>◀</button>}
+                                    {imgPage !== detail.attachmentUrlArray.length -1 & detail.attachmentUrlArray.lenth !== 1 && <button className="map-detail__img-btn next" onClick={clickNextImg}>▶</button>}
+                                </div>
+                            </>
+                        )}
                         <div>{detail.description}</div>
                         <div className="map__detail-clear" onClick={onClickClear}>❌</div>
+                        {detail.url !== "" && <a href={detail.url} target="_blank" rel="noreferrer">관련 사이트</a>}
                     </div>
                 )}
             </div>

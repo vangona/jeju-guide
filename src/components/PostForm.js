@@ -1,3 +1,4 @@
+import imageCompression from "browser-image-compression";
 import { dbService, storageService } from "fBase";
 import React, { useEffect, useState } from "react";
 import DaumPostcode from "react-daum-postcode";
@@ -11,7 +12,7 @@ const PostForm = ({userObj}) => {
     const [geocode, setGeocode] = useState([]);
     const [type, setType] = useState('그외 가볼만한 곳');
     const [description, setDescription] = useState('');
-    const [attachment, setAttachment] = useState('');
+    const [attachmentArray, setAttachmentArray] = useState([]);
     const [url, setUrl] = useState('');
 
     const [address, setAddress] = useState("");
@@ -22,11 +23,14 @@ const PostForm = ({userObj}) => {
 
     const onSubmit = async (event) => {
         event.preventDefault();
-        let attachmentUrl = "";
-        if (attachment !== "") {
-            const attachmentRef = storageService.ref().child(`${userObj.uid}/${uuidv4()}`)
-            const response = await attachmentRef.putString(attachment, "data_url")
-            attachmentUrl = await response.ref.getDownloadURL();
+        let attachmentUrlArray = [];
+        if (attachmentArray !== []) {
+            for (let i = 0; i < attachmentArray.length; i++) {
+                const attachmentRef = storageService.ref().child(`${userObj.uid}/${uuidv4()}`)
+                const response = await attachmentRef.putString(attachmentArray[i], "data_url")
+                attachmentUrlArray.push(await response.ref.getDownloadURL());
+            }
+            console.log(attachmentUrlArray)
         }
 
         const placeObj = {
@@ -37,7 +41,7 @@ const PostForm = ({userObj}) => {
             geocode,
             type,
             description,
-            attachmentUrl,
+            attachmentUrlArray,
             url,
             creatorId: userObj.uid
         }
@@ -49,7 +53,7 @@ const PostForm = ({userObj}) => {
         setGeocode([]);
         setType('');
         setDescription('');
-        setAttachment('');
+        setAttachmentArray([]);
         setUrl('');
     }
 
@@ -73,14 +77,39 @@ const PostForm = ({userObj}) => {
         setDescription(value);
     }
 
-    const onAttachmentChange = (event) => {
+    const onAttachmentChange = async (event) => {
         const {target: { files }} = event;
-        const theFile = files[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(theFile);
-        reader.onloadend = (finishedEvent) => {
-            const {currentTarget: {result}} = finishedEvent
-            setAttachment(result)
+        const fileArray = files;
+        if (fileArray.length < 6) {
+            const options = {
+                maxSizeMB: 1,
+                maxWidthOrHeight: 1024,
+            }
+            try {
+                let resultArray = [];
+                for (let i = 0; i < fileArray.length; i++) {
+                    const compressedFile = await imageCompression(fileArray[i], options)
+                    const reader = new FileReader();
+                    reader.readAsDataURL(compressedFile);
+                    reader.onloadend = (finishedEvent) => {
+                        const {currentTarget : {result}} = finishedEvent
+                        resultArray.push(result)
+                    }
+                }
+                setAttachmentArray(resultArray);
+                // const theFile = files[0];
+                // const compressedFile = await imageCompression(theFile, options)
+                // const reader = new FileReader();
+                // reader.readAsDataURL(compressedFile);
+                // reader.onloadend = (finishedEvent) => {
+                //     const {currentTarget: {result}} = finishedEvent
+                //     setAttachment(result)
+                // }
+            } catch (error) {
+                console.log(error)
+            }
+        } else {
+            alert('사진은 5장까지입니다.')
         }
     }
 
@@ -149,8 +178,9 @@ const PostForm = ({userObj}) => {
                 <label htmlFor="place-type">장소 종류</label>
                 <select name="place-type" required onChange={onTypeChange} >
                     <option value="맛집">맛집</option>
-                    <option value="카페 & 베이커리">카페 & 베이커리</option>
+                    <option value="카페 & 베이커리">카페 & 베이커리</option>\
                     <option value="풍경">풍경</option>
+                    <option value="술집">술집</option>
                     <option value="그 외 가볼만한 곳">그 외 가볼만한 곳</option>
                 </select>
             </div>
@@ -160,7 +190,7 @@ const PostForm = ({userObj}) => {
             </div>
             <div className="post-form__content vertical">               
                 <label htmlFor="place-img">장소 사진(필수 X)</label>
-                <input type="file" accept="image/*" name="place-img" onChange={onAttachmentChange} />
+                <input type="file" accept="image/*" name="place-img" onChange={onAttachmentChange} multiple/>
             </div>
             <div className="post-form__content vertical">               
                 <label htmlFor="place-description">참고 사이트 주소(있다면)</label>
