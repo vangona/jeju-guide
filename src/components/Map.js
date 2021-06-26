@@ -1,11 +1,10 @@
 import { dbService } from "fBase";
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 /* global kakao */
 
-const Map = () => {
-    const [places, setPlaces] = useState([]);
-    const [loading, setLoading] = useState(false);
+const Map = ({places}) => {
     const [type, setType] = useState("전체");
     const [detail, setDetail] = useState(null);
     const [imgPage, setImgPage] = useState(0);
@@ -71,17 +70,6 @@ const Map = () => {
         map = new window.kakao.maps.Map(container.current, options);
     }
 
-    const getPlaces = async () => {
-        await dbService.collection("places").onSnapshot(snapshot => {
-            const placeArray = snapshot.docs.map(doc => ({
-                id:doc.id,
-                ...doc.data(),
-            }));
-            setPlaces(placeArray);
-            setLoading(true);
-        })
-    }
-
     const onTypeChange = (event) => {
         const {target : { value } } = event;
         setType(value)
@@ -92,30 +80,25 @@ const Map = () => {
     }
 
     useEffect(() => {
-        getPlaces();
-        if (loading) {
-            makeMap();
-            places.map(place => {
-                if(type === "전체" || place.type === type) {
-                    makeMarker(place)
-                }
-            })
-        }
-    }, [loading, type]);
+        makeMap();
+        places.map(place => {
+            if(type === "전체" || place.type === type) {
+                makeMarker(place)
+            }
+        })
+    }, []);
     return (
         <>
-            {loading 
-            ? (
             <div className="map__container">
                 <div className="vertical">
                     <div className="map" ref={container} ></div>
                     <div className="map-radio__container">
                             <input type="radio" name="input__place-type" value="전체" defaultChecked onChange={onTypeChange}/><label htmlFor="전체">전체</label>
-                            <input type="radio" name="input__place-type" value="맛집" onChange={onTypeChange}/><label htmlFor="전체">맛집</label>
-                            <input type="radio" name="input__place-type" value="카페 & 베이커리" onChange={onTypeChange}/><label htmlFor="전체">카페 & 베이커리</label>
-                            <input type="radio" name="input__place-type" value="풍경" onChange={onTypeChange}/><label htmlFor="전체">풍경</label>
-                            <input type="radio" name="input__place-type" value="술집" onChange={onTypeChange}/><label htmlFor="전체">술집</label>
-                            <input type="radio" name="input__place-type" value="그 외 가볼만한 곳" onChange={onTypeChange}/><label htmlFor="전체">그 외 가볼만한 곳</label>
+                            <input type="radio" name="input__place-type" value="맛집" onChange={onTypeChange}/><label htmlFor="맛집">맛집</label>
+                            <input type="radio" name="input__place-type" value="카페 & 베이커리" onChange={onTypeChange}/><label htmlFor="카페 & 베이커리">카페 & 베이커리</label>
+                            <input type="radio" name="input__place-type" value="풍경" onChange={onTypeChange}/><label htmlFor="풍경">풍경</label>
+                            <input type="radio" name="input__place-type" value="술집" onChange={onTypeChange}/><label htmlFor="술집">술집</label>
+                            <input type="radio" name="input__place-type" value="그 외 가볼만한 곳" onChange={onTypeChange}/><label htmlFor="그 외 가볼만한 곳">그 외 가볼만한 곳</label>
                     </div>
                     {mouseState && <span>더 알아보시려면 마커를 클릭해주세요.</span>}
                 </div>
@@ -137,7 +120,6 @@ const Map = () => {
                     </div>
                 )}
             </div>
-            ) : "Loading..."}
         </>
     )
 }

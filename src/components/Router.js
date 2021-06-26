@@ -1,6 +1,7 @@
 import React from "react";
 import { HashRouter as Router, Route, Switch, useHistory} from "react-router-dom";
 import Auth from "routes/Auth";
+import Detail from "routes/Detail";
 import Home from "routes/Home";
 import Post from "routes/Post";
 
@@ -22,6 +23,9 @@ const AppRouter = ({ isLoggedIn, userObj }) => {
                     }
                     <Route exact path="/">
                         <Home />
+                    </Route>
+                    <Route exact path="/detail">
+                        <Detail />
                     </Route>
                 </Switch>
             </Router>
