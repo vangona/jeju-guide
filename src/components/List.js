@@ -1,17 +1,7 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const List = ({places}) => {
-    const history = useHistory();
-    const clickTable = (event) => {
-        const name = event.target.innerText
-        history.push({
-            pathname: "/detail",
-            state: {
-                name
-            }
-        })
-    }
     return (
         <>
             <table className="map-list__table">
@@ -28,7 +18,16 @@ const List = ({places}) => {
                     <tbody key={index}>
                         <tr>
                             <td>{index + 1}</td>
-                            <td onClick={clickTable}>{place.name}</td>
+                            <td>
+                                <Link to={{
+                                    pathname: "/detail",
+                                    state: {
+                                        place
+                                    }
+                                }}>
+                                {place.name}
+                                </Link>
+                            </td>
                             <td>{place.addressDetail}</td>
                             <td>{place.description}</td>
                         </tr>

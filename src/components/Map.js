@@ -9,6 +9,7 @@ const Map = ({places}) => {
     const [detail, setDetail] = useState(null);
     const [imgPage, setImgPage] = useState(0);
     const [mouseState, setMouseState] = useState(false);
+    const [myPlace, setMyPlace] = useState([]);
     const container = useRef(null);
     let map = {};
     const options = {
@@ -115,8 +116,8 @@ const Map = ({places}) => {
                             </>
                         )}
                         <div>{detail.description}</div>
-                        <div className="map__detail-clear" onClick={onClickClear}>❌</div>
                         {detail.url !== "" && <a href={detail.url} target="_blank" rel="noreferrer">관련 사이트</a>}
+                        <div className="map__detail-clear" onClick={onClickClear}>❌</div>
                     </div>
                 )}
             </div>
