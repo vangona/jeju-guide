@@ -30,7 +30,6 @@ const PostForm = ({userObj}) => {
                 const response = await attachmentRef.putString(attachmentArray[i], "data_url")
                 attachmentUrlArray.push(await response.ref.getDownloadURL());
             }
-            console.log(attachmentUrlArray)
         }
 
         const placeObj = {

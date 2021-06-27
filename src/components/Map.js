@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 /* global kakao */
 
-const Map = ({places}) => {
+const Map = ({places, myPlaces}) => {
     const [type, setType] = useState("전체");
     const [detail, setDetail] = useState(null);
     const [imgPage, setImgPage] = useState(0);

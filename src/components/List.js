@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const List = ({places}) => {
+const List = ({places, myPlaces}) => {
     return (
         <>
             <table className="map-list__table">
