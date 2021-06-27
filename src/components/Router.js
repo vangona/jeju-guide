@@ -6,6 +6,7 @@ import Home from "routes/Home";
 import Post from "routes/Post";
 
 const AppRouter = ({ isLoggedIn, userObj }) => {
+    const prevViewType = "지도"
     return (
         <>
             <Router>
@@ -22,7 +23,7 @@ const AppRouter = ({ isLoggedIn, userObj }) => {
                             )
                     }
                     <Route exact path="/">
-                        <Home />
+                        <Home prevViewType={prevViewType}/>
                     </Route>
                     <Route exact path="/detail">
                         <Detail />

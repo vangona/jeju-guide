@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { useHistory } from "react-router"
 
 const Detail = () => {
     const history = useHistory();
-    const [state, setState] = useState({});
     const clickBackBtn = () => {
-        history.goBack();
+        history.push({
+            pathname: "/",
+            state: {
+                prevViewType: "목록"
+            }
+        })
     }
-    useEffect(()=>{
-        const {location : {state}} = history;
-        setState(state);
-    }, [])
     return (
         <>
             <div>Detail</div>
-            <div>{state.name}</div>
             <button onClick={clickBackBtn}>Back</button>
         </>
     )
