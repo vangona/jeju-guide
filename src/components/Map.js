@@ -1,15 +1,15 @@
 import { dbService } from "fBase";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import AddMyPlace from "components/AddMyPlace";
 
 /* global kakao */
 
-const Map = ({places, myPlaces}) => {
+const Map = ({places}) => {
     const [type, setType] = useState("전체");
     const [detail, setDetail] = useState(null);
     const [imgPage, setImgPage] = useState(0);
     const [mouseState, setMouseState] = useState(false);
-    const [myPlace, setMyPlace] = useState([]);
     const container = useRef(null);
     let map = {};
     const options = {
@@ -117,6 +117,7 @@ const Map = ({places, myPlaces}) => {
                         )}
                         <div>{detail.description}</div>
                         {detail.url !== "" && <a href={detail.url} target="_blank" rel="noreferrer">관련 사이트</a>}
+                        <AddMyPlace place={detail}/>
                         <div className="map__detail-clear" onClick={onClickClear}>❌</div>
                     </div>
                 )}

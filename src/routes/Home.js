@@ -8,7 +8,6 @@ const Home = () => {
     const location = useLocation();
     const [loading, setLoading] = useState(false);
     const [places, setPlaces] = useState([]);
-    const [myPlaces, setMyPlaces] = useState([]);
     const [viewType, setViewType] = useState("지도");
 
     const getPlaces = async () => {
@@ -18,8 +17,6 @@ const Home = () => {
                 ...doc.data(),
             }));
             setPlaces(placeArray);
-            const myPlaceArray = JSON.parse(localStorage.getItem("micheltain_myplace"));
-            setMyPlaces(myPlaceArray)
             setLoading(true);
         })
     }
@@ -43,13 +40,13 @@ const Home = () => {
             ? 
             <>
                 <button onClick={onClickMap}>리스트로 보기</button>
-                <Map places={places} myPlaces={myPlaces}/>
+                <Map places={places}/>
             </>
             : (loading === true & viewType === "목록"
                 ?
                 <> 
                     <button onClick={onClickMap}>지도로 보기</button>                
-                    <List places={places} myPlaces={myPlaces}/>
+                    <List places={places}/>
                 </>
                 : "Loading..."
             )

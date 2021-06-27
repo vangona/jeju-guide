@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 const MyPlace = () => {
     const history = useHistory();
+    const [myPlaceArray, setMyPlaceArray] = useState([]);
     const clickBackBtn = () => {
         history.push({
             pathname: "/",
@@ -11,9 +12,15 @@ const MyPlace = () => {
             }
         })
     }
+
+    useEffect(() => {
+        const localMyPlace = JSON.parse(localStorage.getItem("micheltain_myplace"))
+        setMyPlaceArray(localMyPlace)
+    }, [])
     return (
         <>
             <div>myplace</div>
+            {myPlaceArray !== null && <div>{myPlaceArray.name}</div>}
             <button onClick={clickBackBtn}>Back</button>
         </>
     )

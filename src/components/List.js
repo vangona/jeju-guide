@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import AddMyPlace from "./AddMyPlace";
 
-const List = ({places, myPlaces}) => {
+const List = ({places}) => {
     return (
         <>
             <table className="map-list__table">
@@ -11,6 +12,7 @@ const List = ({places, myPlaces}) => {
                     <th>이름</th>
                     <th>주소</th>
                     <th>설명</th>
+                    <th>추가</th>
                 </tr>
             </thead>
             {places.map((place, index) => {
@@ -30,6 +32,7 @@ const List = ({places, myPlaces}) => {
                             </td>
                             <td>{place.addressDetail}</td>
                             <td>{place.description}</td>
+                            <td><AddMyPlace place={place}/></td>
                         </tr>
                     </tbody>
                 )
