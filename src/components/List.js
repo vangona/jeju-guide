@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import AddMyPlace from "./AddMyPlace";
 
-const List = ({places}) => {
+const List = ({places, localArray}) => {
     return (
         <>
             <table className="map-list__table">
@@ -18,7 +18,15 @@ const List = ({places}) => {
             {places.map((place, index) => {
                 return (
                     <tbody key={index}>
-                        <tr>
+                        
+                        <tr style={localArray === null 
+                            ? (
+                                {backgroundColor:"white"}
+                            ) : (
+                                localArray.some(localPlace => localPlace.name === place.name)
+                                ? {backgroundColor:"wheat"}
+                                : {backgroundColor:"white"}
+                            )}>
                             <td>{index + 1}</td>
                             <td>
                                 <Link to={{

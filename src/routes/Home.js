@@ -9,6 +9,7 @@ const Home = () => {
     const [loading, setLoading] = useState(false);
     const [places, setPlaces] = useState([]);
     const [viewType, setViewType] = useState("지도");
+    const localArray = JSON.parse(localStorage.getItem("micheltain_myplace"))
 
     const getPlaces = async () => {
         await dbService.collection("places").onSnapshot(snapshot => {
@@ -40,13 +41,13 @@ const Home = () => {
             ? 
             <>
                 <button onClick={onClickMap}>리스트로 보기</button>
-                <Map places={places}/>
+                <Map places={places} localArray={localArray}/>
             </>
             : (loading === true & viewType === "목록"
                 ?
                 <> 
                     <button onClick={onClickMap}>지도로 보기</button>                
-                    <List places={places}/>
+                    <List places={places} localArray={localArray}/>
                 </>
                 : "Loading..."
             )

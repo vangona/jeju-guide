@@ -7,7 +7,9 @@ import MyPlace from "routes/MyPlace";
 import Post from "routes/Post";
 
 const AppRouter = ({ isLoggedIn, userObj }) => {
-    const prevViewType = "지도"
+    const parentFunction = (data) => {
+        console.log(data)
+    }
     return (
         <>
             <Router>
@@ -24,13 +26,13 @@ const AppRouter = ({ isLoggedIn, userObj }) => {
                             )
                     }
                     <Route exact path="/">
-                        <Home prevViewType={prevViewType}/>
+                        <Home />
                     </Route>
                     <Route exact path="/detail">
                         <Detail />
                     </Route>
                     <Route exact path="/myplace">
-                        <MyPlace />
+                        <MyPlace parentFunction={parentFunction}/>
                     </Route>
                 </Switch>
             </Router>

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react"
+import AddMyPlace from "components/AddMyPlace";
+import React, { useState } from "react"
 import { useHistory } from "react-router"
 import { useLocation } from "react-router-dom";
 
@@ -6,7 +7,6 @@ const Detail = () => {
     const location = useLocation();
     const { state : { place } } = location;
     const history = useHistory();
-    const [myPlaceArray, setMyPlaceArray] = useState([]);
     const [imgPage, setImgPage] = useState(0);
 
     const clickBackBtn = () => {
@@ -30,14 +30,6 @@ const Detail = () => {
         }
     }
 
-    const onClickMyPlace = () => {
-        localStorage.setItem("micheltain_myplace", JSON.stringify(place))
-    }
-
-    useEffect(() => {
-        setMyPlaceArray(JSON.parse(localStorage.getItem("micheltain_myplace")))
-    }, [])
-
     return (
         <>
             <div>{place.name}</div>
@@ -47,7 +39,7 @@ const Detail = () => {
                 {imgPage !== place.attachmentUrlArray.length -1 & place.attachmentUrlArray.lenth !== 1 && <button className="map-detail__img-btn next" onClick={clickNextImg}>▶</button>}
             </div>
             <p>{place.description}</p>
-            <button onClick={onClickMyPlace}>+</button>
+            <AddMyPlace place={place}/>
             <button onClick={clickBackBtn}>Back</button>
         </>
     )
