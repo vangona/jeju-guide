@@ -1,10 +1,12 @@
+import { faExchangeAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import List from "components/List";
 import Map from "components/Map";
 import { dbService } from "fBase";
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-const Home = () => {
+const Home = ({ isMobile }) => {
     const location = useLocation();
     const [loading, setLoading] = useState(false);
     const [places, setPlaces] = useState([]);
@@ -37,22 +39,15 @@ const Home = () => {
     return (
         <div className="home__container">
             <h3 className="home__title">MICHETAIN GUIDE</h3>
+            <button className="home-viewtype" onClick={onClickMap}><FontAwesomeIcon icon={faExchangeAlt} /> {viewType === "지도" ? "리스트로 보기" : "지도로 보기"}</button>   
             {loading === true & viewType === "지도" 
-            ? 
-            <>
-                <button onClick={onClickMap}>리스트로 보기</button>
-                <Map places={places} localArray={localArray}/>
-            </>
+            ? <Map places={places} localArray={localArray} isMobile={isMobile}/>
             : (loading === true & viewType === "목록"
-                ?
-                <> 
-                    <button onClick={onClickMap}>지도로 보기</button>                
-                    <List places={places} localArray={localArray}/>
-                </>
+                ? <List places={places} localArray={localArray} isMobile={isMobile}/>
                 : "Loading..."
             )
             }
-            <Link to="/myplace"><button>내 여행지 목록</button></Link>
+            {/* <Link to="/myplace"><button>내 여행지 목록</button></Link> */}
         </div>
     )
 }

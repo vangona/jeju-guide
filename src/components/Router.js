@@ -6,10 +6,8 @@ import Home from "routes/Home";
 import MyPlace from "routes/MyPlace";
 import Post from "routes/Post";
 
-const AppRouter = ({ isLoggedIn, userObj }) => {
-    const parentFunction = (data) => {
-        console.log(data)
-    }
+const AppRouter = ({ isLoggedIn, userObj, isMobile }) => {
+
     return (
         <>
             <Router>
@@ -26,13 +24,13 @@ const AppRouter = ({ isLoggedIn, userObj }) => {
                             )
                     }
                     <Route exact path="/">
-                        <Home />
+                        <Home isMobile={isMobile}/>
                     </Route>
                     <Route exact path="/detail">
                         <Detail />
                     </Route>
                     <Route exact path="/myplace">
-                        <MyPlace parentFunction={parentFunction}/>
+                        <MyPlace />
                     </Route>
                 </Switch>
             </Router>

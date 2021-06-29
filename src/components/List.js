@@ -12,7 +12,7 @@ const List = ({places, localArray}) => {
                     <th>이름</th>
                     <th>주소</th>
                     <th>설명</th>
-                    <th>추가</th>
+                    {/* <th>추가</th> */}
                 </tr>
             </thead>
             {places.map((place, index) => {
@@ -32,6 +32,7 @@ const List = ({places, localArray}) => {
                                 <Link to={{
                                     pathname: "/detail",
                                     state: {
+                                        from: "목록",
                                         place
                                     }
                                 }}>
@@ -40,7 +41,7 @@ const List = ({places, localArray}) => {
                             </td>
                             <td>{place.addressDetail}</td>
                             <td>{place.description}</td>
-                            <td><AddMyPlace place={place}/></td>
+                            {/* <td><AddMyPlace place={place}/></td> */}
                         </tr>
                     </tbody>
                 )

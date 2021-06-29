@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
-const MyPlace = ({parentFunction}) => {
+const MyPlace = () => {
     const history = useHistory();
     const [myPlaceArray, setMyPlaceArray] = useState([]);
     const clickBackBtn = () => {
@@ -13,14 +13,9 @@ const MyPlace = ({parentFunction}) => {
         })
     }
 
-    const childFunction = () => {
-        parentFunction("와우")
-    }
-
     useEffect(() => {
         const localMyPlace = JSON.parse(localStorage.getItem("micheltain_myplace"))
         setMyPlaceArray(localMyPlace)
-        childFunction();
     }, [])
     return (
         <>

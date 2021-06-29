@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 const Detail = () => {
     const location = useLocation();
     const { state : { place } } = location;
+    const { state: { from } } = location;
     const history = useHistory();
     const [imgPage, setImgPage] = useState(0);
 
@@ -13,7 +14,7 @@ const Detail = () => {
         history.push({
             pathname: "/",
             state: {
-                prevViewType: "목록"
+                prevViewType: from
             }
         })
     }
@@ -39,7 +40,7 @@ const Detail = () => {
                 {imgPage !== place.attachmentUrlArray.length -1 & place.attachmentUrlArray.lenth !== 1 && <button className="map-detail__img-btn next" onClick={clickNextImg}>▶</button>}
             </div>
             <p>{place.description}</p>
-            <AddMyPlace place={place}/>
+            {/* <AddMyPlace place={place}/> */}
             <button onClick={clickBackBtn}>Back</button>
         </>
     )

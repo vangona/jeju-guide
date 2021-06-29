@@ -4,9 +4,18 @@
   align-items: center;
 }
 
+.map-explain {
+  font-style: italic;
+  font-size: 0.8rem;
+  padding: 1rem;
+  color: white;
+}
+
 .map {
   width: 700px;
+  max-width: 80vw;
   height: 500px;
+  margin-bottom: 2rem;
 }
 
 .place__infowindow {
@@ -72,4 +81,23 @@
 
 .map__detail-clear:hover {
   cursor: pointer;
+}
+
+.check-geolocation {
+  margin-top: 2rem;
+  border: none;
+  background-color: transparent;
+  color: white;
+}
+
+@media screen and (max-width: 680px) {
+  .map {
+    height: 300px;
+  }
+  .place__infowindow {
+    font-size: 0.7rem;
+  }
+  .map-explain {
+    font-size: 0.7rem;
+  }
 }
