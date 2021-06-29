@@ -32,7 +32,7 @@ const Detail = () => {
     }
 
     return (
-        <>
+        <div className="detail__container">
             <div>{place.name}</div>
             <img src={place.attachmentUrlArray[imgPage]} style={{maxHeight:"300px"}} alt="detail-img"/>
             <div className="map-detail__img-btn__container">
@@ -42,7 +42,7 @@ const Detail = () => {
             <p>{place.description}</p>
             {/* <AddMyPlace place={place}/> */}
             <button onClick={clickBackBtn}>Back</button>
-        </>
+        </div>
     )
 }
 

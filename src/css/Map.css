@@ -26,6 +26,10 @@
   background-color: white;
 }
 
+.place__infowindow:hover {
+  cursor: pointer;
+}
+
 .map-radio__container {
   display: flex;
   justify-content: center;

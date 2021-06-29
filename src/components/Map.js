@@ -32,13 +32,27 @@ const Map = ({places, isMobile}) => {
         }
     }
 
-    const clickMobileHandler = (place) => {
+    const clickMobileHandler = (map, overlay) => {
+        return function () {
+            overlay.setMap(map);
+            setMouseState(true)
+        }
+    }
+
+    const removeOverlay = (overlay) => {
+        return function () {
+            overlay.setMap(null)
+            setMouseState(false)
+        }
+    }
+
+    const clickOverlayHandler = (place) => {
         return function () {
             history.push({
                 pathname: "/detail",
                 state: {
-                    place,
-                    from : "지도"
+                    from: "지도",
+                    place
                 }
             })
         }
@@ -57,9 +71,19 @@ const Map = ({places, isMobile}) => {
             setMouseState(false)
         }
     };
+    const addEventHandle = (target, type, callback) => {
+        if (target.addEventListener) {
+            target.addEventListener(type, callback);
+        } else {
+            target.attachEvent('on' + type, callback);
+        }
+    }
 
     const makeMarker = (place) => {
-        const content = `<div class="place__infowindow">${place.name}</div>`        
+        const content = document.createElement('div');
+        content.className = 'place__infowindow'
+        content.innerHTML = `${place.name}`      
+
         const position = new kakao.maps.LatLng(place.geocode[0], place.geocode[1])
         const overlay = new kakao.maps.CustomOverlay({
             content,
@@ -72,12 +96,13 @@ const Map = ({places, isMobile}) => {
         });
 
         if (isMobile) {
-            kakao.maps.event.addListener(marker, 'click', clickMobileHandler(place));
+            kakao.maps.event.addListener(marker, 'click', clickMobileHandler(map, overlay));
+            addEventHandle(content, "click", clickOverlayHandler(place))
         } else {
             kakao.maps.event.addListener(marker, 'click', clickHandler(place));
+            kakao.maps.event.addListener(marker, 'mouseover', mouseOverHandler(map, overlay));
+            kakao.maps.event.addListener(marker, 'mouseout', mouseOutHandler(overlay));
         }
-        kakao.maps.event.addListener(marker, 'mouseover', mouseOverHandler(map, overlay));
-        kakao.maps.event.addListener(marker, 'mouseout', mouseOutHandler(overlay));
     }
 
     const makeMap = () => {
@@ -141,11 +166,16 @@ const Map = ({places, isMobile}) => {
         <>
             <div className="map__container">
                 <div className="vertical">
-                    <span>{mouseState ? <div className="map-explain">더 알아보시려면 마커를 클릭해주세요.</div> : <div className="map-explain">&nbsp;</div>}</span>
+                    <span className="map-explain__container">{mouseState 
+                    ? isMobile 
+                    ? <div className="map-explain">더 알아보시려면 이름을 클릭해주세요.</div> 
+                    : <div className="map-explain">더 알아보시려면 마커를 클릭해주세요.</div> 
+                    : <div className="map-explain">지도를 확대하실 수 있습니다.</div>}
+                    </span>
                     <div className="map" ref={container} ></div>
                     {isMobile
                     ? (
-                        <select name="input__place-type" onChange={onTypeChange} >
+                        <select className="place-type__map" name="input__place-type" onChange={onTypeChange} >
                             <option value="전체">전체</option>
                             <option value="맛집">맛집</option>
                             <option value="카페 & 베이커리">카페 & 베이커리</option>\

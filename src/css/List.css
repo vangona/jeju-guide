@@ -1,11 +1,47 @@
-.map-list__table {
+.list__container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-bottom: 3rem;
+  margin-top: 1rem;
+}
+
+.list__title {
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.list__table {
   width: 90%;
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.7);
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  word-break: keep-all;
 }
 
 table,
 th,
 td {
   border: 1px solid black;
+}
+
+.list__table-name {
+  text-align: center;
+}
+
+.list__table-name a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.list__table-name a:visited {
+  color: gray;
+}
+
+.place-type__list {
+  margin-right: 5px;
+  height: 100%;
 }

@@ -23,10 +23,9 @@ const App = () => {
       } else {
         setUserObj(null);
       }
-      
+      checkIsMobile();
       setInit(true)
     })
-    checkIsMobile();
   }, [])
   return (
     <>
