@@ -29,9 +29,9 @@ const AppRouter = ({ isLoggedIn, userObj, isMobile }) => {
                     <Route exact path="/detail">
                         <Detail />
                     </Route>
-                    <Route exact path="/myplace">
+                    {/* <Route exact path="/myplace">
                         <MyPlace />
-                    </Route>
+                    </Route> */}
                 </Switch>
             </Router>
         </>

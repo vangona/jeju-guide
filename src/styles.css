@@ -4,6 +4,8 @@
 @import "css/Post.css";
 @import "css/Map.css";
 @import "css/List.css";
+@import "css/Pagination.css";
+@import "css/Detail.css";
 
 html,
 body {

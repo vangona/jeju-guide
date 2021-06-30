@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import AddMyPlace from "./AddMyPlace";
+import Pagination from "./Pagination";
 
 const List = ({places, localArray, isMobile}) => {
     const [value, setValue] = useState("");
     const [type, setType] = useState("전체");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [postsPerPage, setPostsPerPage] = useState(1);
     const onChange = (event) => {
         const {target : {value} } = event;
         setValue(value);
@@ -13,9 +16,22 @@ const List = ({places, localArray, isMobile}) => {
         const {target : { value } } = event;
         setType(value)
     }
+    const onPostsPerPage = (event) => {
+        const {target : { value }} = event;
+        setPostsPerPage(value);
+    }
+
+    const indexOfLast = currentPage * postsPerPage;
+    const indexOfFirst = indexOfLast - postsPerPage;
+    const currentPosts = (posts) => {
+        let currentPosts = 0;
+        currentPosts = posts.slice(indexOfFirst, indexOfLast);
+        return currentPosts;
+    }
+
     return (
         <div className="list__container">
-            <h5 className="list__title">자세히 알고싶다면 장소명을 클릭해주세요.</h5>
+            <div className="list__title">자세히 알고싶다면 장소명을 클릭해주세요.</div>
             <table className="list__table">
             <thead>
                 <tr>
@@ -25,7 +41,7 @@ const List = ({places, localArray, isMobile}) => {
                     {/* <th>추가</th> */}
                 </tr>
             </thead>
-            {places.filter(place=>{return (place.type === type | type === "전체")}).map((place, index) => {
+            {currentPosts(places).filter(place=>{return (place.type === type | type === "전체")}).map((place, index) => {
                 return (
                     <tbody key={index}>
                         {place.name.includes(value) | place.addressDetail.includes(value) | place.description.includes(value)
@@ -58,6 +74,7 @@ const List = ({places, localArray, isMobile}) => {
                 )
             })}
             </table>
+            <Pagination postsPerPage={postsPerPage} totalPosts={places.length} currentPage={currentPage} paginate={setCurrentPage} />
             <div className="list-search__container">
                 {isMobile
                         ? (
@@ -79,7 +96,13 @@ const List = ({places, localArray, isMobile}) => {
                                 <input type="radio" name="input__place-type" value="그 외 가볼만한 곳" onChange={onTypeChange}/><label htmlFor="그 외 가볼만한 곳">그 외 가볼만한 곳</label>
                         </div>
                         )}
-                <input type="text" onChange={onChange} value={value} placeholder="장소명, 주소, 설명..."/>
+                <input className="list-search__input" type="text" onChange={onChange} value={value} placeholder="장소명, 주소, 설명..."/>
+                <select className="list-saerch__pnum" onChange={onPostsPerPage} defaultValue="1">
+                    <option value="1">1</option>
+                    <option value="3">3</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                </select>
             </div>
         </div>
     )

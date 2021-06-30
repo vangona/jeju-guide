@@ -1,0 +1,18 @@
+.pagination__container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.pagination__index {
+  margin: 0 0.5rem;
+}
+
+.pagination__index:hover {
+  cursor: pointer;
+}
+
+.pagination__arrow:hover {
+  cursor: pointer;
+}

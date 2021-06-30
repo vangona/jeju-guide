@@ -9,8 +9,10 @@
 }
 
 .list__title {
+  font-style: italic;
+  font-size: 0.8rem;
   color: white;
-  margin-bottom: 2rem;
+  padding: 1rem;
 }
 
 .list__table {

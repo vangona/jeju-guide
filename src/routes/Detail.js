@@ -1,5 +1,5 @@
 import AddMyPlace from "components/AddMyPlace";
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useHistory } from "react-router"
 import { useLocation } from "react-router-dom";
 
@@ -30,18 +30,19 @@ const Detail = () => {
             setImgPage(prev => prev - 1);
         }
     }
-
     return (
         <div className="detail__container">
-            <div>{place.name}</div>
-            <img src={place.attachmentUrlArray[imgPage]} style={{maxHeight:"300px"}} alt="detail-img"/>
-            <div className="map-detail__img-btn__container">
-                {imgPage !== 0 && <button className="map-detail__img-btn prev" onClick={clickPrevImg}>◀</button>}
-                {imgPage !== place.attachmentUrlArray.length -1 & place.attachmentUrlArray.lenth !== 1 && <button className="map-detail__img-btn next" onClick={clickNextImg}>▶</button>}
+            <div className="detail-box">
+                <div className="detail__name">{place.name}</div>
+                {place.attachmentUrlArray[imgPage] ? <img className="detail__img" src={place.attachmentUrlArray[imgPage]} style={{maxWidth:"100%"}} alt="detail-img"/> : <span>Loading...</span>}
+                <div className="map-detail__img-btn__container detail__imgbtn-container">
+                    {imgPage !== 0 && <button className="map-detail__img-btn prev" onClick={clickPrevImg}>◀</button>}
+                    {imgPage !== place.attachmentUrlArray.length -1 & place.attachmentUrlArray.lenth !== 1 ? <button className="map-detail__img-btn next" onClick={clickNextImg}>▶</button> : null}
+                </div>
+                <p className="detail__description">{place.description}</p>
+                {/* <AddMyPlace place={place}/> */}
+                <button onClick={clickBackBtn}>Back</button>
             </div>
-            <p>{place.description}</p>
-            {/* <AddMyPlace place={place}/> */}
-            <button onClick={clickBackBtn}>Back</button>
         </div>
     )
 }
