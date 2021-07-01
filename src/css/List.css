@@ -43,7 +43,14 @@ td {
   color: gray;
 }
 
-.place-type__list {
-  margin-right: 5px;
+.list-search__container {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.place-type__list,
+.list-search__pnum {
   height: 100%;
 }

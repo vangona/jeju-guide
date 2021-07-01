@@ -7,7 +7,7 @@ const List = ({places, localArray, isMobile}) => {
     const [value, setValue] = useState("");
     const [type, setType] = useState("전체");
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage, setPostsPerPage] = useState(1);
+    const [postsPerPage, setPostsPerPage] = useState(2);
     const onChange = (event) => {
         const {target : {value} } = event;
         setValue(value);
@@ -76,33 +76,21 @@ const List = ({places, localArray, isMobile}) => {
             </table>
             <Pagination postsPerPage={postsPerPage} totalPosts={places.length} currentPage={currentPage} paginate={setCurrentPage} />
             <div className="list-search__container">
-                {isMobile
-                        ? (
-                            <select className="place-type__list" name="input__place-type" onChange={onTypeChange} >
-                                <option value="전체">전체</option>
-                                <option value="맛집">맛집</option>
-                                <option value="카페 & 베이커리">카페 & 베이커리</option>\
-                                <option value="풍경">풍경</option>
-                                <option value="술집">술집</option>
-                                <option value="그 외 가볼만한 곳">그 외 가볼만한 곳</option>
-                            </select>
-                        ) : (
-                        <div className="list-radio__container">
-                                <input type="radio" name="input__place-type" value="전체" defaultChecked onChange={onTypeChange}/><label htmlFor="전체">전체</label>
-                                <input type="radio" name="input__place-type" value="맛집" onChange={onTypeChange}/><label htmlFor="맛집">맛집</label>
-                                <input type="radio" name="input__place-type" value="카페 & 베이커리" onChange={onTypeChange}/><label htmlFor="카페 & 베이커리">카페 & 베이커리</label>
-                                <input type="radio" name="input__place-type" value="풍경" onChange={onTypeChange}/><label htmlFor="풍경">풍경</label>
-                                <input type="radio" name="input__place-type" value="술집" onChange={onTypeChange}/><label htmlFor="술집">술집</label>
-                                <input type="radio" name="input__place-type" value="그 외 가볼만한 곳" onChange={onTypeChange}/><label htmlFor="그 외 가볼만한 곳">그 외 가볼만한 곳</label>
-                        </div>
-                        )}
-                <input className="list-search__input" type="text" onChange={onChange} value={value} placeholder="장소명, 주소, 설명..."/>
-                <select className="list-saerch__pnum" onChange={onPostsPerPage} defaultValue="1">
-                    <option value="1">1</option>
-                    <option value="3">3</option>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
+                {/* <select className="list-saerch__pnum" onChange={onPostsPerPage} defaultValue="1">
+                    <option value="1">1개씩 보기</option>
+                    <option value="3">3개씩 보기</option>
+                    <option value="5">5개씩 보기</option>
+                    <option value="10">10개씩 보기</option>
+                </select> */}
+                <select className="place-type__list" name="input__place-type" onChange={onTypeChange} >
+                        <option value="전체">전체</option>
+                        <option value="맛집">맛집</option>
+                        <option value="카페 & 베이커리">카페 & 베이커리</option>\
+                        <option value="풍경">풍경</option>
+                        <option value="술집">술집</option>
+                        <option value="그 외 가볼만한 곳">그 외 가볼만한 곳</option>
                 </select>
+                <input className="list-search__input" type="text" onChange={onChange} value={value} placeholder="장소명, 주소, 설명..."/>
             </div>
         </div>
     )

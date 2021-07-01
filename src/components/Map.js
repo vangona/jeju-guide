@@ -89,7 +89,9 @@ const Map = ({places, isMobile}) => {
             content,
             position,
             yAnchor: 2,
+            clickable: true,
         })
+
         const marker = new kakao.maps.Marker({
             map: map,
             position
@@ -97,6 +99,7 @@ const Map = ({places, isMobile}) => {
 
         if (isMobile) {
             kakao.maps.event.addListener(marker, 'click', clickMobileHandler(map, overlay));
+            kakao.maps.event.addListener(map, "click", removeOverlay(overlay))
             addEventHandle(content, "click", clickOverlayHandler(place))
         } else {
             kakao.maps.event.addListener(marker, 'click', clickHandler(place));
@@ -173,26 +176,14 @@ const Map = ({places, isMobile}) => {
                     : <div className="map-explain">지도를 확대하실 수 있습니다.</div>}
                     </span>
                     <div className="map" ref={container} ></div>
-                    {isMobile
-                    ? (
-                        <select className="place-type__map" name="input__place-type" onChange={onTypeChange} >
-                            <option value="전체">전체</option>
-                            <option value="맛집">맛집</option>
-                            <option value="카페 & 베이커리">카페 & 베이커리</option>\
-                            <option value="풍경">풍경</option>
-                            <option value="술집">술집</option>
-                            <option value="그 외 가볼만한 곳">그 외 가볼만한 곳</option>
-                        </select>
-                    ) : (
-                    <div className="map-radio__container">
-                            <input type="radio" name="input__place-type" value="전체" defaultChecked onChange={onTypeChange}/><label htmlFor="전체">전체</label>
-                            <input type="radio" name="input__place-type" value="맛집" onChange={onTypeChange}/><label htmlFor="맛집">맛집</label>
-                            <input type="radio" name="input__place-type" value="카페 & 베이커리" onChange={onTypeChange}/><label htmlFor="카페 & 베이커리">카페 & 베이커리</label>
-                            <input type="radio" name="input__place-type" value="풍경" onChange={onTypeChange}/><label htmlFor="풍경">풍경</label>
-                            <input type="radio" name="input__place-type" value="술집" onChange={onTypeChange}/><label htmlFor="술집">술집</label>
-                            <input type="radio" name="input__place-type" value="그 외 가볼만한 곳" onChange={onTypeChange}/><label htmlFor="그 외 가볼만한 곳">그 외 가볼만한 곳</label>
-                    </div>
-                    )}
+                    <select className="place-type__map" name="input__place-type" onChange={onTypeChange} >
+                        <option value="전체">전체</option>
+                        <option value="맛집">맛집</option>
+                        <option value="카페 & 베이커리">카페 & 베이커리</option>\
+                        <option value="풍경">풍경</option>
+                        <option value="술집">술집</option>
+                        <option value="그 외 가볼만한 곳">그 외 가볼만한 곳</option>
+                    </select>
                     <div>
                         <button className="check-geolocation" onClick={onClickLocation}><FontAwesomeIcon icon={faLocationArrow} /> 현재 위치 표시하기</button>
                     </div>

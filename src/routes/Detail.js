@@ -34,10 +34,12 @@ const Detail = () => {
         <div className="detail__container">
             <div className="detail-box">
                 <div className="detail__name">{place.name}</div>
-                {place.attachmentUrlArray[imgPage] ? <img className="detail__img" src={place.attachmentUrlArray[imgPage]} style={{maxWidth:"100%"}} alt="detail-img"/> : <span>Loading...</span>}
-                <div className="map-detail__img-btn__container detail__imgbtn-container">
-                    {imgPage !== 0 && <button className="map-detail__img-btn prev" onClick={clickPrevImg}>◀</button>}
-                    {imgPage !== place.attachmentUrlArray.length -1 & place.attachmentUrlArray.lenth !== 1 ? <button className="map-detail__img-btn next" onClick={clickNextImg}>▶</button> : null}
+                <div className="detail-img__container">
+                    <img className="detail__img" src={place.attachmentUrlArray[imgPage]} style={{maxWidth:"100%"}} alt="detail-img"/>
+                    <div className="detail-img-btn__container">
+                        {imgPage !== 0 && <button className="detail__prev detail-btn" onClick={clickPrevImg}>◀</button>}
+                        {imgPage !== place.attachmentUrlArray.length -1 & place.attachmentUrlArray.lenth !== 1 ? <button className="detail__next detail-btn" onClick={clickNextImg}>▶</button> : null}
+                    </div>
                 </div>
                 <p className="detail__description">{place.description}</p>
                 {/* <AddMyPlace place={place}/> */}
