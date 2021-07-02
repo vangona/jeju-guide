@@ -5,6 +5,7 @@ import Detail from "routes/Detail";
 import Home from "routes/Home";
 import MyPlace from "routes/MyPlace";
 import Post from "routes/Post";
+import Tips from "routes/Tips";
 
 const AppRouter = ({ isLoggedIn, userObj, isMobile }) => {
 
@@ -28,6 +29,9 @@ const AppRouter = ({ isLoggedIn, userObj, isMobile }) => {
                     </Route>
                     <Route exact path="/detail">
                         <Detail />
+                    </Route>
+                    <Route exact path="/tips">
+                        <Tips />
                     </Route>
                     {/* <Route exact path="/myplace">
                         <MyPlace />

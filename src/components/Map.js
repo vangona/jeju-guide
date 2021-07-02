@@ -158,15 +158,15 @@ const Map = ({places, isMobile}) => {
         <>
             <div className="map__container">
                 <div className="vertical">
-                    <select className="place-type__map" name="input__place-type" onChange={onTypeChange} >
-                        <option value="전체">전체</option>
-                        <option value="맛집">맛집</option>
-                        <option value="카페 & 베이커리">카페 & 베이커리</option>\
-                        <option value="풍경">풍경</option>
-                        <option value="술집">술집</option>
-                        <option value="그 외 가볼만한 곳">그 외 가볼만한 곳</option>
-                    </select>
-                    <div>
+                    <div className={isMobile ? "vertical" : null}>
+                        <select className="place-type__map" name="input__place-type" onChange={onTypeChange} >
+                            <option value="전체">전체</option>
+                            <option value="맛집">맛집</option>
+                            <option value="카페 & 베이커리">카페 & 베이커리</option>\
+                            <option value="풍경">풍경</option>
+                            <option value="술집">술집</option>
+                            <option value="그 외 가볼만한 곳">그 외 가볼만한 곳</option>
+                        </select>
                         <button className="check-geolocation" onClick={onClickLocation}><FontAwesomeIcon icon={faLocationArrow} /> 현재 위치 표시하기</button>
                     </div>
                     <div className="map" ref={container} ></div>
@@ -186,8 +186,14 @@ const Map = ({places, isMobile}) => {
                         <p>{currentPlace.description.slice(0, 50)}{currentPlace.description.length > 50 && "..."}</p>
                     </div> 
                     </Link>
-                    : <div className="map-explain">더 알아보시려면 마커를 클릭해주세요.</div> 
-                    : <div className="map-explain">지도를 확대하실 수 있습니다. </div>}
+                    : <div className="map-explain explain-box">
+                        <span>더 알아보시려면 마커를 클릭해주세요.</span> <br />
+                        <Link to="/tips"><div className="map-explain__tips">장기여행자가 알려주는 HONEY TIPS</div></Link>
+                    </div> 
+                    : <div className="map-explain explain-box">
+                        <span>지도를 확대하실 수 있습니다.</span> <br />
+                        <Link to="/tips"><div className="map-explain__tips">장기여행자가 알려주는 HONEY TIPS</div></Link>
+                     </div>}
                     </div>
                 </div>
                 {detail && (
@@ -202,7 +208,8 @@ const Map = ({places, isMobile}) => {
                                 </div>
                             </>
                         )}
-                        <div>{detail.description}</div>
+                        <div>{detail.description}</div><br />
+                        {detail.url !== "" && <a href={detail.url} target="_blank" rel="noreferrer"><button>관련 사이트</button></a>}<br />
                         <Link to={{
                                     pathname: "/detail",
                                     state: {
@@ -210,9 +217,8 @@ const Map = ({places, isMobile}) => {
                                         place: detail
                                     }
                                 }}>
-                        더 알아보기
+                        <button>더 알아보기</button>
                         </Link>
-                        {detail.url !== "" && <a href={detail.url} target="_blank" rel="noreferrer">관련 사이트</a>}
                         {/* <AddMyPlace place={detail}/> */}
                         <div className="map__detail-clear" onClick={onClickClear}>❌</div>
                     </div>
