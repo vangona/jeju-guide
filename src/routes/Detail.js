@@ -2,6 +2,7 @@ import AddMyPlace from "components/AddMyPlace";
 import React, { useEffect, useState } from "react"
 import { useHistory } from "react-router"
 import { useLocation } from "react-router-dom";
+import ScriptTag from "react-script-tag"
 
 const Detail = () => {
     const location = useLocation();
@@ -43,8 +44,19 @@ const Detail = () => {
                 </div>
                 <p className="detail__description">{place.description}</p>
                 {/* <AddMyPlace place={place}/> */}
-                <button onClick={clickBackBtn}>Back</button>
+                <ins
+                className="kakao_ad_area"
+                style={{display:"none"}}
+                data-ad-unit="DAN-c9rNVYJ0iiSwi4Sm"
+                data-ad-width="320"
+                data-ad-height="50"
+                ></ins>
+                <button style={{marginTop:"1rem"}} onClick={clickBackBtn}>돌아가기</button>
             </div>
+            <ScriptTag type="text/javascript"
+                    src="//t1.daumcdn.net/kas/static/ba.min.js" 
+                    async >
+            </ScriptTag>
         </div>
     )
 }
