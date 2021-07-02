@@ -7,7 +7,7 @@ const List = ({places, localArray, isMobile}) => {
     const [value, setValue] = useState("");
     const [type, setType] = useState("전체");
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage, setPostsPerPage] = useState(2);
+    const [postsPerPage, setPostsPerPage] = useState(5);
     const onChange = (event) => {
         const {target : {value} } = event;
         setValue(value);
@@ -76,12 +76,11 @@ const List = ({places, localArray, isMobile}) => {
             </table>
             <Pagination postsPerPage={postsPerPage} totalPosts={places.length} currentPage={currentPage} paginate={setCurrentPage} />
             <div className="list-search__container">
-                {/* <select className="list-saerch__pnum" onChange={onPostsPerPage} defaultValue="1">
-                    <option value="1">1개씩 보기</option>
-                    <option value="3">3개씩 보기</option>
+                {!isMobile && <select className="list-saerch__pnum" onChange={onPostsPerPage} defaultValue="10">
                     <option value="5">5개씩 보기</option>
                     <option value="10">10개씩 보기</option>
-                </select> */}
+                    <option value="15">15개씩 보기</option>
+                </select>}
                 <select className="place-type__list" name="input__place-type" onChange={onTypeChange} >
                         <option value="전체">전체</option>
                         <option value="맛집">맛집</option>

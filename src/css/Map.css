@@ -140,6 +140,7 @@
 
 .map__container a {
   text-decoration: none;
+  color: unset;
 }
 
 .map__container a:active {

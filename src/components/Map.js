@@ -113,8 +113,8 @@ const Map = ({places, isMobile}) => {
 
     const onClickLocation = () => {
         const displayMarker = (locPosition) => {
-            const imageSrc = 'img/tourist.png',
-                imageSize = new kakao.maps.Size(64, 69),
+            const imageSrc = 'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/tourist.png',
+                imageSize = new kakao.maps.Size(25, 25),
                 imageOption = {offset: new kakao.maps.Point(27, 69)};    
 
             const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);

@@ -20,7 +20,7 @@
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.7);
   margin: 1rem 0;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   word-break: keep-all;
 }
 
@@ -44,7 +44,7 @@ td {
 }
 
 .list__table-content {
-  padding: 2px;
+  padding: 5px;
 }
 
 .list-search__container {
