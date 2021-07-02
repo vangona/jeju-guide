@@ -18,3 +18,7 @@
   background-color: transparent;
   color: white;
 }
+
+.home-viewtype:hover {
+  cursor: pointer;
+}

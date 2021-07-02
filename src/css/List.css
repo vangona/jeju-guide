@@ -43,6 +43,10 @@ td {
   color: gray;
 }
 
+.list__table-content {
+  padding: 2px;
+}
+
 .list-search__container {
   width: 90%;
   display: flex;

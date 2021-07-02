@@ -1,10 +1,19 @@
 .map__container {
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.map-explain__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
 .map-explain {
+  margin-top: 1rem;
   font-style: italic;
   font-size: 0.8rem;
   padding: 1rem;
@@ -15,15 +24,23 @@
   width: 700px;
   max-width: 80vw;
   height: 400px;
-  margin-bottom: 2rem;
 }
 
 .place__infowindow {
-  font-size: 0.9rem;
-  font-family: serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  font-family: sans-serif;
   border-radius: 5px;
-  padding: 8px;
+  padding: 5px 10px;
   background-color: white;
+}
+
+.place__infowindow > hr {
+  margin: 0;
+  width: 100%;
 }
 
 .place__infowindow:hover {
@@ -87,16 +104,55 @@
   cursor: pointer;
 }
 
+.place-type__map {
+  margin-top: 1rem;
+  padding: 3px;
+  border-radius: 5px;
+}
+
 .check-geolocation {
-  margin-top: 2rem;
+  margin: 1rem 0;
   border: none;
   background-color: transparent;
   color: white;
 }
 
+.check-geolocation:hover {
+  cursor: pointer;
+}
+
+.marker__detail {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px;
+  margin: 5px;
+  font-size: 0.8rem;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+}
+
+.marker__detail > hr {
+  width: 100%;
+  margin: 0;
+}
+
+.map__container a {
+  text-decoration: none;
+}
+
+.map__container a:active {
+  transform: scale(0.98);
+}
+
+.map__container a:visited {
+  color: unset;
+}
+
 @media screen and (max-width: 680px) {
   .map {
-    height: 300px;
+    height: 250px;
   }
   .place__infowindow {
     font-size: 0.7rem;

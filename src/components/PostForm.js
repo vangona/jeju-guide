@@ -26,7 +26,7 @@ const PostForm = ({userObj}) => {
         let attachmentUrlArray = [];
         if (attachmentArray !== []) {
             for (let i = 0; i < attachmentArray.length; i++) {
-                const attachmentRef = storageService.ref().child(`${userObj.uid}/${uuidv4()}`)
+                const attachmentRef = storageService.ref().child(`${userObj.uid}/${name}/${uuidv4()}`)
                 const response = await attachmentRef.putString(attachmentArray[i], "data_url")
                 attachmentUrlArray.push(await response.ref.getDownloadURL());
             }

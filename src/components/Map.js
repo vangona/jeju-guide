@@ -1,4 +1,4 @@
-import { faLocationArrow } from "@fortawesome/free-solid-svg-icons";
+import { faLocationArrow, faMousePointer } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
@@ -11,6 +11,7 @@ const Map = ({places, isMobile}) => {
     const [detail, setDetail] = useState(null);
     const [imgPage, setImgPage] = useState(0);
     const [mouseState, setMouseState] = useState(false);
+    const [currentPlace, setCurrentPlace] = useState({});
     const container = useRef(null);
     let map = {};
 
@@ -32,9 +33,10 @@ const Map = ({places, isMobile}) => {
         }
     }
 
-    const clickMobileHandler = (map, overlay) => {
+    const clickMobileHandler = (map, overlay, place) => {
         return function () {
             overlay.setMap(map);
+            setCurrentPlace(place)
             setMouseState(true)
         }
     }
@@ -43,18 +45,6 @@ const Map = ({places, isMobile}) => {
         return function () {
             overlay.setMap(null)
             setMouseState(false)
-        }
-    }
-
-    const clickOverlayHandler = (place) => {
-        return function () {
-            history.push({
-                pathname: "/detail",
-                state: {
-                    from: "지도",
-                    place
-                }
-            })
         }
     }
 
@@ -71,24 +61,17 @@ const Map = ({places, isMobile}) => {
             setMouseState(false)
         }
     };
-    const addEventHandle = (target, type, callback) => {
-        if (target.addEventListener) {
-            target.addEventListener(type, callback);
-        } else {
-            target.attachEvent('on' + type, callback);
-        }
-    }
 
     const makeMarker = (place) => {
         const content = document.createElement('div');
-        content.className = 'place__infowindow'
-        content.innerHTML = `${place.name}`      
+        content.className = 'place__infowindow';
+        content.innerHTML = `${place.name}`;
 
         const position = new kakao.maps.LatLng(place.geocode[0], place.geocode[1])
         const overlay = new kakao.maps.CustomOverlay({
             content,
             position,
-            yAnchor: 2,
+            yAnchor: 2.5,
             clickable: true,
         })
 
@@ -98,9 +81,8 @@ const Map = ({places, isMobile}) => {
         });
 
         if (isMobile) {
-            kakao.maps.event.addListener(marker, 'click', clickMobileHandler(map, overlay));
+            kakao.maps.event.addListener(marker, 'click', clickMobileHandler(map, overlay, place));
             kakao.maps.event.addListener(map, "click", removeOverlay(overlay))
-            addEventHandle(content, "click", clickOverlayHandler(place))
         } else {
             kakao.maps.event.addListener(marker, 'click', clickHandler(place));
             kakao.maps.event.addListener(marker, 'mouseover', mouseOverHandler(map, overlay));
@@ -114,7 +96,7 @@ const Map = ({places, isMobile}) => {
             level = 11
         }
         const options = {
-            center: new kakao.maps.LatLng(33.3817, 126.5602), //지도의 중심좌표.
+            center: new kakao.maps.LatLng(33.3517, 126.5602), //지도의 중심좌표.
             level
         }
         map = new window.kakao.maps.Map(container.current, options);
@@ -169,13 +151,6 @@ const Map = ({places, isMobile}) => {
         <>
             <div className="map__container">
                 <div className="vertical">
-                    <span className="map-explain__container">{mouseState 
-                    ? isMobile 
-                    ? <div className="map-explain">더 알아보시려면 이름을 클릭해주세요.</div> 
-                    : <div className="map-explain">더 알아보시려면 마커를 클릭해주세요.</div> 
-                    : <div className="map-explain">지도를 확대하실 수 있습니다.</div>}
-                    </span>
-                    <div className="map" ref={container} ></div>
                     <select className="place-type__map" name="input__place-type" onChange={onTypeChange} >
                         <option value="전체">전체</option>
                         <option value="맛집">맛집</option>
@@ -186,6 +161,26 @@ const Map = ({places, isMobile}) => {
                     </select>
                     <div>
                         <button className="check-geolocation" onClick={onClickLocation}><FontAwesomeIcon icon={faLocationArrow} /> 현재 위치 표시하기</button>
+                    </div>
+                    <div className="map" ref={container} ></div>
+                    <div className="map-explain__container">{mouseState 
+                    ? isMobile 
+                    ? 
+                    <Link to={{
+                        pathname: "/detail",
+                        state: {
+                            from: "지도",
+                            place: currentPlace
+                        }
+                    }}>
+                    <div className="marker__detail">
+                        <h4>{currentPlace.name} <FontAwesomeIcon icon={faMousePointer} size="sm"/></h4>
+                        <hr/>
+                        <p>{currentPlace.description.slice(0, 50)}{currentPlace.description.length > 50 && "..."}</p>
+                    </div> 
+                    </Link>
+                    : <div className="map-explain">더 알아보시려면 마커를 클릭해주세요.</div> 
+                    : <div className="map-explain">지도를 확대하실 수 있습니다. </div>}
                     </div>
                 </div>
                 {detail && (

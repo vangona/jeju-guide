@@ -53,7 +53,7 @@ const List = ({places, localArray, isMobile}) => {
                                     ? {backgroundColor:"wheat"}
                                     : {backgroundColor:"white"}
                                 )}>
-                                <td className="list__table-name">
+                                <td className="list__table-name list__table-content">
                                     <Link to={{
                                         pathname: "/detail",
                                         state: {
@@ -64,7 +64,7 @@ const List = ({places, localArray, isMobile}) => {
                                     {place.name}
                                     </Link>
                                 </td>
-                                <td>{place.addressDetail}</td>
+                                <td list__table-content>{place.addressDetail}</td>
                                 {!isMobile && <td>{place.description}</td>}
                                 {/* <td><AddMyPlace place={place}/></td> */}
                             </tr>
