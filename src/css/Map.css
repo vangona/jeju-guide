@@ -69,16 +69,12 @@
 }
 
 .map__detail {
-  position: relative;
-  top: 0;
-  right: 0;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
   background-color: rgba(255, 255, 255, 0.5);
   padding: 10px 30px;
-  margin-left: 20px;
-  height: 60vh;
+  max-height: 70vh;
   width: 250px;
   word-break: keep-all;
 }

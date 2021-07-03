@@ -18,12 +18,39 @@
   padding: 0.5rem;
 }
 
+.tips__list li {
+  word-break: keep-all;
+  line-height: 22px;
+  margin-bottom: 8px;
+}
+
 .maker-int {
   margin-bottom: 1rem;
 }
 
+.maker-int ul {
+  padding: 0;
+}
+
+.maker-int li {
+  line-height: 25px;
+  list-style: none;
+}
+
+.maker-int__name {
+  font-size: 0.8rem;
+  margin: 1rem 0;
+}
+
+.maker-icons__container {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
 .maker-icons {
   display: flex;
-  width: 30%;
+  width: 50%;
+  align-items: center;
   justify-content: space-between;
 }

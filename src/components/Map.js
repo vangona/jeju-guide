@@ -1,31 +1,16 @@
 import { faLocationArrow, faMousePointer } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 /* global kakao */
 
-const Map = ({places, isMobile}) => {
-    const history = useHistory();
+const Map = ({places, isMobile, setDetail}) => {
     const [type, setType] = useState("전체");
-    const [detail, setDetail] = useState(null);
-    const [imgPage, setImgPage] = useState(0);
     const [mouseState, setMouseState] = useState(false);
     const [currentPlace, setCurrentPlace] = useState({});
     const container = useRef(null);
     let map = {};
-
-    const clickNextImg = () => {
-        if (imgPage < 4) {
-            setImgPage(prev => prev + 1);
-        }
-    }
-
-    const clickPrevImg = () => {
-        if (imgPage > 0) {
-            setImgPage(prev => prev - 1);
-        }
-    }
 
     const clickHandler = (place) => {
         return function () {
@@ -107,10 +92,6 @@ const Map = ({places, isMobile}) => {
         setType(value)
     }
 
-    const onClickClear = () => {
-        setDetail(null);
-    }
-
     const onClickLocation = () => {
         const displayMarker = (locPosition) => {
             const imageSrc = 'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/tourist.png',
@@ -158,8 +139,7 @@ const Map = ({places, isMobile}) => {
         <>
             <div className="map__container">
                 <div className="vertical">
-                    <div className={isMobile ? "vertical" : null}>
-                        <select className="place-type__map" name="input__place-type" onChange={onTypeChange} >
+                    <select className="place-type__map" name="input__place-type" onChange={onTypeChange} >
                             <option value="전체">전체</option>
                             <option value="맛집">맛집</option>
                             <option value="카페 & 베이커리">카페 & 베이커리</option>\
@@ -167,6 +147,7 @@ const Map = ({places, isMobile}) => {
                             <option value="술집">술집</option>
                             <option value="그 외 가볼만한 곳">그 외 가볼만한 곳</option>
                         </select>
+                    <div>
                         <button className="check-geolocation" onClick={onClickLocation}><FontAwesomeIcon icon={faLocationArrow} /> 현재 위치 표시하기</button>
                     </div>
                     <div className="map" ref={container} ></div>
@@ -196,33 +177,6 @@ const Map = ({places, isMobile}) => {
                      </div>}
                     </div>
                 </div>
-                {detail && (
-                    <div className="map__detail vertical">
-                        <h3>{detail.name}</h3>
-                        {detail.attachmentUrlArray[0] && (
-                            <>
-                                <img src={detail.attachmentUrlArray[imgPage]} alt="detail-img" width="100%" height="auto"/>
-                                <div className="map-detail__img-btn__container">
-                                    {imgPage !== 0 && <button className="map-detail__img-btn prev" onClick={clickPrevImg}>◀</button>}
-                                    {imgPage !== detail.attachmentUrlArray.length -1 & detail.attachmentUrlArray.lenth !== 1 && <button className="map-detail__img-btn next" onClick={clickNextImg}>▶</button>}
-                                </div>
-                            </>
-                        )}
-                        <div>{detail.description}</div><br />
-                        {detail.url !== "" && <a href={detail.url} target="_blank" rel="noreferrer"><button>관련 사이트</button></a>}<br />
-                        <Link to={{
-                                    pathname: "/detail",
-                                    state: {
-                                        from: "지도",
-                                        place: detail
-                                    }
-                                }}>
-                        <button>더 알아보기</button>
-                        </Link>
-                        {/* <AddMyPlace place={detail}/> */}
-                        <div className="map__detail-clear" onClick={onClickClear}>❌</div>
-                    </div>
-                )}
             </div>
         </>
     )

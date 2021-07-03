@@ -53,6 +53,7 @@ const Detail = () => {
                 ></ins>
                 <button style={{marginTop:"1rem"}} onClick={clickBackBtn}>돌아가기</button>
             </div>
+            <span className="copyright">&copy; 2021, 나만의 서랍장 Co. all rights reserved.</span>
             <ScriptTag type="text/javascript"
                     src="//t1.daumcdn.net/kas/static/ba.min.js" 
                     async >

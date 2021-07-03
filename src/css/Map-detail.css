@@ -1,0 +1,75 @@
+.map-detail__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.map__detail {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 10px 30px;
+  max-height: 70vh;
+  width: 250px;
+  word-break: keep-all;
+}
+
+.map-detail__img {
+  margin: 10px 0;
+}
+
+.map-detail__img-btn__container {
+  height: 5vh;
+  width: 100%;
+  position: relative;
+}
+
+.map-detail__img-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 1.5rem;
+}
+
+.map-detail__img-btn:hover {
+  cursor: pointer;
+}
+
+.map-detail__description {
+  font-size: 0.9rem;
+  margin: 5px 0;
+}
+
+.map__detail a {
+  text-decoration: none;
+  color: black;
+}
+
+.map-detail__btn {
+  color: rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+  border: 1px solid white;
+  padding: 3px 10px;
+  margin: 10px 5px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.map-detail__btn:hover {
+  cursor: pointer;
+}
+
+.map-detail__btn:active {
+  transform: scale(0.98);
+}
+
+.map__detail-clear {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.map__detail-clear:hover {
+  cursor: pointer;
+}

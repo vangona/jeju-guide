@@ -3,6 +3,7 @@
 @import "css/Auth.css";
 @import "css/Post.css";
 @import "css/Map.css";
+@import "css/Map-detail.css";
 @import "css/List.css";
 @import "css/Pagination.css";
 @import "css/Detail.css";
@@ -30,4 +31,30 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.prev,
+.next {
+  position: absolute;
+}
+
+.prev {
+  left: 0;
+}
+
+.next {
+  right: 0;
+}
+
+.copyright {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.7rem;
+  margin-bottom: 0.5rem;
 }
