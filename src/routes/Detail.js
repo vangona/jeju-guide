@@ -37,13 +37,15 @@ const Detail = () => {
         <div className="detail__container">
             <div className="detail-box">
                 <div className="detail__name">{place.name}</div>
-                <div className="detail-img__container">
+                {place.attachmentUrlArray[0] 
+                ? (<div className="detail-img__container">
                     <img className="detail__img" src={place.attachmentUrlArray[imgPage]} style={{maxWidth:"100%"}} alt="detail-img"/>
                     <div className="detail-img-btn__container">
                         {imgPage !== 0 && <button className="detail__prev detail-btn" onClick={clickPrevImg}><FontAwesomeIcon icon={faAngleLeft} /></button>}
                         {imgPage !== place.attachmentUrlArray.length -1 & place.attachmentUrlArray.lenth !== 1 ? <button className="detail__next detail-btn" onClick={clickNextImg}><FontAwesomeIcon icon={faAngleRight} /></button> : null}
                     </div>
-                </div>
+                </div>)
+                : null}
                 <p className="detail__description">{place.description}</p>
                 {/* <AddMyPlace place={place}/> */}
                 <ins

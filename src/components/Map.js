@@ -77,8 +77,8 @@ const Map = ({places, isMobile, setDetail}) => {
         }
 
         const imageSrc = imageIconLocation,
-        imageSize = new kakao.maps.Size(25, 25),
-        imageOption = {offset: new kakao.maps.Point(27, 69)};    
+        imageSize = new kakao.maps.Size(35, 35),
+        imageOption = {offset: new kakao.maps.Point(17.5, 35)};    
 
       
         const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
@@ -107,7 +107,7 @@ const Map = ({places, isMobile, setDetail}) => {
             level = 11
         }
         const options = {
-            center: new kakao.maps.LatLng(33.3517, 126.5602), //지도의 중심좌표.
+            center: new kakao.maps.LatLng(33.3717, 126.5602), //지도의 중심좌표.
             level
         }
         map = new window.kakao.maps.Map(container.current, options);
@@ -122,7 +122,7 @@ const Map = ({places, isMobile, setDetail}) => {
         const displayMarker = (locPosition) => {
             const imageSrc = 'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/tourist.png',
                 imageSize = new kakao.maps.Size(25, 25),
-                imageOption = {offset: new kakao.maps.Point(27, 69)};    
+                imageOption = {offset: new kakao.maps.Point(12.5, 25)};    
 
             const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
 

@@ -10,7 +10,7 @@ const PostForm = ({userObj}) => {
     const [name, setName] = useState('');
     const [extraAddress, setExtraAddress] = useState(''); 
     const [geocode, setGeocode] = useState([]);
-    const [type, setType] = useState('그외 가볼만한 곳');
+    const [type, setType] = useState('카페 & 베이커리');
     const [description, setDescription] = useState('');
     const [attachmentArray, setAttachmentArray] = useState([]);
     const [url, setUrl] = useState('');
