@@ -15,6 +15,9 @@
   max-height: 70vh;
   width: 250px;
   word-break: keep-all;
+  border-radius: 10px;
+  -webkit-box-shadow: 6px 6px 7px 0px rgba(0, 0, 0, 0.49);
+  box-shadow: 6px 6px 7px 0px rgba(0, 0, 0, 0.49);
 }
 
 .map-detail__img {

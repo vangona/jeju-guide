@@ -20,6 +20,8 @@
   padding: 1rem;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 10px;
+  -webkit-box-shadow: 6px 6px 7px 0px rgba(0, 0, 0, 0.49);
+  box-shadow: 6px 6px 7px 0px rgba(0, 0, 0, 0.49);
 }
 
 .detail__name {
@@ -30,7 +32,7 @@
 }
 
 .detail-img__container {
-  max-height: 30vh;
+  max-height: 40vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -41,14 +43,16 @@
 
 .detail__img {
   max-height: 100%;
+  -webkit-box-shadow: 6px 6px 7px 0px rgba(0, 0, 0, 0.8);
+  box-shadow: 6px 6px 7px 0px rgba(0, 0, 0, 0.8);
 }
 
 .detail-img-btn__container {
   width: 100%;
   height: 4vh;
   position: relative;
-  padding-bottom: 30px;
-  margin-bottom: 5px;
+  padding: 5px 0 30px 0;
+  margin-bottom: 10px;
 }
 
 .detail-btn {

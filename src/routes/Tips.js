@@ -29,7 +29,9 @@ const Tips = () => {
                         <li>
                         - 제주도를 7개월간 여행하였다.
                         </li>
+                        <li>
                         - 뚜벅초와 개발을 맡고있다.
+                        </li>
                     </ul>
                     <div className="maker-icons__container">
                         <span className="maker-icons">
@@ -40,13 +42,25 @@ const Tips = () => {
                     </div>
                     <h6 className="maker-int__name">2. 제주살이꾼 : 박태훈</h6>
                     <p style={{fontSize:"0.8rem"}}>
-                         제주도에 3년간 살고 있다. SUPER DRIVER이며 SUPER 제주도 GUIDE를 맡고있다.
+                        <li>
+                        - 제주도에 3년간 살고 있다.
+                        </li>
+                        <li>
+                        - 제주도 숨은 맛집과 명소 탐방, 미슐탱 가이드 이름의 어원을 맡고있다.    
+                        </li>
+                        <li>
+                        - SUPER DRIVER    
+                        </li>
                     </p>
                     <div className="maker-icons__container">
                     <span className="maker-icons">
                     <a href="https://www.instagram.com/van_gona_/" target="_blank"><FontAwesomeIcon icon={faInstagram} size="2x" color="white"/></a>
                     </span>
                     </div>
+                    <h5>도와주신 분들 & 저작권 표시</h5>
+                    <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+                    <div>Icons made by <a href="" title="iconixar">iconixar</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+                    <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
                 </div>
                 <ins
                     className="kakao_ad_area"

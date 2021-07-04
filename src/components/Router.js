@@ -1,7 +1,8 @@
 import React from "react";
-import { HashRouter as Router, Route, Switch, useHistory} from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import Auth from "routes/Auth";
 import Detail from "routes/Detail";
+import Edit from "routes/Edit";
 import Home from "routes/Home";
 import MyPlace from "routes/MyPlace";
 import Post from "routes/Post";
@@ -14,15 +15,26 @@ const AppRouter = ({ isLoggedIn, userObj, isMobile }) => {
             <Router>
                 <Switch>
                     {isLoggedIn 
-                        ? (                        
-                            <Route exact path="/auth">
+                        ? (             
+                            <Route exact path="/post">
                                 <Post userObj={userObj}/>
                             </Route>
                         ) : (    
-                            <Route exact path="/auth">
+                            <Route exact path="/post">
                                 <Auth />
                             </Route>
-                            )
+                        )
+                    }
+                    {isLoggedIn 
+                        ? (
+                            <Route exact path="/edit">
+                                <Edit />
+                            </Route>
+                        ) : (
+                            <Route exact path="/edit">
+                                <Auth />
+                            </Route>
+                        )
                     }
                     <Route exact path="/">
                         <Home isMobile={isMobile}/>

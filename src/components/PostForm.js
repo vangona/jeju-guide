@@ -180,6 +180,7 @@ const PostForm = ({userObj}) => {
                     <option value="카페 & 베이커리">카페 & 베이커리</option>\
                     <option value="풍경">풍경</option>
                     <option value="술집">술집</option>
+                    <option value="숙소">숙소</option>
                     <option value="그 외 가볼만한 곳">그 외 가볼만한 곳</option>
                 </select>
             </div>

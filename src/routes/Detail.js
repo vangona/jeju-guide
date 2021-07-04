@@ -1,5 +1,7 @@
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddMyPlace from "components/AddMyPlace";
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { useHistory } from "react-router"
 import { useLocation } from "react-router-dom";
 import ScriptTag from "react-script-tag"
@@ -38,8 +40,8 @@ const Detail = () => {
                 <div className="detail-img__container">
                     <img className="detail__img" src={place.attachmentUrlArray[imgPage]} style={{maxWidth:"100%"}} alt="detail-img"/>
                     <div className="detail-img-btn__container">
-                        {imgPage !== 0 && <button className="detail__prev detail-btn" onClick={clickPrevImg}>◀</button>}
-                        {imgPage !== place.attachmentUrlArray.length -1 & place.attachmentUrlArray.lenth !== 1 ? <button className="detail__next detail-btn" onClick={clickNextImg}>▶</button> : null}
+                        {imgPage !== 0 && <button className="detail__prev detail-btn" onClick={clickPrevImg}><FontAwesomeIcon icon={faAngleLeft} /></button>}
+                        {imgPage !== place.attachmentUrlArray.length -1 & place.attachmentUrlArray.lenth !== 1 ? <button className="detail__next detail-btn" onClick={clickNextImg}><FontAwesomeIcon icon={faAngleRight} /></button> : null}
                     </div>
                 </div>
                 <p className="detail__description">{place.description}</p>
