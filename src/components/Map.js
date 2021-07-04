@@ -60,8 +60,34 @@ const Map = ({places, isMobile, setDetail}) => {
             clickable: true,
         })
 
+        let imageIconLocation = ""
+
+        if (place.type === "맛집") {
+            imageIconLocation = 'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/restaurant.png'
+        } else if (place.type === "카페 & 베이커리") {
+            imageIconLocation = 'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/cafe.png'
+        } else if (place.type === "숙소") {
+            imageIconLocation = ''
+        } else if (place.type === "술집") {
+            imageIconLocation = 'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/drink.png'
+        } else if (place.type === "풍경") {
+            imageIconLocation = 'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/landscape.png'
+        } else {
+            imageIconLocation = 'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/basic.png'
+        }
+
+        const imageSrc = imageIconLocation,
+        imageSize = new kakao.maps.Size(25, 25),
+        imageOption = {offset: new kakao.maps.Point(27, 69)};    
+
+      
+        const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+ 
+
+
         const marker = new kakao.maps.Marker({
             map: map,
+            image: markerImage,
             position
         });
 
