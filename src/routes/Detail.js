@@ -1,10 +1,11 @@
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddMyPlace from "components/AddMyPlace";
-import React, { useState } from "react"
-import { useHistory } from "react-router"
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router";
 import { useLocation } from "react-router-dom";
-import ScriptTag from "react-script-tag"
+import ScriptTag from "react-script-tag";
+import ReactGA from "react-ga";
 
 const Detail = () => {
     const location = useLocation();
@@ -33,6 +34,17 @@ const Detail = () => {
             setImgPage(prev => prev - 1);
         }
     }
+
+    const getGA = () => {
+        console.log('세부 페이지 진입')
+        const pathName = window.location.pathname;
+        ReactGA.initialize('UA-199674845-1');
+        ReactGA.set({ page:pathName });
+        ReactGA.pageview(pathName);
+    };
+    useEffect(() => {
+        getGA();
+    })
     return (
         <div className="detail__container">
             <div className="detail-box">

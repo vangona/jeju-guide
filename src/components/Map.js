@@ -67,7 +67,7 @@ const Map = ({places, isMobile, setDetail}) => {
         } else if (place.type === "카페 & 베이커리") {
             imageIconLocation = 'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/cafe.png'
         } else if (place.type === "숙소") {
-            imageIconLocation = ''
+            imageIconLocation = 'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/hotel.png'
         } else if (place.type === "술집") {
             imageIconLocation = 'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/drink.png'
         } else if (place.type === "풍경") {

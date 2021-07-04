@@ -5,6 +5,7 @@ import Map from "components/Map";
 import { dbService } from "fBase";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import ReactGA from "react-ga";
 
 const Home = ({ isMobile }) => {
     const location = useLocation();
@@ -15,6 +16,7 @@ const Home = ({ isMobile }) => {
     const [viewType, setViewType] = useState("지도");
     const localArray = JSON.parse(localStorage.getItem("micheltain_myplace"))
 
+    
     const clickNextImg = () => {
         if (imgPage < 4) {
             setImgPage(prev => prev + 1);
@@ -49,11 +51,22 @@ const Home = ({ isMobile }) => {
         setDetail(null);
     }
 
+    const getGA = () => {
+        console.log('홈 진입')
+        const pathName = window.location.pathname;
+        ReactGA.initialize('UA-199674845-1');
+        ReactGA.set({ page:pathName });
+        ReactGA.pageview(pathName);
+    };
+
     useEffect(() => {
         getPlaces();
+        getGA();
         if (location.state !== undefined) {
             setViewType(location.state.prevViewType)
         } 
+
+
     }, [])
     return (
         <div className="home__container">
