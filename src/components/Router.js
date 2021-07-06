@@ -6,6 +6,7 @@ import Edit from "routes/Edit";
 import Home from "routes/Home";
 import MyPlace from "routes/MyPlace";
 import Post from "routes/Post";
+import Test from "routes/Test";
 import Tips from "routes/Tips";
 
 const AppRouter = ({ isLoggedIn, userObj, isMobile }) => {
@@ -39,9 +40,9 @@ const AppRouter = ({ isLoggedIn, userObj, isMobile }) => {
                     <Route exact path="/">
                         <Home isMobile={isMobile}/>
                     </Route>
-                    <Route exact path="/detail">
-                        <Detail />
-                    </Route>
+                    <Route exact path="/detail" component={Detail} />
+                    <Route exact path="/detail/:place" component={Detail} />
+                    <Route exact path="/test/:test" component={Test} />
                     <Route exact path="/tips">
                         <Tips />
                     </Route>

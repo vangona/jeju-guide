@@ -55,10 +55,9 @@ const List = ({places, localArray, isMobile}) => {
                                 )}>
                                 <td className="list__table-name list__table-content">
                                     <Link to={{
-                                        pathname: "/detail",
+                                        pathname: `/detail/${place.name}`,
                                         state: {
-                                            from: "목록",
-                                            place
+                                            from: "목록"
                                         }
                                     }}>
                                     {place.name}

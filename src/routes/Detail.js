@@ -6,13 +6,18 @@ import { useHistory } from "react-router";
 import { useLocation } from "react-router-dom";
 import ScriptTag from "react-script-tag";
 import ReactGA from "react-ga";
+import { dbService } from "fBase";
 
-const Detail = () => {
+const Detail = ({match}) => {
     const location = useLocation();
-    const { state : { place } } = location;
-    const { state: { from } } = location;
+    let from = "지도"
+    if (location.state !== undefined) {
+        from = location.state.from
+    }
     const history = useHistory();
+    const [detailPlace, setDetailPlace] = useState({});
     const [imgPage, setImgPage] = useState(0);
+    const [detailLoading, setDetailLoading] = useState(false);
 
     const clickBackBtn = () => {
         history.push({
@@ -42,23 +47,39 @@ const Detail = () => {
         ReactGA.set({ page:pathName });
         ReactGA.pageview(pathName);
     };
+
+    const getPlaceName = async () => {
+        const name = match.params.place
+        await dbService.collection("places").where("name", "==", name).onSnapshot(snapshot => {
+            const placeName = snapshot.docs.map(doc => ({
+                ...doc.data()
+            }))
+            setDetailPlace(placeName)
+            setDetailLoading(true)
+        })
+    }
+
     useEffect(() => {
+        getPlaceName();
         getGA();
-    })
+    }, [])
     return (
+        <>
+        {detailLoading
+        ? (
         <div className="detail__container">
             <div className="detail-box">
-                <div className="detail__name">{place.name}</div>
-                {place.attachmentUrlArray[0] 
+                <div className="detail__name">{detailPlace[0].name}</div>
+                {detailPlace[0].attachmentUrlArray[0] 
                 ? (<div className="detail-img__container">
-                    <img className="detail__img" src={place.attachmentUrlArray[imgPage]} style={{maxWidth:"100%"}} alt="detail-img"/>
+                    <img className="detail__img" src={detailPlace[0].attachmentUrlArray[imgPage]} style={{maxWidth:"100%"}} alt="detail-img"/>
                     <div className="detail-img-btn__container">
                         {imgPage !== 0 && <button className="detail__prev detail-btn" onClick={clickPrevImg}><FontAwesomeIcon icon={faAngleLeft} /></button>}
-                        {imgPage !== place.attachmentUrlArray.length -1 & place.attachmentUrlArray.lenth !== 1 ? <button className="detail__next detail-btn" onClick={clickNextImg}><FontAwesomeIcon icon={faAngleRight} /></button> : null}
+                        {imgPage !== detailPlace[0].attachmentUrlArray.length -1 & detailPlace[0].attachmentUrlArray.lenth !== 1 ? <button className="detail__next detail-btn" onClick={clickNextImg}><FontAwesomeIcon icon={faAngleRight} /></button> : null}
                     </div>
                 </div>)
                 : null}
-                <p className="detail__description">{place.description}</p>
+                <p className="detail__description">{detailPlace[0].description}</p>
                 {/* <AddMyPlace place={place}/> */}
                 <ins
                 className="kakao_ad_area"
@@ -75,6 +96,8 @@ const Detail = () => {
                     async >
             </ScriptTag>
         </div>
+        ) : ("Loading...")}
+        </>
     )
 }
 

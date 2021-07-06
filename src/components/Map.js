@@ -9,6 +9,7 @@ const Map = ({places, isMobile, setDetail}) => {
     const [type, setType] = useState("전체");
     const [mouseState, setMouseState] = useState(false);
     const [currentPlace, setCurrentPlace] = useState({});
+    const [prevOverlay, setPrevOverlay] = useState({});
     const container = useRef(null);
     let map = {};
 
@@ -79,12 +80,9 @@ const Map = ({places, isMobile, setDetail}) => {
         const imageSrc = imageIconLocation,
         imageSize = new kakao.maps.Size(35, 35),
         imageOption = {offset: new kakao.maps.Point(17.5, 35)};    
-
       
         const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
  
-
-
         const marker = new kakao.maps.Marker({
             map: map,
             image: markerImage,
@@ -160,7 +158,7 @@ const Map = ({places, isMobile, setDetail}) => {
                 makeMarker(place)
             }
         })
-    }, [type]);
+    }, [type, places]);
     return (
         <>
             <div className="map__container">
@@ -182,10 +180,9 @@ const Map = ({places, isMobile, setDetail}) => {
                     ? isMobile 
                     ? 
                     <Link to={{
-                        pathname: "/detail",
+                        pathname: `/detail/${currentPlace.name}`,
                         state: {
-                            from: "지도",
-                            place: currentPlace
+                            from: "지도"
                         }
                     }}>
                     <div className="marker__detail">

@@ -65,8 +65,6 @@ const Home = ({ isMobile }) => {
         if (location.state !== undefined) {
             setViewType(location.state.prevViewType)
         } 
-
-
     }, [])
     return (
         <div className="home__container">
@@ -106,13 +104,12 @@ const Home = ({ isMobile }) => {
                         <div>
                         {detail.url !== "" && <a href={detail.url} target="_blank" rel="noreferrer"><button className="map-detail__url map-detail__btn">관련 사이트</button></a>}
                         <Link to={{
-                                    pathname: "/detail",
+                                    pathname: `/detail/${detail.name}`,
                                     state: {
-                                        from: "지도",
-                                        place: detail
+                                        from: "지도"
                                     }
                                 }}>
-                        <button className="map-detail__detail map-detail__btn">더 알아보기</button>
+                        <button onClick={onClickClear} className="map-detail__detail map-detail__btn">더 알아보기</button>
                         </Link>
                         </div>
                         {/* <AddMyPlace place={detail}/> */}
