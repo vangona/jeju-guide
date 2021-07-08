@@ -9,9 +9,9 @@ const Map = ({places, isMobile, setDetail}) => {
     const [type, setType] = useState("전체");
     const [mouseState, setMouseState] = useState(false);
     const [currentPlace, setCurrentPlace] = useState({});
-    const [prevOverlay, setPrevOverlay] = useState({});
     const container = useRef(null);
     let map = {};
+    let preOverlay = "";
 
     const clickHandler = (place) => {
         return function () {
@@ -21,9 +21,13 @@ const Map = ({places, isMobile, setDetail}) => {
 
     const clickMobileHandler = (map, overlay, place) => {
         return function () {
+            if (preOverlay !== ""){
+                preOverlay.setMap(null)
+            }
             overlay.setMap(map);
             setCurrentPlace(place)
             setMouseState(true)
+            preOverlay = overlay;
         }
     }
 
