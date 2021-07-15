@@ -92,15 +92,7 @@ const Home = ({ isMobile }) => {
                                 </div> */}
                             </>
                         )}
-                        <Link to={{
-                                    pathname: "/detail",
-                                    state: {
-                                        from: "지도",
-                                        place: detail
-                                    }
-                                }}>
                         <div className="map-detail__description">{detail.description.length > 100 ? detail.description.slice(0, 100) + "..." : detail.description}</div>
-                        </Link>
                         <div>
                         {detail.url !== "" && <a href={detail.url} target="_blank" rel="noreferrer"><button className="map-detail__url map-detail__btn">관련 사이트</button></a>}
                         <Link to={{

@@ -14,9 +14,12 @@ const Post = ({userObj}) => {
     }
     return (
         <div className="post__container">
+            <br />
+            <div>
+                <button onClick={onHomeClick}>Home</button>
+                <button onClick={onLogOutClick}>Logout</button>
+            </div><br />
             <PostForm userObj={userObj}/>
-            <button onClick={onHomeClick}>Home</button>
-            <button onClick={onLogOutClick}>Logout</button>
         </div>
     )
 }

@@ -96,14 +96,6 @@ const PostForm = ({userObj}) => {
                     }
                 }
                 setAttachmentArray(resultArray);
-                // const theFile = files[0];
-                // const compressedFile = await imageCompression(theFile, options)
-                // const reader = new FileReader();
-                // reader.readAsDataURL(compressedFile);
-                // reader.onloadend = (finishedEvent) => {
-                //     const {currentTarget: {result}} = finishedEvent
-                //     setAttachment(result)
-                // }
             } catch (error) {
                 console.log(error)
             }
@@ -142,14 +134,18 @@ const PostForm = ({userObj}) => {
             }
             fullAddr += (extraAddr !== '' ? ` (${extraAddr})` : '');
         }
-    
+
+        await geocoder.addressSearch(fullAddr, makeGeocode)
+
         setAddress(data.zonecode);
         setAddressDetail(fullAddr);
-    
-        await geocoder.addressSearch(addressDetail, makeGeocode)
 
         setIsOpenPost(false);
     }
+
+    useEffect(() => {
+        console.log(attachmentArray)
+    }, [attachmentArray])
 
     return (
         <form className="post-form__container" onSubmit={onSubmit}>
@@ -160,7 +156,7 @@ const PostForm = ({userObj}) => {
             <div className="post-form__content vertical">  
                 <div className="address-input">
                     { isOpenPost && <DaumPostcode autoClose onComplete={onCompletePost} /> }
-                    <button onClick={onChangeOpenPost}>주소 입력(지번)</button>
+                    <button onClick={onChangeOpenPost}>주소 입력 하기</button>
                 </div>
                 <div className="address-content__container">
                     <label htmlFor="place-address">주소 : </label>
@@ -175,7 +171,7 @@ const PostForm = ({userObj}) => {
             </div>     
             <div className="post-form__content vertical">         
                 <label htmlFor="place-type">장소 종류</label>
-                <select name="place-type" required onChange={onTypeChange} >
+                <select name="place-type" value={type} required onChange={onTypeChange} >
                     <option value="맛집">맛집</option>
                     <option value="카페 & 베이커리">카페 & 베이커리</option>\
                     <option value="풍경">풍경</option>
@@ -189,8 +185,15 @@ const PostForm = ({userObj}) => {
                 <textarea className="place-description" name="place-description" placeholder="설명" onChange={onDescriptionChange} value={description} required/>
             </div>
             <div className="post-form__content vertical">               
-                <label htmlFor="place-img">장소 사진(필수 X)</label>
+                <label htmlFor="place-img">장소 사진(필수 X, 최대 5장, 올린 순서대로 보여집니다.)</label>
                 <input type="file" accept="image/*" name="place-img" onChange={onAttachmentChange} multiple/>
+                <div>
+                {attachmentArray.map(attachment => {
+                    return (
+                        <img src={`${attachment}`} alt="preview" width="20%" />
+                    )
+                })}
+                </div>
             </div>
             <div className="post-form__content vertical">               
                 <label htmlFor="place-description">참고 사이트 주소(있다면)</label>
