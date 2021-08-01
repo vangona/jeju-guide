@@ -10,8 +10,9 @@ const Map = ({places, isMobile, setDetail}) => {
     const [mouseState, setMouseState] = useState(false);
     const [currentPlace, setCurrentPlace] = useState({});
     const container = useRef(null);
-    let map = {};
+    let map;
     let preOverlay = "";
+    let clusterer;
 
     const clickHandler = (place) => {
         return function () {
@@ -88,7 +89,6 @@ const Map = ({places, isMobile, setDetail}) => {
         const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
  
         const marker = new kakao.maps.Marker({
-            map: map,
             image: markerImage,
             position
         });
@@ -101,6 +101,8 @@ const Map = ({places, isMobile, setDetail}) => {
             kakao.maps.event.addListener(marker, 'mouseover', mouseOverHandler(map, overlay));
             kakao.maps.event.addListener(marker, 'mouseout', mouseOutHandler(overlay));
         }
+
+        return marker;
     }
 
     const makeMap = () => {
@@ -113,6 +115,11 @@ const Map = ({places, isMobile, setDetail}) => {
             level
         }
         map = new window.kakao.maps.Map(container.current, options);
+        clusterer = new kakao.maps.MarkerClusterer({
+            map,
+            averageCenter: true,
+            minLevel: 9
+        })
     }
 
     const onTypeChange = (event) => {
@@ -156,12 +163,16 @@ const Map = ({places, isMobile, setDetail}) => {
     }
 
     useEffect(() => {
+        let markers = [];
         makeMap();
         places.map(place => {
             if(type === "전체" || place.type === type) {
                 makeMarker(place)
+                markers.push(makeMarker(place))
             }
         })
+        console.log(markers)
+        clusterer.addMarkers(markers)
     }, [type, places]);
     return (
         <>
