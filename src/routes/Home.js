@@ -6,6 +6,7 @@ import { dbService } from "fBase";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import ReactGA from "react-ga";
+import Modal from "components/Modal";
 
 const Home = ({ isMobile }) => {
     const location = useLocation();
@@ -80,34 +81,7 @@ const Home = ({ isMobile }) => {
                 }
             </div>
             {detail && (
-                <div className="map-detail__container"> 
-                    <div className="map__detail vertical">
-                        <h3>{detail.name}</h3>
-                        {detail.attachmentUrlArray[0] && (
-                            <>
-                                <img className="map-detail__img" src={detail.attachmentUrlArray[0]} alt="detail-img" width="100%" height="auto"/>
-                                {/* <div className="map-detail__img-btn__container">
-                                    {imgPage !== 0 && <button className="map-detail__img-btn prev" onClick={clickPrevImg}>◀</button>}
-                                    {imgPage !== detail.attachmentUrlArray.length -1 & detail.attachmentUrlArray.lenth !== 1 ? <button className="map-detail__img-btn next" onClick={clickNextImg}>▶</button> : null}
-                                </div> */}
-                            </>
-                        )}
-                        <div className="map-detail__description">{detail.description.length > 100 ? detail.description.slice(0, 100) + "..." : detail.description}</div>
-                        <div>
-                        {detail.url !== "" && <a href={detail.url} target="_blank" rel="noreferrer"><button className="map-detail__url map-detail__btn">관련 사이트</button></a>}
-                        <Link to={{
-                                    pathname: `/detail/${detail.name}`,
-                                    state: {
-                                        from: "지도"
-                                    }
-                                }}>
-                        <button onClick={onClickClear} className="map-detail__detail map-detail__btn">더 알아보기</button>
-                        </Link>
-                        </div>
-                        {/* <AddMyPlace place={detail}/> */}
-                        <div className="map__detail-clear" onClick={onClickClear}>❌</div>
-                    </div>
-                </div>
+                <Modal place={detail} setModalState={setDetail} />
             )}
             {/* <Link to="/myplace"><button>내 여행지 목록</button></Link> */}
         </div>
