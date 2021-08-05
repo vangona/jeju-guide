@@ -1,7 +1,9 @@
 import { faLocationArrow, faMousePointer } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { dbService } from "fBase";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import Saychat from "./Saychat";
 
 /* global kakao */
 
@@ -9,6 +11,8 @@ const Map = ({places, isMobile, setDetail}) => {
     const [type, setType] = useState("전체");
     const [mouseState, setMouseState] = useState(false);
     const [currentPlace, setCurrentPlace] = useState({});
+    const [geoLat, setGeoLat] = useState("");
+    const [geoLon, setGeoLon] = useState("");
     const container = useRef(null);
     let map;
     let preOverlay = "";
@@ -148,6 +152,9 @@ const Map = ({places, isMobile, setDetail}) => {
                 
                 var lat = position.coords.latitude, // 위도
                     lon = position.coords.longitude; // 경도
+
+                setGeoLat(lat)
+                setGeoLon(lon)
                 
                 var locPosition = new kakao.maps.LatLng(lat, lon) // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
                 
@@ -162,8 +169,34 @@ const Map = ({places, isMobile, setDetail}) => {
         }
     }
 
+    const paintChat = (chats) => {
+        if (chats !== false) {
+        const latestChat = chats[chats.length -1]
+        const content = document.createElement('div');
+        content.className = 'place__infowindow';
+        content.innerHTML = `${latestChat.text}`;
+        const position = new kakao.maps.LatLng(latestChat.location[0], latestChat.location[1])
+        const chatWindow = new kakao.maps.CustomOverlay({
+            content,
+            position,
+            yAnchor: 2.5,
+            clickable: true,
+        })
+        chatWindow.setMap(map)
+        setTimeout(()=>{chatWindow.setMap(null)}, 3000)
+    }};
+
     useEffect(() => {
         let markers = [];
+
+        dbService.collection("chats").onSnapshot(snapshot => {
+            const chatArray = snapshot.docs.map(doc => ({
+                id:doc.id,
+                ...doc.data()
+            }));
+            paintChat(chatArray)
+        })
+
         makeMap();
         places.map(place => {
             if(type === "전체" || place.type === type) {
@@ -171,7 +204,6 @@ const Map = ({places, isMobile, setDetail}) => {
                 markers.push(makeMarker(place))
             }
         })
-        console.log(markers)
         clusterer.addMarkers(markers)
     }, [type, places]);
     return (
@@ -215,6 +247,7 @@ const Map = ({places, isMobile, setDetail}) => {
                         <Link to="/tips"><div className="map-explain__tips">장기여행자가 알려주는 HONEY TIPS</div></Link>
                      </div>}
                     </div>
+                    <Saychat lat={geoLat} lon={geoLon} />
                 </div>
             </div>
         </>
