@@ -7,7 +7,7 @@ import Saychat from "./Saychat";
 
 /* global kakao */
 
-const Map = ({places, isMobile, setDetail}) => {
+const Map = ({places, isMobile, setDetail, chatState}) => {
     const [type, setType] = useState("전체");
     const [mouseState, setMouseState] = useState(false);
     const [currentPlace, setCurrentPlace] = useState({});
@@ -247,7 +247,7 @@ const Map = ({places, isMobile, setDetail}) => {
                         <Link to="/tips"><div className="map-explain__tips">장기여행자가 알려주는 HONEY TIPS</div></Link>
                      </div>}
                     </div>
-                    <Saychat lat={geoLat} lon={geoLon} />
+                    {chatState && <Saychat lat={geoLat} lon={geoLon} />}
                 </div>
             </div>
         </>

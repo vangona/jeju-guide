@@ -4,9 +4,10 @@ import List from "components/List";
 import Map from "components/Map";
 import { dbService } from "fBase";
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import ReactGA from "react-ga";
 import Modal from "components/Modal";
+import Navigation from "components/Navigation";
 
 const Home = ({ isMobile }) => {
     const location = useLocation();
@@ -15,6 +16,8 @@ const Home = ({ isMobile }) => {
     const [loading, setLoading] = useState(false);
     const [places, setPlaces] = useState([]);
     const [viewType, setViewType] = useState("지도");
+    const [chatState, setChatState] = useState(false)
+
     const localArray = JSON.parse(localStorage.getItem("micheltain_myplace"))
 
     
@@ -40,6 +43,7 @@ const Home = ({ isMobile }) => {
             setLoading(true);
         })
     }
+
     const onClickMap = () => {
         if (viewType === "목록") {
             setViewType("지도")
@@ -73,7 +77,7 @@ const Home = ({ isMobile }) => {
                 <h3 className="home__title">MICHETAIN GUIDE</h3>
                 <button className="home-viewtype" onClick={onClickMap}><FontAwesomeIcon icon={faExchangeAlt} /> {viewType === "지도" ? "리스트로 보기" : "지도로 보기"}</button>   
                 {loading === true & viewType === "지도" 
-                ? <Map places={places} localArray={localArray} isMobile={isMobile} setDetail={setDetail}/>
+                ? <Map places={places} localArray={localArray} isMobile={isMobile} setDetail={setDetail} chatState={chatState} />
                 : (loading === true & viewType === "목록"
                     ? <List places={places} localArray={localArray} isMobile={isMobile}/>
                     : "Loading..."
@@ -84,6 +88,7 @@ const Home = ({ isMobile }) => {
                 <Modal place={detail} setModalState={setDetail} />
             )}
             {/* <Link to="/myplace"><button>내 여행지 목록</button></Link> */}
+            <Navigation setViewType={setViewType} setChatSate={setChatState} /> 
         </div>
     )
 }
