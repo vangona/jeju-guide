@@ -11,6 +11,9 @@ const Navigation = ({ setViewType, setChatSate }) => {
             setChatSate(false)
         } else if (e.target.innerHTML === "Chat") {
             setChatSate(true)
+        } else if (e.target.innerHTML === "Profile") {
+            setViewType("프로필")
+            setChatSate(false)
         }
     }
 

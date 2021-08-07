@@ -6,6 +6,7 @@ import Edit from "routes/Edit";
 import Home from "routes/Home";
 import MyPlace from "routes/MyPlace";
 import Post from "routes/Post";
+import Profile from "routes/Profile";
 import Test from "routes/Test";
 import Tips from "routes/Tips";
 
@@ -36,7 +37,7 @@ const AppRouter = ({ isLoggedIn, userObj, isMobile }) => {
                                 <Auth />
                             </Route>
                         )
-                    }
+                    }               
                     <Route exact path="/">
                         <Home isMobile={isMobile}/>
                     </Route>

@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import ReactGA from "react-ga";
 import Modal from "components/Modal";
 import Navigation from "components/Navigation";
+import Profile from "./Profile";
 
 const Home = ({ isMobile }) => {
     const location = useLocation();
@@ -75,12 +76,14 @@ const Home = ({ isMobile }) => {
         <div className="home__container">
             <div className="vertical">
                 <h3 className="home__title">MICHETAIN GUIDE</h3>
-                <button className="home-viewtype" onClick={onClickMap}><FontAwesomeIcon icon={faExchangeAlt} /> {viewType === "지도" ? "리스트로 보기" : "지도로 보기"}</button>   
+                {/* <button className="home-viewtype" onClick={onClickMap}><FontAwesomeIcon icon={faExchangeAlt} /> {viewType === "지도" ? "리스트로 보기" : "지도로 보기"}</button>    */}
                 {loading === true & viewType === "지도" 
                 ? <Map places={places} localArray={localArray} isMobile={isMobile} setDetail={setDetail} chatState={chatState} />
                 : (loading === true & viewType === "목록"
                     ? <List places={places} localArray={localArray} isMobile={isMobile}/>
-                    : "Loading..."
+                    : (loading === true & viewType === "프로필") 
+                        ? <Profile />
+                        : "Loading..."
                 )
                 }
             </div>
