@@ -19,6 +19,8 @@ const App = () => {
       if(user) {
         setUserObj({
           uid:user.uid, 
+          displayname:user.displayName,
+          uPic:user.photoURL,
         });
       } else {
         setUserObj(null);

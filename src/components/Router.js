@@ -39,7 +39,7 @@ const AppRouter = ({ isLoggedIn, userObj, isMobile }) => {
                         )
                     }               
                     <Route exact path="/">
-                        <Home isMobile={isMobile}/>
+                        <Home isMobile={isMobile} userObj={userObj}/>
                     </Route>
                     <Route exact path="/detail" component={Detail} />
                     <Route exact path="/detail/:place" component={Detail} />

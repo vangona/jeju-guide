@@ -10,7 +10,7 @@ import Modal from "components/Modal";
 import Navigation from "components/Navigation";
 import Profile from "./Profile";
 
-const Home = ({ isMobile }) => {
+const Home = ({ isMobile, userObj }) => {
     const location = useLocation();
     const [detail, setDetail] = useState(null);
     const [imgPage, setImgPage] = useState(0);
@@ -82,7 +82,7 @@ const Home = ({ isMobile }) => {
                 : (loading === true & viewType === "목록"
                     ? <List places={places} localArray={localArray} isMobile={isMobile}/>
                     : (loading === true & viewType === "프로필") 
-                        ? <Profile />
+                        ? <Profile userObj={userObj} />
                         : "Loading..."
                 )
                 }
