@@ -1,12 +1,5 @@
-import {
-  faFacebook,
-  faGithub,
-  faInstagram,
-} from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
-import { useHistory } from "react-router";
-import ScriptTag from "react-script-tag";
+import React from 'react';
+import { useHistory } from 'react-router';
 
 const Tips = () => {
   const history = useHistory();
@@ -14,15 +7,16 @@ const Tips = () => {
   const clickBackBtn = () => {
     history.goBack();
   };
+
   return (
-    <div className="detail__container">
-      <div className="detail-box tips-box" style={{ maxHeight: "90vh" }}>
+    <div className='detail__container'>
+      <div className='detail-box tips-box' style={{ maxHeight: '90vh' }}>
         <h5>장기여행자 들려주는 꿀팁들</h5>
-        <ul className="tips__list">
+        <ul className='tips__list'>
           <li>
             꿀팁 1. 제주도에는 실시간 버스 정보 시스템이 별도로 존재한다.
-            뚜벅이라면 꼭 참고하도록 하자. <br />{" "}
-            <a href="http://bus.jeju.go.kr/">버스 정보 시스템 바로가기</a>
+            뚜벅이라면 꼭 참고하도록 하자. <br />{' '}
+            <a href='http://bus.jeju.go.kr/'>버스 정보 시스템 바로가기</a>
           </li>
           <li>
             꿀팁 2. 제주도에는 공항에서 숙소, 숙소에서 숙소, 숙소에서 공항 등
@@ -48,28 +42,28 @@ const Tips = () => {
             그런 곳을 선정했다. 당신의 그런 공간도 찾아보면 좋겠다.
           </li>
         </ul>
-        <div className="maker-int">
-          <h5 style={{ textAlign: "center" }}>만든이 소개</h5>
-          <h6 className="maker-int__name">1. 장기여행자 : 김관경</h6>
-          <ul style={{ fontSize: "0.8rem" }}>
+        <div className='maker-int'>
+          <h5 style={{ textAlign: 'center' }}>만든이 소개</h5>
+          <h6 className='maker-int__name'>1. 장기여행자 : 김관경</h6>
+          <ul style={{ fontSize: '0.8rem' }}>
             <li>- 제주도를 7개월간 여행하였다.</li>
             <li>- 뚜벅초와 개발을 맡고있다.</li>
           </ul>
-          <div className="maker-icons__container">
-            <span className="maker-icons">
-              <a href="https://www.instagram.com/van_gona_/" target="_blank">
-                <FontAwesomeIcon icon={faInstagram} size="2x" color="white" />
+          <div className='maker-icons__container'>
+            <span className='maker-icons'>
+              <a href='https://www.instagram.com/van_gona_/' target='_blank'>
+                인스타그램 아이콘
               </a>
-              <a href="https://www.facebook.com/gonavankim" target="_blank">
-                <FontAwesomeIcon icon={faFacebook} size="2x" color="white" />
+              <a href='https://www.facebook.com/gonavankim' target='_blank'>
+                페이스북 아이콘
               </a>
-              <a href="https://github.com/vangona/" target="_blank">
-                <FontAwesomeIcon icon={faGithub} size="2x" color="white" />
+              <a href='https://github.com/vangona/' target='_blank'>
+                깃허브 아이콘
               </a>
             </span>
           </div>
-          <h6 className="maker-int__name">2. 제주살이꾼 : 박태훈</h6>
-          <p style={{ fontSize: "0.8rem" }}>
+          <h6 className='maker-int__name'>2. 제주살이꾼 : 박태훈</h6>
+          <p style={{ fontSize: '0.8rem' }}>
             <li>- 제주도에 3년간 살고 있다.</li>
             <li>
               - 제주도 숨은 맛집과 명소 탐방, 미슐탱 가이드 이름의 어원을
@@ -77,64 +71,59 @@ const Tips = () => {
             </li>
             <li>- SUPER DRIVER</li>
           </p>
-          <div className="maker-icons__container">
-            <span className="maker-icons">
-              <a href="https://www.instagram.com/van_gona_/" target="_blank">
-                <FontAwesomeIcon icon={faInstagram} size="2x" color="white" />
+          <div className='maker-icons__container'>
+            <span className='maker-icons'>
+              <a href='https://www.instagram.com/van_gona_/' target='_blank'>
+                인스타그램 아이콘
               </a>
             </span>
           </div>
           <h5>도와주신 분들 & 저작권 표시</h5>
           <div>
-            Icons made by{" "}
-            <a href="https://www.freepik.com" title="Freepik">
+            Icons made by{' '}
+            <a href='https://www.freepik.com' title='Freepik'>
               Freepik
-            </a>{" "}
-            from{" "}
-            <a href="https://www.flaticon.com/" title="Flaticon">
+            </a>{' '}
+            from{' '}
+            <a href='https://www.flaticon.com/' title='Flaticon'>
               www.flaticon.com
             </a>
           </div>
           <div>
-            Icons made by{" "}
-            <a href="" title="iconixar">
+            Icons made by{' '}
+            <a href='' title='iconixar'>
               iconixar
-            </a>{" "}
-            from{" "}
-            <a href="https://www.flaticon.com/" title="Flaticon">
+            </a>{' '}
+            from{' '}
+            <a href='https://www.flaticon.com/' title='Flaticon'>
               www.flaticon.com
             </a>
           </div>
           <div>
-            Icons made by{" "}
-            <a href="https://www.freepik.com" title="Freepik">
+            Icons made by{' '}
+            <a href='https://www.freepik.com' title='Freepik'>
               Freepik
-            </a>{" "}
-            from{" "}
-            <a href="https://www.flaticon.com/" title="Flaticon">
+            </a>{' '}
+            from{' '}
+            <a href='https://www.flaticon.com/' title='Flaticon'>
               www.flaticon.com
             </a>
           </div>
         </div>
         <ins
-          className="kakao_ad_area"
-          style={{ display: "none" }}
-          data-ad-unit="DAN-c9rNVYJ0iiSwi4Sm"
-          data-ad-width="320"
-          data-ad-height="50"
+          className='kakao_ad_area'
+          style={{ display: 'none' }}
+          data-ad-unit='DAN-c9rNVYJ0iiSwi4Sm'
+          data-ad-width='320'
+          data-ad-height='50'
         ></ins>
-        <button style={{ marginTop: "1rem" }} onClick={clickBackBtn}>
+        <button style={{ marginTop: '1rem' }} onClick={clickBackBtn}>
           돌아가기
         </button>
       </div>
-      <span className="copyright">
+      <span className='copyright'>
         &copy; 2021, 나만의 서랍장 Co. all rights reserved.
       </span>
-      <ScriptTag
-        type="text/javascript"
-        src="//t1.daumcdn.net/kas/static/ba.min.js"
-        async
-      ></ScriptTag>
     </div>
   );
 };
