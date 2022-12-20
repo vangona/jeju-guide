@@ -10,7 +10,7 @@ const firebaseConfig = {
   storageBucket: "jeju-guide.appspot.com",
   messagingSenderId: "350907878366",
   appId: "1:350907878366:web:2f3fcda2d82f9ab4602b4f",
-  measurementId: "G-2F62EPJ668"
+  measurementId: "G-2F62EPJ668",
 };
 
 firebase.initializeApp(firebaseConfig);
