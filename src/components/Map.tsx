@@ -1,35 +1,46 @@
+// @ts-nocheck
+// TODO: kakao 맵의 type 체크하고 ts-nocheck 풀기
+
 import {
   faLocationArrow,
   faMousePointer,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { dbService } from "fBase";
-import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import Saychat from "./Saychat";
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { dbService } from '../fBase';
+import Saychat from './Saychat';
+import type { PlaceInfo } from '../types';
 
 /* global kakao */
 
-const Map = ({ places, isMobile, setDetail, chatState }) => {
-  const [type, setType] = useState("전체");
+interface MapProps {
+  places: PlaceInfo[];
+  isMobile: boolean;
+  handleChangeDetail: (newDetail: PlaceInfo) => void;
+  chatState: boolean;
+}
+
+const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
+  const [type, setType] = useState('전체');
   const [mouseState, setMouseState] = useState(false);
   const [currentPlace, setCurrentPlace] = useState({});
-  const [geoLat, setGeoLat] = useState("");
-  const [geoLon, setGeoLon] = useState("");
+  const [geoLat, setGeoLat] = useState('');
+  const [geoLon, setGeoLon] = useState('');
   const container = useRef(null);
   let map;
-  let preOverlay = "";
+  let preOverlay = '';
   let clusterer;
 
-  const clickHandler = (place) => {
+  const clickHandler = (place: PlaceInfo) => {
     return function () {
-      setDetail(place);
+      handleChangeDetail(place);
     };
   };
 
   const clickMobileHandler = (map, overlay, place) => {
     return function () {
-      if (preOverlay !== "") {
+      if (preOverlay !== '') {
         preOverlay.setMap(null);
       }
       overlay.setMap(map);
@@ -61,8 +72,8 @@ const Map = ({ places, isMobile, setDetail, chatState }) => {
   };
 
   const makeMarker = (place) => {
-    const content = document.createElement("div");
-    content.className = "place__infowindow";
+    const content = document.createElement('div');
+    content.className = 'place__infowindow';
     content.innerHTML = `${place.name}`;
 
     const position = new kakao.maps.LatLng(place.geocode[0], place.geocode[1]);
@@ -73,26 +84,26 @@ const Map = ({ places, isMobile, setDetail, chatState }) => {
       clickable: true,
     });
 
-    let imageIconLocation = "";
+    let imageIconLocation = '';
 
-    if (place.type === "맛집") {
+    if (place.type === '맛집') {
       imageIconLocation =
-        "https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/restaurant.png";
-    } else if (place.type === "카페 & 베이커리") {
+        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/restaurant.png';
+    } else if (place.type === '카페 & 베이커리') {
       imageIconLocation =
-        "https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/cafe.png";
-    } else if (place.type === "숙소") {
+        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/cafe.png';
+    } else if (place.type === '숙소') {
       imageIconLocation =
-        "https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/hotel.png";
-    } else if (place.type === "술집") {
+        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/hotel.png';
+    } else if (place.type === '술집') {
       imageIconLocation =
-        "https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/drink.png";
-    } else if (place.type === "풍경") {
+        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/drink.png';
+    } else if (place.type === '풍경') {
       imageIconLocation =
-        "https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/landscape.png";
+        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/landscape.png';
     } else {
       imageIconLocation =
-        "https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/basic.png";
+        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/basic.png';
     }
 
     const imageSrc = imageIconLocation,
@@ -102,7 +113,7 @@ const Map = ({ places, isMobile, setDetail, chatState }) => {
     const markerImage = new kakao.maps.MarkerImage(
       imageSrc,
       imageSize,
-      imageOption
+      imageOption,
     );
 
     const marker = new kakao.maps.Marker({
@@ -113,21 +124,21 @@ const Map = ({ places, isMobile, setDetail, chatState }) => {
     if (isMobile) {
       kakao.maps.event.addListener(
         marker,
-        "click",
-        clickMobileHandler(map, overlay, place)
+        'click',
+        clickMobileHandler(map, overlay, place),
       );
-      kakao.maps.event.addListener(map, "click", removeOverlay(overlay));
+      kakao.maps.event.addListener(map, 'click', removeOverlay(overlay));
     } else {
-      kakao.maps.event.addListener(marker, "click", clickHandler(place));
+      kakao.maps.event.addListener(marker, 'click', clickHandler(place));
       kakao.maps.event.addListener(
         marker,
-        "mouseover",
-        mouseOverHandler(map, overlay)
+        'mouseover',
+        mouseOverHandler(map, overlay),
       );
       kakao.maps.event.addListener(
         marker,
-        "mouseout",
-        mouseOutHandler(overlay)
+        'mouseout',
+        mouseOutHandler(overlay),
       );
     }
 
@@ -161,14 +172,14 @@ const Map = ({ places, isMobile, setDetail, chatState }) => {
   const onClickLocation = () => {
     const displayMarker = (locPosition) => {
       const imageSrc =
-          "https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/tourist.png",
+          'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/tourist.png',
         imageSize = new kakao.maps.Size(25, 25),
         imageOption = { offset: new kakao.maps.Point(12.5, 25) };
 
       const markerImage = new kakao.maps.MarkerImage(
         imageSrc,
         imageSize,
-        imageOption
+        imageOption,
       );
 
       const marker = new kakao.maps.Marker({
@@ -194,19 +205,19 @@ const Map = ({ places, isMobile, setDetail, chatState }) => {
     } else {
       // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
 
-      alert("위치 정보를 이용할 수 없습니다.");
+      alert('위치 정보를 이용할 수 없습니다.');
     }
   };
 
   const paintChat = (chats) => {
     if (chats !== false) {
       const latestChat = chats[chats.length - 1];
-      const content = document.createElement("div");
-      content.className = "place__infowindow";
+      const content = document.createElement('div');
+      content.className = 'place__infowindow';
       content.innerHTML = `${latestChat.text}`;
       const position = new kakao.maps.LatLng(
         latestChat.location[0],
-        latestChat.location[1]
+        latestChat.location[1],
       );
       const chatWindow = new kakao.maps.CustomOverlay({
         content,
@@ -224,7 +235,7 @@ const Map = ({ places, isMobile, setDetail, chatState }) => {
   useEffect(() => {
     let markers = [];
 
-    dbService.collection("chats").onSnapshot((snapshot) => {
+    dbService.collection('chats').onSnapshot((snapshot) => {
       const chatArray = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -234,7 +245,7 @@ const Map = ({ places, isMobile, setDetail, chatState }) => {
 
     makeMap();
     places.map((place) => {
-      if (type === "전체" || place.type === type) {
+      if (type === '전체' || place.type === type) {
         makeMarker(place);
         markers.push(makeMarker(place));
       }
@@ -243,65 +254,65 @@ const Map = ({ places, isMobile, setDetail, chatState }) => {
   }, [type, places]);
   return (
     <>
-      <div className="map__container">
-        <div className="vertical">
+      <div className='map__container'>
+        <div className='vertical'>
           <select
-            className="place-type__map"
-            name="input__place-type"
+            className='place-type__map'
+            name='input__place-type'
             onChange={onTypeChange}
           >
-            <option value="전체">전체</option>
-            <option value="맛집">맛집</option>
-            <option value="카페 & 베이커리">카페 & 베이커리</option>\
-            <option value="풍경">풍경</option>
-            <option value="술집">술집</option>
-            <option value="숙소">숙소</option>
-            <option value="그 외 가볼만한 곳">그 외 가볼만한 곳</option>
+            <option value='전체'>전체</option>
+            <option value='맛집'>맛집</option>
+            <option value='카페 & 베이커리'>카페 & 베이커리</option>\
+            <option value='풍경'>풍경</option>
+            <option value='술집'>술집</option>
+            <option value='숙소'>숙소</option>
+            <option value='그 외 가볼만한 곳'>그 외 가볼만한 곳</option>
           </select>
           <div>
-            <button className="check-geolocation" onClick={onClickLocation}>
+            <button className='check-geolocation' onClick={onClickLocation}>
               <FontAwesomeIcon icon={faLocationArrow} /> 현재 위치 표시하기
             </button>
           </div>
-          <div className="map" ref={container}></div>
-          <div className="map-explain__container">
+          <div className='map' ref={container}></div>
+          <div className='map-explain__container'>
             {mouseState ? (
               isMobile ? (
                 <Link
                   to={{
                     pathname: `/detail/${currentPlace.name}`,
                     state: {
-                      from: "지도",
+                      from: '지도',
                     },
                   }}
                 >
-                  <div className="marker__detail">
+                  <div className='marker__detail'>
                     <h4>
-                      {currentPlace.name}{" "}
-                      <FontAwesomeIcon icon={faMousePointer} size="sm" />
+                      {currentPlace.name}{' '}
+                      <FontAwesomeIcon icon={faMousePointer} size='sm' />
                     </h4>
                     <hr />
                     <p>
                       {currentPlace.description.slice(0, 50)}
-                      {currentPlace.description.length > 50 && "..."}
+                      {currentPlace.description.length > 50 && '...'}
                     </p>
                   </div>
                 </Link>
               ) : (
-                <div className="map-explain explain-box">
+                <div className='map-explain explain-box'>
                   <span>더 알아보시려면 마커를 클릭해주세요.</span> <br />
-                  <Link to="/tips">
-                    <div className="map-explain__tips">
+                  <Link to='/tips'>
+                    <div className='map-explain__tips'>
                       장기여행자가 알려주는 HONEY TIPS
                     </div>
                   </Link>
                 </div>
               )
             ) : (
-              <div className="map-explain explain-box">
+              <div className='map-explain explain-box'>
                 <span>지도를 확대하실 수 있습니다.</span> <br />
-                <Link to="/tips">
-                  <div className="map-explain__tips">
+                <Link to='/tips'>
+                  <div className='map-explain__tips'>
                     장기여행자가 알려주는 HONEY TIPS
                   </div>
                 </Link>
