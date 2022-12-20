@@ -10,7 +10,7 @@ import { UserObj } from '../types';
 /* global kakao */
 
 interface PostFormProps {
-  userObj: UserObj;
+  userObj: UserObj | null;
 }
 
 const PostForm = ({ userObj }: PostFormProps) => {
@@ -36,7 +36,7 @@ const PostForm = ({ userObj }: PostFormProps) => {
       for (let i = 0; i < attachmentArray.length; i++) {
         const attachmentRef = storageService
           .ref()
-          .child(`${userObj.uid}/${name}/${uuidv4()}`);
+          .child(`${userObj?.uid}/${name}/${uuidv4()}`);
         const response = await attachmentRef.putString(
           attachmentArray[i],
           'data_url',
@@ -55,7 +55,7 @@ const PostForm = ({ userObj }: PostFormProps) => {
       description,
       attachmentUrlArray,
       url,
-      creatorId: userObj.uid,
+      creatorId: userObj?.uid,
     };
 
     await dbService.collection('places').add(placeObj);

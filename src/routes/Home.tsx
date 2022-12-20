@@ -14,19 +14,16 @@ interface LocationProps {
 
 interface HomeProps {
   isMobile: boolean;
-  userObj: UserObj;
+  userObj: UserObj | null;
 }
 
 const Home = ({ isMobile, userObj }: HomeProps) => {
   const location = useLocation<LocationProps>();
-  const [detail, setDetail] = useState(null);
+  const [detail, setDetail] = useState<PlaceInfo | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [places, setPlaces] = useState<PlaceInfo[]>([]);
   const [viewType, setViewType] = useState('지도');
   const [chatState, setChatState] = useState<boolean>(false);
-
-  const localItems = localStorage.getItem('micheltain_myplace');
-  const localArray = localItems ? JSON.parse(localItems) : [];
 
   const getPlaces = async () => {
     dbService.collection('places').onSnapshot((snapshot) => {
@@ -36,6 +33,18 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
       setPlaces(placeArray);
       setLoading(true);
     });
+  };
+
+  const handleChangeDetail = (newDetail: PlaceInfo | null) => {
+    setDetail(newDetail);
+  };
+
+  const handleViewTypeChange = (newViewType: string) => {
+    setViewType(newViewType);
+  };
+
+  const handleChatStateChange = (newChatState: boolean) => {
+    setChatState(newChatState);
   };
 
   useEffect(() => {
@@ -52,22 +61,26 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
         {loading === true && viewType === '지도' ? (
           <Map
             places={places}
-            localArray={localArray}
             isMobile={isMobile}
-            setDetail={setDetail}
+            handleChangeDetail={handleChangeDetail}
             chatState={chatState}
           />
         ) : loading === true && viewType === '목록' ? (
-          <List places={places} localArray={localArray} isMobile={isMobile} />
+          <List places={places} isMobile={isMobile} />
         ) : loading === true && viewType === '프로필' ? (
           <Profile userObj={userObj} />
         ) : (
           'Loading...'
         )}
       </div>
-      {detail && <Modal place={detail} setModalState={setDetail} />}
+      {detail && (
+        <Modal place={detail} handleModalContentChange={handleChangeDetail} />
+      )}
       {/* <Link to="/myplace"><button>내 여행지 목록</button></Link> */}
-      <Navigation setViewType={setViewType} setChatSate={setChatState} />
+      <Navigation
+        handleViewTypeChange={handleViewTypeChange}
+        handleChatStateChange={handleChatStateChange}
+      />
     </div>
   );
 };

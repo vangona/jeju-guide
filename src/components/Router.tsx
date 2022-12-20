@@ -10,7 +10,7 @@ import { UserObj } from '../types';
 
 interface AppRouterProps {
   isLoggedIn: boolean;
-  userObj: UserObj;
+  userObj: UserObj | null;
   isMobile: boolean;
 }
 

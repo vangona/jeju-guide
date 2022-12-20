@@ -5,7 +5,7 @@ import { authService } from '../fBase';
 import type { UserObj } from '../types';
 
 interface PostProps {
-  userObj: UserObj;
+  userObj: UserObj | null;
 }
 
 const Post = ({ userObj }: PostProps) => {

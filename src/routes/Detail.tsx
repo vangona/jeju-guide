@@ -2,23 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { dbService } from '../fBase';
+import type { PlaceInfo } from '../types';
 
 interface LocationProps {
   from: string;
 }
-
-type PlaceInfo = {
-  name: string;
-  type: string;
-  geocode: { '0': string; '1': string };
-  url: string;
-  attachmentUrlArray: string[];
-  creatorId: string;
-  description: string;
-  address: string;
-  extraAddress: string;
-  addressDetail: string;
-};
 
 const Detail = () => {
   const { place } = useParams<{ place?: string }>();

@@ -37,6 +37,10 @@ const List = ({ places, isMobile }: ListProps) => {
     setPostsPerPage(value);
   };
 
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
   const indexOfLast = currentPage * parseInt(postsPerPage);
   const indexOfFirst = indexOfLast - parseInt(postsPerPage);
   const currentPosts = (posts: PlaceInfo[]) => {
@@ -95,7 +99,7 @@ const List = ({ places, isMobile }: ListProps) => {
         postsPerPage={postsPerPage}
         totalPosts={places.length}
         currentPage={currentPage}
-        paginate={setCurrentPage}
+        handlePageChange={handlePageChange}
       />
       <div className='list-search__container'>
         {!isMobile && (
