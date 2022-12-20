@@ -1,23 +1,30 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { PlaceInfo } from '../types';
 
-const Modal = ({ place, setModalState }) => {
+interface ModalProps {
+  place: PlaceInfo;
+  handleModalContentChange: (newDetail: PlaceInfo | null) => void;
+}
+
+const Modal = ({ place, handleModalContentChange }: ModalProps) => {
   const onBackgroundClick = () => {
-    setModalState(false);
+    handleModalContentChange(null);
   };
+
   return (
-    <div onClick={onBackgroundClick} className="modal-background">
-      <div className="map-detail__container modal-container">
-        <div className="map__detail vertical">
+    <div onClick={onBackgroundClick} className='modal-background'>
+      <div className='map-detail__container modal-container'>
+        <div className='map__detail vertical'>
           <h3>{place.name}</h3>
           {place.attachmentUrlArray[0] && (
             <>
               <img
-                className="map-detail__img"
+                className='map-detail__img'
                 src={place.attachmentUrlArray[0]}
-                alt="detail-img"
-                width="100%"
-                height="auto"
+                alt='detail-img'
+                width='100%'
+                height='auto'
               />
               {/* <div className="map-detail__img-btn__container">
                                     {imgPage !== 0 && <button className="map-detail__img-btn prev" onClick={clickPrevImg}>◀</button>}
@@ -25,15 +32,15 @@ const Modal = ({ place, setModalState }) => {
                                 </div> */}
             </>
           )}
-          <div className="map-detail__description">
+          <div className='map-detail__description'>
             {place.description.length > 100
-              ? place.description.slice(0, 100) + "..."
+              ? place.description.slice(0, 100) + '...'
               : place.description}
           </div>
           <div>
-            {place.url !== "" && (
-              <a href={place.url} target="_blank" rel="noreferrer">
-                <button className="map-detail__url map-detail__btn">
+            {place.url !== '' && (
+              <a href={place.url} target='_blank' rel='noreferrer'>
+                <button className='map-detail__url map-detail__btn'>
                   관련 사이트
                 </button>
               </a>
@@ -42,17 +49,17 @@ const Modal = ({ place, setModalState }) => {
               to={{
                 pathname: `/detail/${place.name}`,
                 state: {
-                  from: "지도",
+                  from: '지도',
                 },
               }}
             >
-              <button className="map-detail__detail map-detail__btn">
+              <button className='map-detail__detail map-detail__btn'>
                 더 알아보기
               </button>
             </Link>
           </div>
           {/* <AddMyPlace place={detail}/> */}
-          <div className="map__detail-clear" onClick={onBackgroundClick}>
+          <div className='map__detail-clear' onClick={onBackgroundClick}>
             ❌
           </div>
         </div>
