@@ -6,7 +6,7 @@ import {
   faMousePointer,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { dbService } from '../fBase';
 import Saychat from './Saychat';
@@ -71,97 +71,6 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
     };
   };
 
-  const makeMarker = (place) => {
-    const content = document.createElement('div');
-    content.className = 'place__infowindow';
-    content.innerHTML = `${place.name}`;
-
-    const position = new kakao.maps.LatLng(place.geocode[0], place.geocode[1]);
-    const overlay = new kakao.maps.CustomOverlay({
-      content,
-      position,
-      yAnchor: 2.5,
-      clickable: true,
-    });
-
-    let imageIconLocation = '';
-
-    if (place.type === '맛집') {
-      imageIconLocation =
-        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/restaurant.png';
-    } else if (place.type === '카페 & 베이커리') {
-      imageIconLocation =
-        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/cafe.png';
-    } else if (place.type === '숙소') {
-      imageIconLocation =
-        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/hotel.png';
-    } else if (place.type === '술집') {
-      imageIconLocation =
-        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/drink.png';
-    } else if (place.type === '풍경') {
-      imageIconLocation =
-        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/landscape.png';
-    } else {
-      imageIconLocation =
-        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/basic.png';
-    }
-
-    const imageSrc = imageIconLocation,
-      imageSize = new kakao.maps.Size(35, 35),
-      imageOption = { offset: new kakao.maps.Point(17.5, 35) };
-
-    const markerImage = new kakao.maps.MarkerImage(
-      imageSrc,
-      imageSize,
-      imageOption,
-    );
-
-    const marker = new kakao.maps.Marker({
-      image: markerImage,
-      position,
-    });
-
-    if (isMobile) {
-      kakao.maps.event.addListener(
-        marker,
-        'click',
-        clickMobileHandler(map, overlay, place),
-      );
-      kakao.maps.event.addListener(map, 'click', removeOverlay(overlay));
-    } else {
-      kakao.maps.event.addListener(marker, 'click', clickHandler(place));
-      kakao.maps.event.addListener(
-        marker,
-        'mouseover',
-        mouseOverHandler(map, overlay),
-      );
-      kakao.maps.event.addListener(
-        marker,
-        'mouseout',
-        mouseOutHandler(overlay),
-      );
-    }
-
-    return marker;
-  };
-
-  const makeMap = () => {
-    let level = 10;
-    if (isMobile) {
-      level = 11;
-    }
-    const options = {
-      center: new kakao.maps.LatLng(33.3717, 126.5602), //지도의 중심좌표.
-      level,
-    };
-    map = new window.kakao.maps.Map(container.current, options);
-    clusterer = new kakao.maps.MarkerClusterer({
-      map,
-      averageCenter: true,
-      minLevel: 9,
-    });
-  };
-
   const onTypeChange = (event) => {
     const {
       target: { value },
@@ -182,7 +91,7 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
         imageOption,
       );
 
-      const marker = new kakao.maps.Marker({
+      new kakao.maps.Marker({
         map: map,
         image: markerImage,
         position: locPosition,
@@ -190,14 +99,14 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
     };
     if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-      navigator.geolocation.getCurrentPosition(function (position) {
-        var lat = position.coords.latitude, // 위도
-          lon = position.coords.longitude; // 경도
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude; // 위도
+        const lon = position.coords.longitude; // 경도
 
         setGeoLat(lat);
         setGeoLon(lon);
 
-        var locPosition = new kakao.maps.LatLng(lat, lon); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+        const locPosition = new kakao.maps.LatLng(lat, lon); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
 
         // 마커와 인포윈도우를 표시합니다
         displayMarker(locPosition);
@@ -209,31 +118,132 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
     }
   };
 
-  const paintChat = (chats) => {
-    if (chats !== false) {
-      const latestChat = chats[chats.length - 1];
+  const makeMarker = useCallback(
+    (place) => {
       const content = document.createElement('div');
       content.className = 'place__infowindow';
-      content.innerHTML = `${latestChat.text}`;
+      content.innerHTML = `${place.name}`;
+
       const position = new kakao.maps.LatLng(
-        latestChat.location[0],
-        latestChat.location[1],
+        place.geocode[0],
+        place.geocode[1],
       );
-      const chatWindow = new kakao.maps.CustomOverlay({
+      const overlay = new kakao.maps.CustomOverlay({
         content,
         position,
         yAnchor: 2.5,
         clickable: true,
       });
-      chatWindow.setMap(map);
-      setTimeout(() => {
-        chatWindow.setMap(null);
-      }, 3000);
+
+      let imageIconLocation = '';
+
+      if (place.type === '맛집') {
+        imageIconLocation =
+          'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/restaurant.png';
+      } else if (place.type === '카페 & 베이커리') {
+        imageIconLocation =
+          'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/cafe.png';
+      } else if (place.type === '숙소') {
+        imageIconLocation =
+          'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/hotel.png';
+      } else if (place.type === '술집') {
+        imageIconLocation =
+          'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/drink.png';
+      } else if (place.type === '풍경') {
+        imageIconLocation =
+          'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/landscape.png';
+      } else {
+        imageIconLocation =
+          'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/basic.png';
+      }
+
+      const imageSrc = imageIconLocation,
+        imageSize = new kakao.maps.Size(35, 35),
+        imageOption = { offset: new kakao.maps.Point(17.5, 35) };
+
+      const markerImage = new kakao.maps.MarkerImage(
+        imageSrc,
+        imageSize,
+        imageOption,
+      );
+
+      const marker = new kakao.maps.Marker({
+        image: markerImage,
+        position,
+      });
+
+      if (isMobile) {
+        kakao.maps.event.addListener(
+          marker,
+          'click',
+          clickMobileHandler(map, overlay, place),
+        );
+        kakao.maps.event.addListener(map, 'click', removeOverlay(overlay));
+      } else {
+        kakao.maps.event.addListener(marker, 'click', clickHandler(place));
+        kakao.maps.event.addListener(
+          marker,
+          'mouseover',
+          mouseOverHandler(map, overlay),
+        );
+        kakao.maps.event.addListener(
+          marker,
+          'mouseout',
+          mouseOutHandler(overlay),
+        );
+      }
+
+      return marker;
+    },
+    [map, clickHandler, clickMobileHandler, isMobile],
+  );
+
+  // TODO: 리팩토링 필요
+  const makeMap = useCallback(() => {
+    let level = 10;
+    if (isMobile) {
+      level = 11;
     }
-  };
+    const options = {
+      center: new kakao.maps.LatLng(33.3717, 126.5602), //지도의 중심좌표.
+      level,
+    };
+    map = new window.kakao.maps.Map(container.current, options);
+    clusterer = new kakao.maps.MarkerClusterer({
+      map,
+      averageCenter: true,
+      minLevel: 9,
+    });
+  }, []);
+
+  const paintChat = useCallback(
+    (chats) => {
+      if (chats !== false) {
+        const latestChat = chats[chats.length - 1];
+        const content = document.createElement('div');
+        content.className = 'place__infowindow';
+        content.innerHTML = `${latestChat.text}`;
+        const position = new kakao.maps.LatLng(
+          latestChat.location[0],
+          latestChat.location[1],
+        );
+        const chatWindow = new kakao.maps.CustomOverlay({
+          content,
+          position,
+          yAnchor: 2.5,
+          clickable: true,
+        });
+        chatWindow.setMap(map);
+        setTimeout(() => {
+          chatWindow.setMap(null);
+        }, 3000);
+      }
+    },
+    [map],
+  );
 
   useEffect(() => {
-    let markers = [];
+    const markers = [];
 
     dbService.collection('chats').onSnapshot((snapshot) => {
       const chatArray = snapshot.docs.map((doc) => ({
@@ -251,7 +261,7 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
       }
     });
     clusterer.addMarkers(markers);
-  }, [type, places]);
+  }, [type, places, clusterer, makeMap, makeMarker, paintChat]);
   return (
     <>
       <div className='map__container'>

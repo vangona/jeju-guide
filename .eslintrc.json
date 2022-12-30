@@ -8,35 +8,40 @@
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "prettier",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:import/recommended"
   ],
-  "plugins": ["react", "react-hooks", "prettier"],
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "react-hooks",
+    "prettier",
+    "import"
+  ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
     },
-    "ecmaVersion": "latest",
+    "ecmaVersion": 12,
     "sourceType": "module"
   },
   "rules": {
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"],
     "camelcase": "error",
     "prefer-const": "error",
     "prefer-arrow-callback": "error",
-    "no-nested-ternary": "error",
-    "no-use-before-define": [
-      "error",
-      {
-        "functions": true,
-        "classes": true,
-        "variables": true
-      }
-    ],
+    "no-nested-ternary": "warn",
     "no-var": "error",
     "no-console": "error",
     "prettier/prettier": "warn",
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single"],
     "semi": ["error", "always"],
+    "import/no-named-as-default-member": "off",
     "import/order": [
       "warn",
       {
@@ -50,38 +55,6 @@
           "object",
           "type"
         ],
-        "pathGroups": [
-          {
-            "pattern": "next/**",
-            "group": "builtin",
-            "position": "before"
-          },
-          {
-            "pattern": "react",
-            "group": "builtin",
-            "position": "before"
-          },
-          {
-            "pattern": "@tanstack/**",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "classnames/**",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "@**",
-            "group": "internal",
-            "position": "before"
-          },
-          {
-            "pattern": "@sass/**",
-            "group": "type",
-            "position": "after"
-          }
-        ],
         "alphabetize": {
           "order": "asc",
           "caseInsensitive": true
@@ -89,5 +62,14 @@
         "pathGroupsExcludedImportTypes": ["react"]
       }
     ]
+  },
+  "settings": {
+    "import/extensions": [".js", "jsx", "ts", " tsx"],
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {}
+    }
   }
 }

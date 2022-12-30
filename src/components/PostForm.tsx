@@ -1,7 +1,7 @@
 // TODO: DaumPost & 카카오맵 타입 찾아서 @ts-ignore 지우기
 
 import imageCompression from 'browser-image-compression';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import DaumPostcode from 'react-daum-postcode';
 import { v4 as uuidv4 } from 'uuid';
 import { dbService, storageService } from '../fBase';
@@ -31,7 +31,7 @@ const PostForm = ({ userObj }: PostFormProps) => {
 
   const onSubmit: React.FormEventHandler = async (event) => {
     event.preventDefault();
-    let attachmentUrlArray = [];
+    const attachmentUrlArray = [];
     if (attachmentArray.length > 0) {
       for (let i = 0; i < attachmentArray.length; i++) {
         const attachmentRef = storageService
@@ -112,7 +112,7 @@ const PostForm = ({ userObj }: PostFormProps) => {
     };
 
     try {
-      let resultArray: string[] | null = [];
+      const resultArray: string[] | null = [];
       for (let i = 0; i < fileArray.length; i++) {
         const compressedFile = await imageCompression(fileArray[i], options);
         const reader = new FileReader();
@@ -125,7 +125,7 @@ const PostForm = ({ userObj }: PostFormProps) => {
       }
       setAttachmentArray(resultArray);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -171,10 +171,6 @@ const PostForm = ({ userObj }: PostFormProps) => {
 
     setIsOpenPost(false);
   };
-
-  useEffect(() => {
-    console.log(attachmentArray);
-  }, [attachmentArray]);
 
   return (
     <form className='post-form__container' onSubmit={onSubmit}>
@@ -264,8 +260,15 @@ const PostForm = ({ userObj }: PostFormProps) => {
           multiple
         />
         <div>
-          {attachmentArray.map((attachment) => {
-            return <img src={`${attachment}`} alt='preview' width='20%' />;
+          {attachmentArray.map((attachment, index) => {
+            return (
+              <img
+                key={index}
+                src={`${attachment}`}
+                alt='preview'
+                width='20%'
+              />
+            );
           })}
         </div>
       </div>

@@ -20,13 +20,13 @@ const Tips = () => {
           </li>
           <li>
             꿀팁 2. 제주도에는 공항에서 숙소, 숙소에서 숙소, 숙소에서 공항 등
-            들고 돌아다니기 부담스러울 수 있는 짐을 옮겨주는 '짐 옮기기
-            서비스'가 아주 잘되어있다. 뚜벅이는 적극 이용해보자.
+            들고 돌아다니기 부담스러울 수 있는 짐을 옮겨주는 &#39;짐 옮기기
+            서비스&#39;가 아주 잘되어있다. 뚜벅이는 적극 이용해보자.
           </li>
           <li>
             꿀팁 3. 제주도에서 제대로 걸어보고 싶다면 올레길을 적극 이용해보자.
-            이용해본 후기는 '굳이 저기를 걸어봐야해?' 라고 지나가려던 숨은
-            명소를 다 보내버린다.
+            이용해본 후기는 &#39;굳이 저기를 걸어봐야해?&#39; 라고 지나가려던
+            숨은 명소를 다 보내버린다.
           </li>
           <li>
             꿀팁 4. 개인적으로 용눈이오름을 제외하고, 노을은 서쪽이 예뻤다. 해는
@@ -51,13 +51,25 @@ const Tips = () => {
           </ul>
           <div className='maker-icons__container'>
             <span className='maker-icons'>
-              <a href='https://www.instagram.com/van_gona_/' target='_blank'>
+              <a
+                href='https://www.instagram.com/van_gona_/'
+                rel='noreferrer'
+                target='_blank'
+              >
                 인스타그램 아이콘
               </a>
-              <a href='https://www.facebook.com/gonavankim' target='_blank'>
+              <a
+                href='https://www.facebook.com/gonavankim'
+                rel='noreferrer'
+                target='_blank'
+              >
                 페이스북 아이콘
               </a>
-              <a href='https://github.com/vangona/' target='_blank'>
+              <a
+                href='https://github.com/vangona/'
+                rel='noreferrer'
+                target='_blank'
+              >
                 깃허브 아이콘
               </a>
             </span>
@@ -73,7 +85,11 @@ const Tips = () => {
           </p>
           <div className='maker-icons__container'>
             <span className='maker-icons'>
-              <a href='https://www.instagram.com/van_gona_/' target='_blank'>
+              <a
+                href='https://www.instagram.com/van_gona_/'
+                rel='noreferrer'
+                target='_blank'
+              >
                 인스타그램 아이콘
               </a>
             </span>

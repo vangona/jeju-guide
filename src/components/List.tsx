@@ -44,9 +44,7 @@ const List = ({ places, isMobile }: ListProps) => {
   const indexOfLast = currentPage * parseInt(postsPerPage);
   const indexOfFirst = indexOfLast - parseInt(postsPerPage);
   const currentPosts = (posts: PlaceInfo[]) => {
-    let currentPosts;
-    currentPosts = posts.slice(indexOfFirst, indexOfLast);
-    return currentPosts;
+    return posts.slice(indexOfFirst, indexOfLast);
   };
 
   return (
@@ -86,7 +84,7 @@ const List = ({ places, isMobile }: ListProps) => {
                         {place.name}
                       </Link>
                     </td>
-                    <td list__table-content>{place.addressDetail}</td>
+                    <td>{place.addressDetail}</td>
                     {!isMobile && <td>{place.description}</td>}
                     {/* <td><AddMyPlace place={place}/></td> */}
                   </tr>
