@@ -1,16 +1,19 @@
-@import "css/variables.css";
-@import "css/Home.css";
-@import "css/Auth.css";
-@import "css/Post.css";
-@import "css/Map.css";
-@import "css/Map-detail.css";
-@import "css/List.css";
-@import "css/Pagination.css";
-@import "css/Detail.css";
-@import "css/Tips.css";
-@import "css/Modal.css";
-@import "css/Navigation.css";
-@import "css/Profile.css";
+@import 'css/variables.css';
+@import 'css/Home.css';
+@import 'css/Auth.css';
+@import 'css/Post.css';
+@import 'css/Map.css';
+@import 'css/Map-detail.css';
+@import 'css/List.css';
+@import 'css/Pagination.css';
+@import 'css/Detail.css';
+@import 'css/Tips.css';
+@import 'css/Modal.css';
+@import 'css/Navigation.css';
+@import 'css/Profile.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 html,
 body {
