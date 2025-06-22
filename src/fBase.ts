@@ -4,13 +4,13 @@ import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDbt76_Zwf7Pnx-cBDVxe6oDWnv32v9xqo',
-  authDomain: 'jeju-guide.firebaseapp.com',
-  projectId: 'jeju-guide',
-  storageBucket: 'jeju-guide.appspot.com',
-  messagingSenderId: '350907878366',
-  appId: '1:350907878366:web:2f3fcda2d82f9ab4602b4f',
-  measurementId: 'G-2F62EPJ668',
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
