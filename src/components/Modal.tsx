@@ -1,12 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faTimes, 
   faExternalLinkAlt, 
   faInfoCircle,
-  faMapMarkerAlt
+  faMapMarkerAlt,
+  faCopy,
+  faCheck
 } from '@fortawesome/free-solid-svg-icons';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Zoom } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/zoom';
 import { PlaceInfo } from '../types';
 import AddMyPlace from './AddMyPlace';
 
@@ -16,6 +24,9 @@ interface ModalProps {
 }
 
 const Modal = ({ place, handleModalContentChange }: ModalProps) => {
+  const [copied, setCopied] = useState(false);
+  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
+
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       handleModalContentChange(null);
@@ -25,6 +36,33 @@ const Modal = ({ place, handleModalContentChange }: ModalProps) => {
   const onCloseClick = () => {
     handleModalContentChange(null);
   };
+
+  const copyAddress = async () => {
+    try {
+      await navigator.clipboard.writeText(place.addressDetail || place.address || '');
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = place.addressDetail || place.address || '';
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const handleImageLoad = (index: number) => {
+    setLoadedImages(prev => new Set(prev).add(index));
+  };
+
+  // Reset loaded images when place changes
+  useEffect(() => {
+    setLoadedImages(new Set());
+  }, [place.id]);
 
   // Handle ESC key press
   useEffect(() => {
@@ -71,15 +109,68 @@ const Modal = ({ place, handleModalContentChange }: ModalProps) => {
 
         {/* Content */}
         <div className='modal-body'>
-          {/* Image */}
-          {place.attachmentUrlArray[0] && (
+          {/* Images */}
+          {place.attachmentUrlArray && place.attachmentUrlArray.length > 0 && (
             <div className='modal-image-container'>
-              <img
-                className='modal-image'
-                src={place.attachmentUrlArray[0]}
-                alt={`${place.name} 이미지`}
-                loading="lazy"
-              />
+              {place.attachmentUrlArray.length === 1 ? (
+                // Single image
+                <div className='swiper-zoom-container'>
+                  {!loadedImages.has(0) && (
+                    <div className='image-skeleton'>
+                      <div className='skeleton-shimmer'></div>
+                    </div>
+                  )}
+                  <img
+                    className={`modal-image ${loadedImages.has(0) ? 'loaded' : 'loading'}`}
+                    src={place.attachmentUrlArray[0]}
+                    alt={`${place.name} 이미지`}
+                    loading="lazy"
+                    onLoad={() => handleImageLoad(0)}
+                  />
+                </div>
+              ) : (
+                // Multiple images with Swiper
+                <Swiper
+                  modules={[Navigation, Pagination, Zoom]}
+                  spaceBetween={0}
+                  slidesPerView={1}
+                  navigation
+                  pagination={{ 
+                    clickable: true,
+                    dynamicBullets: true
+                  }}
+                  zoom={{
+                    maxRatio: 3,
+                    minRatio: 1
+                  }}
+                  className='modal-swiper'
+                >
+                  {place.attachmentUrlArray.map((imageUrl, index) => (
+                    <SwiperSlide key={index}>
+                      <div className='swiper-zoom-container'>
+                        {!loadedImages.has(index) && (
+                          <div className='image-skeleton'>
+                            <div className='skeleton-shimmer'></div>
+                          </div>
+                        )}
+                        <img
+                          className={`modal-image ${loadedImages.has(index) ? 'loaded' : 'loading'}`}
+                          src={imageUrl}
+                          alt={`${place.name} 이미지 ${index + 1}`}
+                          loading="lazy"
+                          onLoad={() => handleImageLoad(index)}
+                        />
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              )}
+              
+              {place.attachmentUrlArray.length > 1 && (
+                <div className='image-count'>
+                  {place.attachmentUrlArray.length}장의 사진
+                </div>
+              )}
             </div>
           )}
 
@@ -96,8 +187,18 @@ const Modal = ({ place, handleModalContentChange }: ModalProps) => {
           {/* Address */}
           {place.address && (
             <div className='modal-address'>
-              <FontAwesomeIcon icon={faMapMarkerAlt} className='address-icon' />
-              <span>{place.address}</span>
+              <div className='address-content'>
+                <FontAwesomeIcon icon={faMapMarkerAlt} className='address-icon' />
+                <span className='address-text'>{place.addressDetail}</span>
+              </div>
+              <button 
+                className={`copy-btn ${copied ? 'copy-btn--copied' : ''}`}
+                onClick={copyAddress}
+                aria-label="주소 복사"
+                title={copied ? '복사됨!' : '주소 복사'}
+              >
+                <FontAwesomeIcon icon={copied ? faCheck : faCopy} />
+              </button>
             </div>
           )}
         </div>
