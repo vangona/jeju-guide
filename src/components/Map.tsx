@@ -1,5 +1,5 @@
 // @ts-nocheck
-// TODO: kakao 맵의 type 체크하고 ts-nocheck 풀기
+// TODO: kakao 맵의 type 체크하기
 
 import {
   faLocationArrow,
@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { dbService } from '../fBase';
+import { collection, onSnapshot } from 'firebase/firestore';
 import Saychat from './Saychat';
 import type { PlaceInfo } from '../types';
 
@@ -182,7 +183,7 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
         imageOption,
       );
 
-      const marker = new kakao.maps.Marker({
+      new kakao.maps.Marker({
         map: map,
         image: markerImage,
         position: locPosition,
@@ -190,14 +191,14 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
     };
     if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-      navigator.geolocation.getCurrentPosition(function (position) {
-        var lat = position.coords.latitude, // 위도
-          lon = position.coords.longitude; // 경도
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude; // 위도
+        const lon = position.coords.longitude; // 경도
 
         setGeoLat(lat);
         setGeoLon(lon);
 
-        var locPosition = new kakao.maps.LatLng(lat, lon); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+        const locPosition = new kakao.maps.LatLng(lat, lon); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
 
         // 마커와 인포윈도우를 표시합니다
         displayMarker(locPosition);
@@ -233,9 +234,9 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
   };
 
   useEffect(() => {
-    let markers = [];
+    const markers = [];
 
-    dbService.collection('chats').onSnapshot((snapshot) => {
+    onSnapshot(collection(dbService, 'chats'), (snapshot) => {
       const chatArray = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),

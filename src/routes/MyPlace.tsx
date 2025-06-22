@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { PlaceInfo } from '../types';
 
 const MyPlace = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [myPlaceArray, setMyPlaceArray] = useState<PlaceInfo[] | false>([]);
   const clickBackBtn = () => {
-    history.push({
-      pathname: '/',
+    navigate('/', {
       state: {
         prevViewType: '목록',
       },

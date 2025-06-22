@@ -5,6 +5,8 @@ import React, { useEffect, useState } from 'react';
 import DaumPostcode from 'react-daum-postcode';
 import { v4 as uuidv4 } from 'uuid';
 import { dbService, storageService } from '../fBase';
+import { collection, addDoc } from 'firebase/firestore';
+import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 import { UserObj } from '../types';
 
 /* global kakao */
@@ -26,22 +28,18 @@ const PostForm = ({ userObj }: PostFormProps) => {
   const [addressDetail, setAddressDetail] = useState('');
   const [isOpenPost, setIsOpenPost] = useState(false);
 
-  // @ts-ignore
+  // @ts-expect-error kakao maps API is not typed  
   const geocoder = new kakao.maps.services.Geocoder();
 
   const onSubmit: React.FormEventHandler = async (event) => {
     event.preventDefault();
-    let attachmentUrlArray = [];
+    const attachmentUrlArray = [];
     if (attachmentArray.length > 0) {
       for (let i = 0; i < attachmentArray.length; i++) {
-        const attachmentRef = storageService
-          .ref()
-          .child(`${userObj?.uid}/${name}/${uuidv4()}`);
-        const response = await attachmentRef.putString(
-          attachmentArray[i],
-          'data_url',
-        );
-        attachmentUrlArray.push(await response.ref.getDownloadURL());
+        const attachmentRef = ref(storageService, `${userObj?.uid}/${name}/${uuidv4()}`);
+        const response = await uploadString(attachmentRef, attachmentArray[i], 'data_url');
+        const downloadURL = await getDownloadURL(response.ref);
+        attachmentUrlArray.push(downloadURL);
       }
     }
 
@@ -58,7 +56,7 @@ const PostForm = ({ userObj }: PostFormProps) => {
       creatorId: userObj?.uid,
     };
 
-    await dbService.collection('places').add(placeObj);
+    await addDoc(collection(dbService, 'places'), placeObj);
     setName('');
     setAddress('');
     setAddressDetail('');
@@ -112,7 +110,7 @@ const PostForm = ({ userObj }: PostFormProps) => {
     };
 
     try {
-      let resultArray: string[] | null = [];
+      const resultArray: string[] = [];
       for (let i = 0; i < fileArray.length; i++) {
         const compressedFile = await imageCompression(fileArray[i], options);
         const reader = new FileReader();
@@ -125,7 +123,7 @@ const PostForm = ({ userObj }: PostFormProps) => {
       }
       setAttachmentArray(resultArray);
     } catch (error) {
-      console.log(error);
+      // Error handling
     }
   };
 
@@ -138,17 +136,17 @@ const PostForm = ({ userObj }: PostFormProps) => {
     setIsOpenPost(!isOpenPost);
   };
 
-  // @ts-ignore
+  // @ts-expect-error
   const makeGeocode = (result, status) => {
-    // @ts-ignore
+    // @ts-expect-error
     if (status === kakao.maps.services.Status.OK) {
       const geocodeArray = [result[0].y, result[0].x];
-      // @ts-ignore
+      // @ts-expect-error
       setGeocode(geocodeArray);
     }
   };
 
-  // @ts-ignore
+  // @ts-expect-error
   const onCompletePost = async (data) => {
     let fullAddr = data.address;
     let extraAddr = '';
@@ -173,7 +171,7 @@ const PostForm = ({ userObj }: PostFormProps) => {
   };
 
   useEffect(() => {
-    console.log(attachmentArray);
+    // attachmentArray updated
   }, [attachmentArray]);
 
   return (
@@ -264,8 +262,8 @@ const PostForm = ({ userObj }: PostFormProps) => {
           multiple
         />
         <div>
-          {attachmentArray.map((attachment) => {
-            return <img src={`${attachment}`} alt='preview' width='20%' />;
+          {attachmentArray.map((attachment, index) => {
+            return <img key={index} src={`${attachment}`} alt='preview' width='20%' />;
           })}
         </div>
       </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter as Router, Route, Switch } from 'react-router-dom'; // TODO: Rotuer 방식 변경하기
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Auth from '../routes/Auth';
 import Detail from '../routes/Detail';
 import Edit from '../routes/Edit';
@@ -16,41 +16,24 @@ interface AppRouterProps {
 
 const AppRouter = ({ isLoggedIn, userObj, isMobile }: AppRouterProps) => {
   return (
-    <>
-      <Router>
-        <Switch>
-          {isLoggedIn ? (
-            <Route exact path='/post'>
-              <Post userObj={userObj} />
-            </Route>
-          ) : (
-            <Route exact path='/post'>
-              <Auth />
-            </Route>
-          )}
-          {isLoggedIn ? (
-            <Route exact path='/edit'>
-              <Edit />
-            </Route>
-          ) : (
-            <Route exact path='/edit'>
-              <Auth />
-            </Route>
-          )}
-          <Route exact path='/'>
-            <Home isMobile={isMobile} userObj={userObj} />
-          </Route>
-          <Route exact path='/detail' component={Detail} />
-          <Route exact path='/detail/:place' component={Detail} />
-          <Route exact path='/tips'>
-            <Tips />
-          </Route>
-          {/* <Route exact path="/myplace">
-                        <MyPlace />
-                    </Route> */}
-        </Switch>
-      </Router>
-    </>
+    <Router>
+      <Routes>
+        <Route path='/' element={<Home isMobile={isMobile} userObj={userObj} />} />
+        <Route 
+          path='/post' 
+          element={isLoggedIn ? <Post userObj={userObj} /> : <Navigate to='/auth' replace />} 
+        />
+        <Route 
+          path='/edit' 
+          element={isLoggedIn ? <Edit /> : <Navigate to='/auth' replace />} 
+        />
+        <Route path='/detail' element={<Detail />} />
+        <Route path='/detail/:place' element={<Detail />} />
+        <Route path='/tips' element={<Tips />} />
+        <Route path='/auth' element={<Auth />} />
+        {/* <Route path="/myplace" element={<MyPlace />} /> */}
+      </Routes>
+    </Router>
   );
 };
 
