@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PlaceInfo } from '../types';
 import Pagination from './Pagination';
+import AddMyPlace from './AddMyPlace';
 
 interface ListProps {
   places: PlaceInfo[];
@@ -83,7 +84,9 @@ const List = ({ places, isMobile }: ListProps) => {
                     </td>
                     <td className="list__table-content">{place.addressDetail}</td>
                     {!isMobile && <td>{place.description}</td>}
-                    {/* <td><AddMyPlace place={place}/></td> */}
+                    <td className="list__add-place-cell">
+                      <AddMyPlace place={place} size="small" />
+                    </td>
                   </tr>
                 ) : null}
               </tbody>

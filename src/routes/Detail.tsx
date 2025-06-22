@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { dbService } from '../fBase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import AddMyPlace from '../components/AddMyPlace';
 import type { PlaceInfo } from '../types';
 
 interface LocationState {
@@ -96,7 +97,11 @@ const Detail = () => {
               </div>
             ) : null}
             <p className='detail__description'>{detailPlace?.description}</p>
-            {/* <AddMyPlace place={place}/> */}
+            {detailPlace && (
+              <div className="detail__add-to-plan">
+                <AddMyPlace place={detailPlace} size="large" showLabel={true} />
+              </div>
+            )}
             <ins
               className='kakao_ad_area'
               style={{ display: 'none' }}

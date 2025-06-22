@@ -11,6 +11,8 @@
 @import "css/Modal.css";
 @import "css/Navigation.css";
 @import "css/Profile.css";
+@import "css/AddMyPlace.css";
+@import "css/LoadingSpinner.css";
 
 html,
 body {

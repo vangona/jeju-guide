@@ -1,0 +1,126 @@
+/* AddMyPlace 컴포넌트 스타일 */
+.add-my-place-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 2px solid #e5e7eb;
+  background-color: white;
+  color: #6b7280;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+
+.add-my-place-btn:hover {
+  border-color: var(--seacolor, #9ebad0);
+  color: var(--seacolor, #9ebad0);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(158, 186, 208, 0.2);
+}
+
+.add-my-place-btn:active {
+  transform: translateY(0);
+}
+
+/* 크기 변형 */
+.add-my-place-btn--small {
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  min-width: 32px;
+  min-height: 32px;
+}
+
+.add-my-place-btn--medium {
+  padding: 8px 12px;
+  font-size: 0.875rem;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.add-my-place-btn--large {
+  padding: 12px 16px;
+  font-size: 1rem;
+  min-width: 48px;
+  min-height: 48px;
+}
+
+/* 추가된 상태 스타일 */
+.add-my-place-btn--added {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+  color: #ef4444;
+}
+
+.add-my-place-btn--added:hover {
+  border-color: #dc2626;
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+/* 애니메이션 상태 */
+.add-my-place-btn--animating {
+  border-color: #10b981;
+  background-color: #f0fdf4;
+  color: #10b981;
+  animation: addSuccess 0.6s ease;
+}
+
+@keyframes addSuccess {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 레이블 스타일 */
+.add-my-place-label {
+  font-size: inherit;
+  white-space: nowrap;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 680px) {
+  .add-my-place-btn--small {
+    min-width: 36px;
+    min-height: 36px;
+    padding: 8px;
+  }
+  
+  .add-my-place-btn--medium {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 10px;
+  }
+  
+  .add-my-place-btn--large {
+    min-width: 52px;
+    min-height: 52px;
+    padding: 12px;
+  }
+}
+
+/* 하트 아이콘 특별 효과 */
+.add-my-place-btn--added svg {
+  animation: heartBeat 1s ease-in-out infinite;
+}
+
+@keyframes heartBeat {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
