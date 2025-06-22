@@ -1,0 +1,137 @@
+[
+  {
+    "viewport": {
+      "width": 1920,
+      "height": 1080,
+      "name": "1920x1080"
+    },
+    "analysis": {
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "textNodes": [
+        {
+          "text": "장기여행자가 알려주는 HONEY TIPS",
+          "parentTag": "A",
+          "parentClass": "map-explain__tips",
+          "parentId": "",
+          "position": {
+            "top": 705,
+            "left": 846.109375,
+            "bottom": 740,
+            "right": 1121.875,
+            "width": 275.765625,
+            "height": 35
+          },
+          "isVisible": true,
+          "isInViewport": true,
+          "overflow": "visible",
+          "textOverflow": "clip",
+          "whiteSpace": "normal",
+          "fontSize": "14px",
+          "fontFamily": "Times",
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgba(255, 255, 255, 0.1)",
+          "zIndex": "auto",
+          "position_style": "static"
+        }
+      ],
+      "documentSize": {
+        "width": 1920,
+        "height": 1080
+      }
+    },
+    "screenshot": "screenshots/honey-tips-focus-1920x1080.png"
+  },
+  {
+    "viewport": {
+      "width": 1366,
+      "height": 768,
+      "name": "1366x768"
+    },
+    "analysis": {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "textNodes": [
+        {
+          "text": "장기여행자가 알려주는 HONEY TIPS",
+          "parentTag": "A",
+          "parentClass": "map-explain__tips",
+          "parentId": "",
+          "position": {
+            "top": 705,
+            "left": 569.109375,
+            "bottom": 740,
+            "right": 844.875,
+            "width": 275.765625,
+            "height": 35
+          },
+          "isVisible": true,
+          "isInViewport": true,
+          "overflow": "visible",
+          "textOverflow": "clip",
+          "whiteSpace": "normal",
+          "fontSize": "14px",
+          "fontFamily": "Times",
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgba(255, 255, 255, 0.1)",
+          "zIndex": "auto",
+          "position_style": "static"
+        }
+      ],
+      "documentSize": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    "screenshot": "screenshots/honey-tips-focus-1366x768.png"
+  },
+  {
+    "viewport": {
+      "width": 1024,
+      "height": 768,
+      "name": "1024x768"
+    },
+    "analysis": {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "textNodes": [
+        {
+          "text": "장기여행자가 알려주는 HONEY TIPS",
+          "parentTag": "A",
+          "parentClass": "map-explain__tips",
+          "parentId": "",
+          "position": {
+            "top": 705,
+            "left": 398.109375,
+            "bottom": 740,
+            "right": 673.875,
+            "width": 275.765625,
+            "height": 35
+          },
+          "isVisible": true,
+          "isInViewport": true,
+          "overflow": "visible",
+          "textOverflow": "clip",
+          "whiteSpace": "normal",
+          "fontSize": "14px",
+          "fontFamily": "Times",
+          "color": "rgb(255, 255, 255)",
+          "backgroundColor": "rgba(255, 255, 255, 0.1)",
+          "zIndex": "auto",
+          "position_style": "static"
+        }
+      ],
+      "documentSize": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    "screenshot": "screenshots/honey-tips-focus-1024x768.png"
+  }
+]

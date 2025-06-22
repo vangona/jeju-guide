@@ -1,9 +1,28 @@
 .map__container {
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
+  padding: 0 16px;
+}
+
+.vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+}
+
+/* Desktop layout improvements */
+@media (min-width: 1024px) {
+  .map__container {
+    max-width: 900px;
+    padding: 0 24px;
+  }
 }
 
 .map__container--error {
@@ -44,6 +63,27 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  max-width: 600px;
+  margin: 16px auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 10;
+}
+
+/* Mobile explain container */
+@media (max-width: 350px) {
+  .map-explain__container {
+    padding: 0 8px;
+  }
+}
+
+/* Desktop explain container */
+@media (min-width: 768px) {
+  .map-explain__container {
+    max-width: 700px;
+    padding: 0 24px;
+  }
 }
 
 .map-explain {
@@ -64,44 +104,59 @@
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 16px;
-  margin: 16px 0;
+  margin: 0;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Mobile explain box */
+@media (max-width: 350px) {
+  .explain-box {
+    padding: 12px 8px;
+    border-radius: 8px;
+  }
+}
+
+/* Desktop explain box */
+@media (min-width: 768px) {
+  .explain-box {
+    padding: 20px 24px;
+    max-width: 500px;
+  }
 }
 
 .map-explain__content {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 12px;
+  justify-content: center;
 }
 
 .map-explain__icon {
   opacity: 0.8;
 }
 
-.map-explain__tips {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  color: white;
-  text-decoration: none;
-  font-size: 0.875rem;
-  transition: all 0.2s ease;
-}
-
-.map-explain__tips:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-}
-
 .map {
-  min-width: 700px;
-  max-width: 95vw;
+  width: 100%;
+  max-width: 1200px;
   height: 350px;
+  margin: 0 auto;
+}
+
+/* Desktop specific styling */
+@media (min-width: 1024px) {
+  .map {
+    max-width: 900px;
+    height: 400px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .map {
+    max-width: 700px;
+    height: 350px;
+  }
 }
 
 .place__infowindow {
@@ -167,21 +222,42 @@
 .map__controls {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin: 1rem 0;
+  gap: 20px;
+  margin: 0.5rem 0 1.5rem 0;
   flex-wrap: wrap;
   justify-content: center;
+  width: 100%;
+  max-width: 700px;
+  padding: 0 16px;
+}
+
+/* Desktop map controls */
+@media (min-width: 768px) {
+  .map__controls {
+    gap: 32px;
+    margin: 1rem 0 2rem 0;
+    flex-wrap: nowrap;
+    max-width: 800px;
+  }
 }
 
 .map__filter-group {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  padding: 8px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(15px);
+  border-radius: 16px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.map__filter-group:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
 .map__filter-icon {
@@ -193,11 +269,13 @@
   background: transparent;
   border: none;
   color: white;
-  font-size: 0.875rem;
-  padding: 4px 8px;
-  border-radius: 6px;
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  border-radius: 8px;
   outline: none;
   cursor: pointer;
+  font-weight: 500;
+  min-width: 80px;
 }
 
 .place-type__map option {
@@ -210,6 +288,17 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Desktop map wrapper */
+@media (min-width: 768px) {
+  .map__wrapper {
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
 }
 
 .map__loading {
@@ -228,21 +317,28 @@
 .check-geolocation {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
   color: white;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  font-weight: 500;
 }
 
 .check-geolocation:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.18);
   transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.check-geolocation:active {
+  transform: translateY(0);
 }
 
 .btn-text {
@@ -338,13 +434,34 @@
   
   .map__controls {
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
+    margin: 0.5rem 0 0.5rem 0;
+    padding: 0 16px;
+    max-width: 100%;
   }
   
   .map__filter-group,
   .check-geolocation {
     width: 100%;
+    max-width: 320px;
     justify-content: center;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+  }
+  
+  .map__filter-group {
+    gap: 8px;
+  }
+  
+  .check-geolocation {
+    gap: 8px;
+  }
+  
+  .place-type__map {
+    font-size: 0.85rem;
+    padding: 4px 8px;
+    min-width: 70px;
   }
   
   .btn-text {
@@ -381,5 +498,27 @@
   
   .marker__detail-actions {
     align-self: flex-end;
+  }
+}
+
+/* Extra small screens */
+@media screen and (max-width: 400px) {
+  .map__controls {
+    gap: 8px;
+    margin: 0.25rem 0 0.25rem 0;
+    padding: 0 12px;
+  }
+  
+  .map__filter-group,
+  .check-geolocation {
+    max-width: 280px;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .place-type__map {
+    font-size: 0.8rem;
+    padding: 3px 6px;
+    min-width: 60px;
   }
 }

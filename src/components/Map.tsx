@@ -4,7 +4,6 @@ import {
   faMapMarkerAlt,
   faSearchLocation,
   faFilter,
-  faComments,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
@@ -473,55 +472,30 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
             )}
             <div className='map' ref={container}></div>
           </div>
-          <div className='map-explain__container'>
-            {mouseState ? (
-              isMobile ? (
-                <div className='marker__detail'>
-                  <div className='marker__detail-header'>
-                    <h4>{(currentPlace as PlaceInfo).name}</h4>
-                    <div className='marker__detail-actions'>
-                      <AddMyPlace 
-                        place={currentPlace as PlaceInfo} 
-                        size='small'
-                      />
-                      <Link
-                        to={`/detail/${(currentPlace as PlaceInfo).name}`}
-                        className='btn-detail'
-                      >
-                        <FontAwesomeIcon icon={faSearchLocation} />
-                      </Link>
-                    </div>
-                  </div>
-                  <p className='marker__detail-description'>
-                    {(currentPlace as PlaceInfo).description.slice(0, 50)}
-                    {(currentPlace as PlaceInfo).description.length > 50 && '...'}
-                  </p>
-                </div>
-              ) : (
-                <div className='map-explain explain-box'>
-                  <div className='map-explain__content'>
-                    <FontAwesomeIcon icon={faMousePointer} className='map-explain__icon' />
-                    <span>더 알아보시려면 마커를 클릭해주세요.</span>
-                  </div>
-                  <Link to='/tips' className='map-explain__tips'>
-                    <FontAwesomeIcon icon={faComments} />
-                    장기여행자가 알려주는 HONEY TIPS
+          {/* Mobile marker detail when clicked */}
+          {mouseState && isMobile && (
+            <div className='marker__detail'>
+              <div className='marker__detail-header'>
+                <h4>{(currentPlace as PlaceInfo).name}</h4>
+                <div className='marker__detail-actions'>
+                  <AddMyPlace 
+                    place={currentPlace as PlaceInfo} 
+                    size='small'
+                  />
+                  <Link
+                    to={`/detail/${(currentPlace as PlaceInfo).name}`}
+                    className='btn-detail'
+                  >
+                    <FontAwesomeIcon icon={faSearchLocation} />
                   </Link>
                 </div>
-              )
-            ) : (
-              <div className='map-explain explain-box'>
-                <div className='map-explain__content'>
-                  <FontAwesomeIcon icon={faMapMarkerAlt} className='map-explain__icon' />
-                  <span>지도를 확대하실 수 있습니다.</span>
-                </div>
-                <Link to='/tips' className='map-explain__tips'>
-                  <FontAwesomeIcon icon={faComments} />
-                  장기여행자가 알려주는 HONEY TIPS
-                </Link>
               </div>
-            )}
-          </div>
+              <p className='marker__detail-description'>
+                {(currentPlace as PlaceInfo).description.slice(0, 50)}
+                {(currentPlace as PlaceInfo).description.length > 50 && '...'}
+              </p>
+            </div>
+          )}
           {chatState && <Saychat latitude={geoLat} longitude={geoLon} />}
         </div>
       </div>
