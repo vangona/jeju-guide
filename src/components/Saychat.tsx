@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { dbService } from '../fBase';
+import { addDoc, collection } from 'firebase/firestore';
 
 interface SaychatProps {
   latitude: number;
@@ -17,7 +18,7 @@ const Saychat = ({ latitude, longitude }: SaychatProps) => {
         createdAt: Date.now(),
         location: [latitude, longitude],
       };
-      await dbService.collection('chats').add(chatObj);
+      await addDoc(collection(dbService, 'chats'), chatObj);
       setChat('');
     } else {
       alert('먼저 위치를 표시해주세요.');

@@ -1,28 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { dbService } from '../fBase';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import type { PlaceInfo } from '../types';
 
-interface LocationProps {
+interface LocationState {
   from: string;
 }
 
 const Detail = () => {
   const { place } = useParams<{ place?: string }>();
-  const location = useLocation<LocationProps>();
+  const location = useLocation();
+  const locationState = location.state as LocationState | null;
   let from = '지도';
-  if (location.state) {
-    from = location.state.from;
+  if (locationState) {
+    from = locationState.from;
   }
-  const history = useHistory();
+  const navigate = useNavigate();
   const [detailPlace, setDetailPlace] = useState<PlaceInfo>();
   const [imgPage, setImgPage] = useState(0);
   const [detailLoading, setDetailLoading] = useState(false);
 
   const clickBackBtn = () => {
-    history.push({
-      pathname: '/',
+    navigate('/', {
       state: {
         prevViewType: from,
       },
@@ -42,14 +44,17 @@ const Detail = () => {
   };
 
   const getPlaceName = async () => {
-    dbService
-      .collection('places')
-      .where('name', '==', place)
-      .onSnapshot((snapshot) => {
-        const placeData = snapshot.docs[0].data() as PlaceInfo; // DocumentData라는 타입으로 와서 PlaceInfo로 TypeCasting
+    if (!place) return;
+    
+    const q = query(collection(dbService, 'places'), where('name', '==', place));
+    
+    onSnapshot(q, (snapshot) => {
+      if (snapshot.docs.length > 0) {
+        const placeData = snapshot.docs[0].data() as PlaceInfo;
         setDetailPlace(placeData);
         setDetailLoading(true);
-      });
+      }
+    });
   };
 
   useEffect(() => {

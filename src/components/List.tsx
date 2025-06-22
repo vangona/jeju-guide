@@ -44,8 +44,7 @@ const List = ({ places, isMobile }: ListProps) => {
   const indexOfLast = currentPage * parseInt(postsPerPage);
   const indexOfFirst = indexOfLast - parseInt(postsPerPage);
   const currentPosts = (posts: PlaceInfo[]) => {
-    let currentPosts;
-    currentPosts = posts.slice(indexOfFirst, indexOfLast);
+    const currentPosts = posts.slice(indexOfFirst, indexOfLast);
     return currentPosts;
   };
 
@@ -76,17 +75,13 @@ const List = ({ places, isMobile }: ListProps) => {
                   <tr style={{ backgroundColor: 'white' }}>
                     <td className='list__table-name list__table-content'>
                       <Link
-                        to={{
-                          pathname: `/detail/${place.name}`,
-                          state: {
-                            from: '목록',
-                          },
-                        }}
+                        to={`/detail/${place.name}`}
+                        state={{ from: '목록' }}
                       >
                         {place.name}
                       </Link>
                     </td>
-                    <td list__table-content>{place.addressDetail}</td>
+                    <td className="list__table-content">{place.addressDetail}</td>
                     {!isMobile && <td>{place.description}</td>}
                     {/* <td><AddMyPlace place={place}/></td> */}
                   </tr>

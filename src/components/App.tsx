@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { authService } from '../fBase';
+import { onAuthStateChanged } from 'firebase/auth';
 import { UserObj } from '../types';
 import AppRouter from './Router';
 
@@ -21,7 +22,7 @@ const App = () => {
     }
   };
   useEffect(() => {
-    authService.onAuthStateChanged((user) => {
+    onAuthStateChanged(authService, (user) => {
       if (user) {
         setUserObj({
           uid: user.uid,

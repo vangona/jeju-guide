@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import PostForm from '../components/PostForm';
 import { authService } from '../fBase';
 import type { UserObj } from '../types';
@@ -9,15 +9,15 @@ interface PostProps {
 }
 
 const Post = ({ userObj }: PostProps) => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const onLogOutClick = () => {
     authService.signOut();
-    history.push('/');
+    navigate('/');
   };
 
   const onHomeClick = () => {
-    history.push('/');
+    navigate('/');
   };
 
   return (

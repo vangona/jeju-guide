@@ -1,11 +1,11 @@
 import React from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 const Tips = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const clickBackBtn = () => {
-    history.goBack();
+    navigate(-1);
   };
 
   return (

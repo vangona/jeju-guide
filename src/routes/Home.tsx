@@ -5,10 +5,11 @@ import Map from '../components/Map';
 import Modal from '../components/Modal';
 import Navigation from '../components/Navigation';
 import { dbService } from '../fBase';
+import { collection, onSnapshot } from 'firebase/firestore';
 import Profile from './Profile';
 import type { PlaceInfo, UserObj } from '../types';
 
-interface LocationProps {
+interface LocationState {
   prevViewType: string;
 }
 
@@ -18,7 +19,7 @@ interface HomeProps {
 }
 
 const Home = ({ isMobile, userObj }: HomeProps) => {
-  const location = useLocation<LocationProps>();
+  const location = useLocation();
   const [detail, setDetail] = useState<PlaceInfo | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [places, setPlaces] = useState<PlaceInfo[]>([]);
@@ -26,7 +27,7 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
   const [chatState, setChatState] = useState<boolean>(false);
 
   const getPlaces = async () => {
-    dbService.collection('places').onSnapshot((snapshot) => {
+    onSnapshot(collection(dbService, 'places'), (snapshot) => {
       const placeArray = snapshot.docs.map((doc) => ({
         ...(doc.data() as PlaceInfo),
       }));
@@ -49,8 +50,9 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
 
   useEffect(() => {
     getPlaces();
-    if (location.state) {
-      setViewType(location.state.prevViewType);
+    const locationState = location.state as LocationState | null;
+    if (locationState) {
+      setViewType(locationState.prevViewType);
     }
   }, []);
   return (
@@ -77,10 +79,10 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
         <Modal place={detail} handleModalContentChange={handleChangeDetail} />
       )}
       {/* <Link to="/myplace"><button>내 여행지 목록</button></Link> */}
-      <Navigation
+      {/* <Navigation
         handleViewTypeChange={handleViewTypeChange}
         handleChatStateChange={handleChatStateChange}
-      />
+      /> */}
     </div>
   );
 };

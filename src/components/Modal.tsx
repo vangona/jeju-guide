@@ -46,11 +46,9 @@ const Modal = ({ place, handleModalContentChange }: ModalProps) => {
               </a>
             )}
             <Link
-              to={{
-                pathname: `/detail/${place.name}`,
-                state: {
-                  from: '지도',
-                },
+              to={`/detail/${place.name}`}
+              state={{
+                from: '지도',
               }}
             >
               <button className='map-detail__detail map-detail__btn'>
