@@ -38,10 +38,6 @@ const MyPlace = () => {
     }
   };
 
-  const handleChatStateChange = (newChatState: boolean) => {
-    // Chat functionality - could navigate to home with chat enabled
-    navigate('/');
-  };
 
   useEffect(() => {
     const localMyPlace = localStorage.getItem('micheltain_myplace');
@@ -141,7 +137,6 @@ const MyPlace = () => {
         
         <Navigation 
           handleViewTypeChange={handleViewTypeChange}
-          handleChatStateChange={handleChatStateChange}
         />
       </div>
     );
@@ -263,7 +258,6 @@ const MyPlace = () => {
       
       <Navigation 
         handleViewTypeChange={handleViewTypeChange}
-        handleChatStateChange={handleChatStateChange}
       />
     </div>
   );

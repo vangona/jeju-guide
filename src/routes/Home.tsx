@@ -25,7 +25,6 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [places, setPlaces] = useState<PlaceInfo[]>([]);
   const [viewType, setViewType] = useState('지도');
-  const [chatState, setChatState] = useState<boolean>(false);
 
   const getPlaces = async () => {
     onSnapshot(collection(dbService, 'places'), (snapshot) => {
@@ -45,9 +44,6 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
     setViewType(newViewType);
   };
 
-  const handleChatStateChange = (newChatState: boolean) => {
-    setChatState(newChatState);
-  };
 
   useEffect(() => {
     getPlaces();
@@ -66,7 +62,7 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
             places={places}
             isMobile={isMobile}
             handleChangeDetail={handleChangeDetail}
-            chatState={chatState}
+            chatState={false}
           />
         ) : loading === true && viewType === '목록' ? (
           <List places={places} isMobile={isMobile} />
@@ -82,7 +78,6 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
       {/* <Link to="/myplace"><button>내 여행지 목록</button></Link> */}
       <Navigation
         handleViewTypeChange={handleViewTypeChange}
-        handleChatStateChange={handleChatStateChange}
       />
     </div>
   );

@@ -4,19 +4,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faMap, 
   faList, 
-  faComments, 
   faLightbulb,
   faHeart 
 } from '@fortawesome/free-solid-svg-icons';
 
 interface NavigationProps {
   handleViewTypeChange: (newViewType: string) => void;
-  handleChatStateChange: (newChatState: boolean) => void;
 }
 
 const Navigation = ({
   handleViewTypeChange,
-  handleChatStateChange,
 }: NavigationProps) => {
   const [activeTab, setActiveTab] = useState('지도');
 
@@ -26,14 +23,9 @@ const Navigation = ({
     switch (type) {
       case '지도':
         handleViewTypeChange('지도');
-        handleChatStateChange(false);
         break;
       case '목록':
         handleViewTypeChange('목록');
-        handleChatStateChange(false);
-        break;
-      case '채팅':
-        handleChatStateChange(true);
         break;
     }
   };
@@ -41,7 +33,6 @@ const Navigation = ({
   const navItems = [
     { key: '지도', label: 'Map', icon: faMap },
     { key: '목록', label: 'List', icon: faList },
-    { key: '채팅', label: 'Chat', icon: faComments },
   ];
 
   return (

@@ -9,7 +9,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faMap,
   faList,
-  faComments,
   faPlus,
   faHome,
   faLightbulb,
@@ -19,13 +18,11 @@ import { useResponsive } from '../hooks/useResponsive';
 
 interface ResponsiveNavigationProps {
   handleViewTypeChange: (viewType: string) => void;
-  handleChatStateChange: (chatState: boolean) => void;
   isLoggedIn?: boolean;
 }
 
 const ResponsiveNavigation = ({
   handleViewTypeChange,
-  handleChatStateChange,
   isLoggedIn = false,
 }: ResponsiveNavigationProps) => {
   const location = useLocation();
@@ -74,15 +71,6 @@ const ResponsiveNavigation = ({
       showAlways: true,
     },
     {
-      id: 'chat',
-      label: '채팅',
-      icon: faComments,
-      onClick: () => handleChatStateChange(true),
-      isActive: false,
-      showAlways: false,
-      mobileOnly: true,
-    },
-    {
       id: 'add',
       label: '추가',
       icon: faPlus,
@@ -97,7 +85,6 @@ const ResponsiveNavigation = ({
   const getVisibleItems = () => {
     return navigationItems.filter(item => {
       if (item.requiresAuth && !isLoggedIn) return false;
-      if (item.mobileOnly && !deviceInfo.isMobile) return false;
       return item.showAlways || deviceInfo.isMobile;
     });
   };

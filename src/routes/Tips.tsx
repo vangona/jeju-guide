@@ -22,10 +22,6 @@ const Tips = () => {
     }
   };
 
-  const handleChatStateChange = (newChatState: boolean) => {
-    // Chat functionality - could navigate to home with chat enabled
-    navigate('/');
-  };
 
   return (
     <div className='detail__container'>
@@ -156,7 +152,6 @@ const Tips = () => {
       
       <Navigation 
         handleViewTypeChange={handleViewTypeChange}
-        handleChatStateChange={handleChatStateChange}
       />
     </div>
   );
