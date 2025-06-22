@@ -1,5 +1,4 @@
-import React from 'react';
-import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Auth from '../routes/Auth';
 import Detail from '../routes/Detail';
 import Edit from '../routes/Edit';
