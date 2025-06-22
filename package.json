@@ -42,6 +42,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.1",
     "react-scripts": "5.0.1",
+    "swiper": "^11.2.8",
     "typescript": "^5.3.3",
     "web-vitals": "^3.5.0"
   },
