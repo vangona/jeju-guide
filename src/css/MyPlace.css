@@ -142,7 +142,7 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.search__container {
+.myplace__controls .search__container {
   margin-bottom: 1rem;
 }
 
