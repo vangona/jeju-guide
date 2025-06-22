@@ -29,7 +29,7 @@ const Auth = () => {
     const unsubscribe = onAuthStateChanged(authService, (user) => {
       if (user) {
         // 로그인된 상태면 Post 페이지로 이동
-        navigate('/post', { replace: true });
+        navigate('/admin', { replace: true });
       } else {
         // 로그인되지 않은 상태면 Auth 페이지 표시
         setCheckingAuth(false);
@@ -61,11 +61,11 @@ const Auth = () => {
       if (newAccount) {
         await createUserWithEmailAndPassword(authService, email, password);
         // 계정 생성 성공 후 게시글 작성으로 이동
-        navigate('/post', { replace: true });
+        navigate('/admin', { replace: true });
       } else {
         await signInWithEmailAndPassword(authService, email, password);
         // 로그인 성공 후 게시글 작성으로 이동
-        navigate('/post', { replace: true });
+        navigate('/admin', { replace: true });
       }
     } catch (error) {
       if (error instanceof Error) {

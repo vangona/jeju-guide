@@ -93,6 +93,7 @@ const PostForm = ({ userObj }: PostFormProps) => {
         attachmentUrlArray,
         url,
         creatorId: userObj?.uid,
+        createdAt: Date.now(), // 생성 시간 추가
       };
 
       await addDoc(collection(dbService, 'places'), placeObj);

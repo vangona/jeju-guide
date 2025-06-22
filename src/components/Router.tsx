@@ -6,6 +6,7 @@ import Home from '../routes/Home';
 import Post from '../routes/Post';
 import Tips from '../routes/Tips';
 import MyPlace from '../routes/MyPlace';
+import Admin from '../routes/Admin';
 import { UserObj } from '../types';
 
 interface DeviceInfo {
@@ -60,6 +61,10 @@ const AppRouter = ({
         <Route path='/tips' element={<Tips />} />
         <Route path='/auth' element={<Auth />} />
         <Route path="/myplace" element={<MyPlace />} />
+        <Route 
+          path='/admin' 
+          element={isLoggedIn ? <Admin userObj={userObj} /> : <Navigate to='/auth' replace />} 
+        />
       </Routes>
     </Router>
   );

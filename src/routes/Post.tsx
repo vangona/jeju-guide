@@ -13,7 +13,8 @@ import {
   faLocation,
   faChevronUp,
   faChevronDown,
-  faQuestionCircle
+  faQuestionCircle,
+  faCog
 } from '@fortawesome/free-solid-svg-icons';
 import PostForm from '../components/PostForm';
 import { authService } from '../fBase';
@@ -74,6 +75,10 @@ const Post = ({ userObj }: PostProps) => {
 
   const onBackClick = () => {
     navigate(-1);
+  };
+
+  const onAdminClick = () => {
+    navigate('/admin');
   };
 
   const toggleProfile = () => {
@@ -148,6 +153,10 @@ const Post = ({ userObj }: PostProps) => {
                   <button className='profile__action' onClick={onHomeClick}>
                     <FontAwesomeIcon icon={faHome} />
                     <span>홈으로</span>
+                  </button>
+                  <button className='profile__action' onClick={onAdminClick}>
+                    <FontAwesomeIcon icon={faCog} />
+                    <span>관리자</span>
                   </button>
                   <button className='profile__action profile__action--logout' onClick={onLogOutClick}>
                     <FontAwesomeIcon icon={faSignOutAlt} />
