@@ -189,6 +189,7 @@
   font-size: 0.9rem;
 }
 
+.myplace__container
 .filter__select,
 .sort__select {
   flex: 1;

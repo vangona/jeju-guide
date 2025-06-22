@@ -141,16 +141,17 @@
   z-index: 2;
 }
 
-.search__input,
-.filter__select {
-  width: 100%;
-  padding: 12px 12px 12px 40px;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 12px;
-  color: white;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
+.edit__page {
+  .search__input, .filter__select {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    color: white;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+  }
 }
 
 .search__input::placeholder {
@@ -165,7 +166,7 @@
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
 
-.filter__select option {
+.edit__page .filter__select option {
   background: var(--seacolor, #9ebad0);
   color: white;
 }
