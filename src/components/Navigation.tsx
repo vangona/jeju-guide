@@ -5,8 +5,8 @@ import {
   faMap, 
   faList, 
   faComments, 
-  faUser, 
-  faLightbulb 
+  faLightbulb,
+  faHeart 
 } from '@fortawesome/free-solid-svg-icons';
 
 interface NavigationProps {
@@ -35,10 +35,6 @@ const Navigation = ({
       case '채팅':
         handleChatStateChange(true);
         break;
-      case '프로필':
-        handleViewTypeChange('프로필');
-        handleChatStateChange(false);
-        break;
     }
   };
 
@@ -46,7 +42,6 @@ const Navigation = ({
     { key: '지도', label: 'Map', icon: faMap },
     { key: '목록', label: 'List', icon: faList },
     { key: '채팅', label: 'Chat', icon: faComments },
-    { key: '프로필', label: 'Profile', icon: faUser },
   ];
 
   return (
@@ -62,6 +57,10 @@ const Navigation = ({
           <span className='nav__label'>{item.label}</span>
         </button>
       ))}
+      <Link to='/myplace' className='nav__component nav__component--link'>
+        <FontAwesomeIcon icon={faHeart} />
+        <span className='nav__label'>My</span>
+      </Link>
       <Link to='/tips' className='nav__component nav__component--link'>
         <FontAwesomeIcon icon={faLightbulb} />
         <span className='nav__label'>Tips</span>

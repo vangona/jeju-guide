@@ -9,11 +9,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faMap,
   faList,
-  faUser,
   faComments,
   faPlus,
   faHome,
   faLightbulb,
+  faHeart,
 } from '@fortawesome/free-solid-svg-icons';
 import { useResponsive } from '../hooks/useResponsive';
 
@@ -58,6 +58,14 @@ const ResponsiveNavigation = ({
       showAlways: true,
     },
     {
+      id: 'myplace',
+      label: '내 장소',
+      icon: faHeart,
+      link: '/myplace',
+      isActive: location.pathname === '/myplace',
+      showAlways: true,
+    },
+    {
       id: 'tips',
       label: '팁',
       icon: faLightbulb,
@@ -82,15 +90,6 @@ const ResponsiveNavigation = ({
       isActive: location.pathname === '/post',
       showAlways: false,
       requiresAuth: true,
-    },
-    {
-      id: 'profile',
-      label: '프로필',
-      icon: faUser,
-      onClick: () => handleViewTypeChange('프로필'),
-      link: '/auth',
-      isActive: location.pathname === '/auth' || location.pathname === '/profile',
-      showAlways: true,
     },
   ];
 

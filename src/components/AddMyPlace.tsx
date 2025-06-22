@@ -7,9 +7,11 @@ interface AddMyPlaceProps {
   place: PlaceInfo;
   size?: 'small' | 'medium' | 'large';
   showLabel?: boolean;
+  onUpdate?: () => void;
+  onRemoveConfirm?: (place: PlaceInfo) => Promise<boolean>;
 }
 
-const AddMyPlace = ({ place, size = 'medium', showLabel = false }: AddMyPlaceProps) => {
+const AddMyPlace = ({ place, size = 'medium', showLabel = false, onUpdate, onRemoveConfirm }: AddMyPlaceProps) => {
   const [isAdded, setIsAdded] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -25,9 +27,14 @@ const AddMyPlace = ({ place, size = 'medium', showLabel = false }: AddMyPlacePro
     }
   }, [place.name]);
 
-  const handleAddToMyPlace = () => {
+  const handleAddToMyPlace = async () => {
     if (isAdded) {
-      // 이미 추가된 경우 제거
+      // 이미 추가된 경우 제거 - 확인 대화상자 표시
+      if (onRemoveConfirm) {
+        const shouldRemove = await onRemoveConfirm(place);
+        if (!shouldRemove) return;
+      }
+      
       const placeLocalArray = localStorage.getItem('micheltain_myplace');
       if (placeLocalArray) {
         const parsedPlaceArray = JSON.parse(placeLocalArray);
@@ -36,6 +43,7 @@ const AddMyPlace = ({ place, size = 'medium', showLabel = false }: AddMyPlacePro
         );
         localStorage.setItem('micheltain_myplace', JSON.stringify(filteredArray));
         setIsAdded(false);
+        onUpdate?.();
       }
     } else {
       // 새로 추가
@@ -49,6 +57,7 @@ const AddMyPlace = ({ place, size = 'medium', showLabel = false }: AddMyPlacePro
         );
         setIsAdded(true);
         setIsAnimating(true);
+        onUpdate?.();
         
         // 애니메이션 효과
         setTimeout(() => setIsAnimating(false), 600);

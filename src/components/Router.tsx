@@ -6,6 +6,7 @@ import Edit from '../routes/Edit';
 import Home from '../routes/Home';
 import Post from '../routes/Post';
 import Tips from '../routes/Tips';
+import MyPlace from '../routes/MyPlace';
 import { UserObj } from '../types';
 
 interface DeviceInfo {
@@ -59,7 +60,7 @@ const AppRouter = ({
         <Route path='/detail/:place' element={<Detail />} />
         <Route path='/tips' element={<Tips />} />
         <Route path='/auth' element={<Auth />} />
-        {/* <Route path="/myplace" element={<MyPlace />} /> */}
+        <Route path="/myplace" element={<MyPlace />} />
       </Routes>
     </Router>
   );

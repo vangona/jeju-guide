@@ -1,5 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faHome } from '@fortawesome/free-solid-svg-icons';
+import Navigation from '../components/Navigation';
 
 const Tips = () => {
   const navigate = useNavigate();
@@ -8,9 +11,38 @@ const Tips = () => {
     navigate(-1);
   };
 
+  const goHome = () => {
+    navigate('/');
+  };
+
+  // Navigation handlers
+  const handleViewTypeChange = (newViewType: string) => {
+    if (newViewType === '지도' || newViewType === '목록') {
+      navigate('/');
+    }
+  };
+
+  const handleChatStateChange = (newChatState: boolean) => {
+    // Chat functionality - could navigate to home with chat enabled
+    navigate('/');
+  };
+
   return (
     <div className='detail__container'>
-      <div className='detail-box tips-box' style={{ maxHeight: '90vh' }}>
+      <header className='tips__header'>
+        <div className='tips__nav'>
+          <button className='nav-btn nav-btn--back' onClick={clickBackBtn}>
+            <FontAwesomeIcon icon={faArrowLeft} />
+            <span>뒤로</span>
+          </button>
+          <h1 className='tips__title'>제주 가이드 팁</h1>
+          <button className='nav-btn nav-btn--home' onClick={goHome}>
+            <FontAwesomeIcon icon={faHome} />
+            <span>홈</span>
+          </button>
+        </div>
+      </header>
+      <div className='detail-box tips-box'>
         <h5>장기여행자 들려주는 꿀팁들</h5>
         <ul className='tips__list'>
           <li>
@@ -64,7 +96,7 @@ const Tips = () => {
           </div>
           <h6 className='maker-int__name'>2. 제주살이꾼 : 박태훈</h6>
           <p style={{ fontSize: '0.8rem' }}>
-            <li>- 제주도에 3년간 살고 있다.</li>
+            <li>- 제주도에 5년간 살았다.</li>
             <li>
               - 제주도 숨은 맛집과 명소 탐방, 미슐탱 가이드 이름의 어원을
               맡고있다.
@@ -117,13 +149,15 @@ const Tips = () => {
           data-ad-width='320'
           data-ad-height='50'
         ></ins>
-        <button style={{ marginTop: '1rem' }} onClick={clickBackBtn}>
-          돌아가기
-        </button>
       </div>
       <span className='copyright'>
-        &copy; 2021, 나만의 서랍장 Co. all rights reserved.
+        &copy; {new Date().getFullYear().toString()}, 나만의 서랍장 Co. all rights reserved.
       </span>
+      
+      <Navigation 
+        handleViewTypeChange={handleViewTypeChange}
+        handleChatStateChange={handleChatStateChange}
+      />
     </div>
   );
 };

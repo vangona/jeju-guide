@@ -1,6 +1,83 @@
+.tips__header {
+  position: sticky;
+  width: 100%;
+  top: 0;
+  z-index: 100;
+  background: rgba(158, 186, 208, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+}
+
+.tips__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.tips__title {
+  color: white;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  flex: 1;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 8px 12px;
+  color: white;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 70px;
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.nav-btn span {
+  font-weight: 500;
+}
+
+@media (max-width: 480px) {
+  .tips__nav {
+    padding: 0 0.75rem;
+  }
+  
+  .tips__title {
+    font-size: 1rem;
+  }
+  
+  .nav-btn {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    min-width: 60px;
+  }
+  
+  .nav-btn span {
+    display: none;
+  }
+}
+
 .tips-box {
   justify-content: flex-start;
   overflow: auto;
+  max-height: calc(100vh - 250px); /* Adjusted for navigation and copyright */
+  margin-bottom: 20px; /* Space between content and copyright */
 }
 
 .tips-box::-webkit-scrollbar {
@@ -53,4 +130,18 @@
   width: 50%;
   align-items: center;
   justify-content: space-between;
+}
+
+/* Copyright styling for Tips page */
+.detail__container .copyright {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.75rem;
+  text-align: center;
+  padding: 15px 20px;
+  margin-bottom: 100px; /* Space for navigation */
+  position: relative;
+  z-index: 10;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
 }
