@@ -1,0 +1,167 @@
+[
+  {
+    "viewport": {
+      "width": 1920,
+      "height": 1080,
+      "name": "desktop-1920x1080"
+    },
+    "actualViewport": {
+      "width": 1920,
+      "height": 1080,
+      "scrollWidth": 1920,
+      "scrollHeight": 1080
+    },
+    "honeyTipsInfo": {
+      "found": false
+    },
+    "navigationInfo": [
+      {
+        "index": 0,
+        "tagName": "NAV",
+        "className": "nav__container",
+        "position": {
+          "top": 1019,
+          "left": 857.1796875,
+          "bottom": 1080,
+          "right": 1062.8203125,
+          "width": 205.640625,
+          "height": 61
+        },
+        "offsetTop": 1019,
+        "zIndex": "999",
+        "position_style": "fixed"
+      }
+    ],
+    "fixedElements": [
+      {
+        "tagName": "NAV",
+        "className": "nav__container",
+        "id": "",
+        "position": "fixed",
+        "zIndex": "999",
+        "bounds": {
+          "top": 1019,
+          "left": 857.1796875,
+          "bottom": 1080,
+          "right": 1062.8203125,
+          "width": 205.640625,
+          "height": 61
+        }
+      }
+    ],
+    "screenshots": {
+      "fullPage": "screenshots/layout-investigation-desktop-1920x1080.png",
+      "bottomArea": null
+    }
+  },
+  {
+    "viewport": {
+      "width": 1366,
+      "height": 768,
+      "name": "desktop-1366x768"
+    },
+    "actualViewport": {
+      "width": 1366,
+      "height": 768,
+      "scrollWidth": 1366,
+      "scrollHeight": 768
+    },
+    "honeyTipsInfo": {
+      "found": false
+    },
+    "navigationInfo": [
+      {
+        "index": 0,
+        "tagName": "NAV",
+        "className": "nav__container",
+        "position": {
+          "top": 707,
+          "left": 580.1796875,
+          "bottom": 768,
+          "right": 785.8203125,
+          "width": 205.640625,
+          "height": 61
+        },
+        "offsetTop": 707,
+        "zIndex": "999",
+        "position_style": "fixed"
+      }
+    ],
+    "fixedElements": [
+      {
+        "tagName": "NAV",
+        "className": "nav__container",
+        "id": "",
+        "position": "fixed",
+        "zIndex": "999",
+        "bounds": {
+          "top": 707,
+          "left": 580.1796875,
+          "bottom": 768,
+          "right": 785.8203125,
+          "width": 205.640625,
+          "height": 61
+        }
+      }
+    ],
+    "screenshots": {
+      "fullPage": "screenshots/layout-investigation-desktop-1366x768.png",
+      "bottomArea": null
+    }
+  },
+  {
+    "viewport": {
+      "width": 1024,
+      "height": 768,
+      "name": "tablet-1024x768"
+    },
+    "actualViewport": {
+      "width": 1024,
+      "height": 768,
+      "scrollWidth": 1024,
+      "scrollHeight": 768
+    },
+    "honeyTipsInfo": {
+      "found": false
+    },
+    "navigationInfo": [
+      {
+        "index": 0,
+        "tagName": "NAV",
+        "className": "nav__container",
+        "position": {
+          "top": 707,
+          "left": 409.1796875,
+          "bottom": 768,
+          "right": 614.8203125,
+          "width": 205.640625,
+          "height": 61
+        },
+        "offsetTop": 707,
+        "zIndex": "999",
+        "position_style": "fixed"
+      }
+    ],
+    "fixedElements": [
+      {
+        "tagName": "NAV",
+        "className": "nav__container",
+        "id": "",
+        "position": "fixed",
+        "zIndex": "999",
+        "bounds": {
+          "top": 707,
+          "left": 409.1796875,
+          "bottom": 768,
+          "right": 614.8203125,
+          "width": 205.640625,
+          "height": 61
+        }
+      }
+    ],
+    "screenshots": {
+      "fullPage": "screenshots/layout-investigation-tablet-1024x768.png",
+      "bottomArea": null
+    }
+  }
+]

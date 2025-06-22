@@ -1,0 +1,172 @@
+[
+  {
+    "width": 400,
+    "analysis": {
+      "viewport": {
+        "width": 400,
+        "height": 600
+      },
+      "honeyTips": {
+        "left": 94.109375,
+        "right": 369.875,
+        "width": 275.765625,
+        "textContent": "장기여행자가 알려주는 HONEY TIPS",
+        "isClipped": false,
+        "overflowAmount": 0
+      }
+    }
+  },
+  {
+    "width": 380,
+    "analysis": {
+      "viewport": {
+        "width": 380,
+        "height": 600
+      },
+      "honeyTips": {
+        "left": 84.109375,
+        "right": 359.875,
+        "width": 275.765625,
+        "textContent": "장기여행자가 알려주는 HONEY TIPS",
+        "isClipped": false,
+        "overflowAmount": 0
+      }
+    }
+  },
+  {
+    "width": 360,
+    "analysis": {
+      "viewport": {
+        "width": 360,
+        "height": 600
+      },
+      "honeyTips": {
+        "left": 74.109375,
+        "right": 349.875,
+        "width": 275.765625,
+        "textContent": "장기여행자가 알려주는 HONEY TIPS",
+        "isClipped": false,
+        "overflowAmount": 0
+      }
+    }
+  },
+  {
+    "width": 350,
+    "analysis": {
+      "viewport": {
+        "width": 350,
+        "height": 600
+      },
+      "honeyTips": {
+        "left": 69.109375,
+        "right": 344.875,
+        "width": 275.765625,
+        "textContent": "장기여행자가 알려주는 HONEY TIPS",
+        "isClipped": false,
+        "overflowAmount": 0
+      }
+    }
+  },
+  {
+    "width": 340,
+    "analysis": {
+      "viewport": {
+        "width": 340,
+        "height": 600
+      },
+      "honeyTips": {
+        "left": 64.109375,
+        "right": 339.875,
+        "width": 275.765625,
+        "textContent": "장기여행자가 알려주는 HONEY TIPS",
+        "isClipped": false,
+        "overflowAmount": 0
+      }
+    }
+  },
+  {
+    "width": 330,
+    "analysis": {
+      "viewport": {
+        "width": 330,
+        "height": 600
+      },
+      "honeyTips": {
+        "left": 59.109375,
+        "right": 334.875,
+        "width": 275.765625,
+        "textContent": "장기여행자가 알려주는 HONEY TIPS",
+        "isClipped": true,
+        "overflowAmount": 4.875
+      }
+    }
+  },
+  {
+    "width": 325,
+    "analysis": {
+      "viewport": {
+        "width": 325,
+        "height": 600
+      },
+      "honeyTips": {
+        "left": 56.609375,
+        "right": 332.375,
+        "width": 275.765625,
+        "textContent": "장기여행자가 알려주는 HONEY TIPS",
+        "isClipped": true,
+        "overflowAmount": 7.375
+      }
+    }
+  },
+  {
+    "width": 320,
+    "analysis": {
+      "viewport": {
+        "width": 320,
+        "height": 600
+      },
+      "honeyTips": {
+        "left": 54.109375,
+        "right": 329.875,
+        "width": 275.765625,
+        "textContent": "장기여행자가 알려주는 HONEY TIPS",
+        "isClipped": true,
+        "overflowAmount": 9.875
+      }
+    }
+  },
+  {
+    "width": 315,
+    "analysis": {
+      "viewport": {
+        "width": 315,
+        "height": 600
+      },
+      "honeyTips": {
+        "left": 51.609375,
+        "right": 327.375,
+        "width": 275.765625,
+        "textContent": "장기여행자가 알려주는 HONEY TIPS",
+        "isClipped": true,
+        "overflowAmount": 12.375
+      }
+    }
+  },
+  {
+    "width": 310,
+    "analysis": {
+      "viewport": {
+        "width": 310,
+        "height": 600
+      },
+      "honeyTips": {
+        "left": 49.109375,
+        "right": 324.875,
+        "width": 275.765625,
+        "textContent": "장기여행자가 알려주는 HONEY TIPS",
+        "isClipped": true,
+        "overflowAmount": 14.875
+      }
+    }
+  }
+]

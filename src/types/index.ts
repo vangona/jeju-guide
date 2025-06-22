@@ -1,4 +1,5 @@
 export type PlaceInfo = {
+  id?: string;
   name: string;
   type: string;
   geocode: { '0': string; '1': string };

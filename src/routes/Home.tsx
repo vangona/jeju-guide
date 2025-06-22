@@ -4,6 +4,7 @@ import List from '../components/List';
 import Map from '../components/Map';
 import Modal from '../components/Modal';
 import Navigation from '../components/Navigation';
+import LoadingSpinner from '../components/LoadingSpinner';
 import { dbService } from '../fBase';
 import { collection, onSnapshot } from 'firebase/firestore';
 import Profile from './Profile';
@@ -24,7 +25,6 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [places, setPlaces] = useState<PlaceInfo[]>([]);
   const [viewType, setViewType] = useState('지도');
-  const [chatState, setChatState] = useState<boolean>(false);
 
   const getPlaces = async () => {
     onSnapshot(collection(dbService, 'places'), (snapshot) => {
@@ -44,9 +44,6 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
     setViewType(newViewType);
   };
 
-  const handleChatStateChange = (newChatState: boolean) => {
-    setChatState(newChatState);
-  };
 
   useEffect(() => {
     getPlaces();
@@ -65,24 +62,23 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
             places={places}
             isMobile={isMobile}
             handleChangeDetail={handleChangeDetail}
-            chatState={chatState}
+            chatState={false}
           />
         ) : loading === true && viewType === '목록' ? (
           <List places={places} isMobile={isMobile} />
         ) : loading === true && viewType === '프로필' ? (
           <Profile userObj={userObj} />
         ) : (
-          'Loading...'
+          <LoadingSpinner message="장소 정보를 불러오고 있습니다..." />
         )}
       </div>
       {detail && (
         <Modal place={detail} handleModalContentChange={handleChangeDetail} />
       )}
       {/* <Link to="/myplace"><button>내 여행지 목록</button></Link> */}
-      {/* <Navigation
+      <Navigation
         handleViewTypeChange={handleViewTypeChange}
-        handleChatStateChange={handleChatStateChange}
-      /> */}
+      />
     </div>
   );
 };

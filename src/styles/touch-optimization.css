@@ -1,0 +1,470 @@
+/**
+ * 터치 및 제스처 최적화 스타일
+ * 제주 가이드 앱의 모바일 인터랙션 향상
+ */
+
+/* 기본 터치 최적화 */
+* {
+  /* 터치 지연 제거 */
+  touch-action: manipulation;
+  
+  /* 텍스트 선택 방지 (필요한 경우만) */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 입력 요소들은 텍스트 선택 허용 */
+input,
+textarea,
+[contenteditable="true"] {
+  -webkit-user-select: auto;
+  -moz-user-select: auto;
+  -ms-user-select: auto;
+  user-select: auto;
+}
+
+/* 터치 타겟 최소 크기 보장 */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.touch-target-lg {
+  min-height: 48px;
+  min-width: 48px;
+}
+
+/* 터치 피드백 효과 */
+.touch-feedback {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.1s ease;
+}
+
+.touch-feedback:active {
+  transform: scale(0.98);
+}
+
+.touch-feedback::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+  pointer-events: none;
+}
+
+.touch-feedback:active::before {
+  width: 200px;
+  height: 200px;
+}
+
+/* 스와이프 가능한 컨테이너 */
+.swipeable {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.swipeable::-webkit-scrollbar {
+  display: none;
+}
+
+.swipeable-item {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* 스와이프 인디케이터 */
+.swipe-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.swipe-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transition: all 0.2s ease;
+}
+
+.swipe-dot.active {
+  background: white;
+  transform: scale(1.2);
+}
+
+/* Pull-to-refresh 스타일 */
+.pull-to-refresh-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.pull-to-refresh-indicator {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 20px;
+  background: var(--seacolor);
+  color: white;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.pull-to-refresh-indicator.visible {
+  top: 20px;
+}
+
+.pull-to-refresh-indicator .refresh-icon {
+  display: inline-block;
+  margin-right: 8px;
+  transition: transform 0.3s ease;
+}
+
+.pull-to-refresh-indicator.ready .refresh-icon {
+  transform: rotate(180deg);
+}
+
+.pull-to-refresh-indicator.loading .refresh-icon {
+  animation: spin 1s linear infinite;
+}
+
+/* 핀치 줌 컨테이너 */
+.pinch-zoom-container {
+  overflow: hidden;
+  position: relative;
+  touch-action: none;
+}
+
+.pinch-zoom-content {
+  transition: transform 0.1s ease-out;
+  transform-origin: center center;
+}
+
+/* 터치 가이드 오버레이 */
+.touch-guide-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.touch-guide-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.touch-guide-content {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 300px;
+  text-align: center;
+}
+
+.touch-guide-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: var(--seacolor);
+}
+
+.touch-guide-text {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.touch-guide-close {
+  background: var(--seacolor);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* 모바일 전용 인터랙션 */
+@media (hover: none) and (pointer: coarse) {
+  /* 호버 효과를 터치에 맞게 조정 */
+  .hover-effect {
+    transition: none;
+  }
+  
+  .hover-effect:active {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  /* 링크의 기본 터치 하이라이트 제거 */
+  a, button {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* 터치 디바이스 전용 스타일 */
+@media (pointer: coarse) {
+  /* 스크롤바 숨기기 */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* 터치 스크롤 최적화 */
+  .scroll-container {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  
+  /* 터치 영역 확장 */
+  .touch-extend::before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: -12px;
+    right: -12px;
+    bottom: -12px;
+    z-index: -1;
+  }
+}
+
+/* 접근성 - 고대비 모드 */
+@media (prefers-contrast: high) {
+  .touch-feedback::before {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+  .swipe-dot {
+    border: 2px solid currentColor;
+  }
+}
+
+/* 접근성 - 모션 감소 */
+@media (prefers-reduced-motion: reduce) {
+  .touch-feedback,
+  .swipeable,
+  .pull-to-refresh-indicator,
+  .pinch-zoom-content {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .swipeable {
+    scroll-behavior: auto;
+  }
+}
+
+/* 제스처 가이드 애니메이션 */
+@keyframes swipe-hint {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(20px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes pinch-hint {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pull-hint {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+  100% { transform: translateY(0); }
+}
+
+.gesture-hint-swipe {
+  animation: swipe-hint 2s ease-in-out infinite;
+}
+
+.gesture-hint-pinch {
+  animation: pinch-hint 2s ease-in-out infinite;
+}
+
+.gesture-hint-pull {
+  animation: pull-hint 2s ease-in-out infinite;
+}
+
+/* 터치 상태 피드백 */
+.touch-state-feedback {
+  position: relative;
+}
+
+.touch-state-feedback:active {
+  opacity: 0.8;
+}
+
+.touch-state-feedback.touched {
+  background-color: rgba(158, 186, 208, 0.1);
+}
+
+.touch-state-feedback.swiping {
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+}
+
+/* 스와이프 액션 힌트 */
+.swipe-action-hint {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.swipe-action-hint.left {
+  left: 16px;
+  right: auto;
+}
+
+.swipe-action-hint.visible {
+  opacity: 1;
+}
+
+/* 긴 누르기 진행 표시 */
+.long-press-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--seacolor);
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 0.8s linear;
+}
+
+.long-press-progress.active {
+  transform: scaleX(1);
+}
+
+/* 터치 리플 효과 (Material Design 스타일) */
+.touch-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.touch-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
+  opacity: 0;
+}
+
+.touch-ripple:active::after {
+  width: 300px;
+  height: 300px;
+  opacity: 1;
+  transition: width 0s, height 0s, opacity 0s;
+}
+
+/* iOS 스타일 스위치 (터치 최적화) */
+.ios-switch {
+  position: relative;
+  display: inline-block;
+  width: 51px;
+  height: 31px;
+  background-color: #ccc;
+  border-radius: 31px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ios-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 27px;
+  height: 27px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ios-switch.active {
+  background-color: var(--seacolor);
+}
+
+.ios-switch.active::after {
+  transform: translateX(20px);
+}
+
+/* 터치 최적화된 체크박스 */
+.touch-checkbox {
+  position: relative;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.touch-checkbox::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+
+.touch-checkbox.checked {
+  background: var(--seacolor);
+  border-color: var(--seacolor);
+}
+
+.touch-checkbox.checked::after {
+  transform: translate(-50%, -50%) scale(1);
+}

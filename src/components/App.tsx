@@ -3,6 +3,7 @@ import { authService } from '../fBase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { UserObj } from '../types';
 import AppRouter from './Router';
+import LoadingSpinner from './LoadingSpinner';
 
 const App = () => {
   const [init, setInit] = useState(false);
@@ -45,7 +46,11 @@ const App = () => {
           isMobile={isMobile}
         />
       ) : (
-        'Loading...'
+        <LoadingSpinner 
+          fullScreen={true} 
+          message="미슐탱 가이드를 준비하고 있습니다..." 
+          size="large"
+        />
       )}
     </>
   );

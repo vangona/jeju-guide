@@ -1,0 +1,476 @@
+/**
+ * 컴포넌트별 반응형 스타일
+ * 모바일 퍼스트 접근법 적용
+ */
+
+/* App Loading */
+.app-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: var(--spacing-lg);
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: var(--spacing-md);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 반응형 내비게이션 */
+
+/* 모바일 내비게이션 */
+.mobile-navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: env(safe-area-inset-bottom) 0 0 0;
+}
+
+.mobile-navigation .nav-items {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: var(--spacing-xs) 0;
+  min-height: var(--touch-target-recommended);
+}
+
+.mobile-navigation .nav-item {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.mobile-navigation .nav-link,
+.mobile-navigation .nav-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xs);
+  text-decoration: none;
+  color: #666;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+}
+
+.mobile-navigation .nav-icon {
+  font-size: 1.2rem;
+  margin-bottom: 2px;
+}
+
+.mobile-navigation .nav-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.mobile-navigation .nav-item.active .nav-link,
+.mobile-navigation .nav-item.active .nav-button {
+  color: var(--seacolor);
+}
+
+.mobile-navigation .nav-link:active,
+.mobile-navigation .nav-button:active {
+  transform: scale(0.95);
+}
+
+/* 태블릿 내비게이션 */
+.tablet-navigation {
+  position: sticky;
+  top: 0;
+  background: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  z-index: 999;
+}
+
+.tablet-navigation .nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) var(--container-padding);
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+}
+
+.tablet-navigation .nav-brand .brand-link {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--seacolor);
+}
+
+.tablet-navigation .nav-items {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.tablet-navigation .nav-link,
+.tablet-navigation .nav-button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-decoration: none;
+  color: #333;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.tablet-navigation .nav-link:hover,
+.tablet-navigation .nav-button:hover {
+  background-color: rgba(158, 186, 208, 0.1);
+}
+
+.tablet-navigation .nav-item.active .nav-link,
+.tablet-navigation .nav-item.active .nav-button {
+  background-color: var(--seacolor);
+  color: white;
+}
+
+/* 데스크톱 내비게이션 */
+.desktop-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg) var(--container-padding);
+  background: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.desktop-navigation .nav-brand h1 {
+  margin: 0;
+  color: var(--seacolor);
+  font-size: 1.8rem;
+}
+
+.desktop-navigation .nav-brand .brand-link {
+  text-decoration: none;
+}
+
+.desktop-navigation .nav-items {
+  display: flex;
+  gap: var(--spacing-xl);
+}
+
+.desktop-navigation .nav-link,
+.desktop-navigation .nav-button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  text-decoration: none;
+  color: #333;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.desktop-navigation .nav-link:hover,
+.desktop-navigation .nav-button:hover {
+  background-color: rgba(158, 186, 208, 0.1);
+  transform: translateY(-1px);
+}
+
+.desktop-navigation .nav-item.active .nav-link,
+.desktop-navigation .nav-item.active .nav-button {
+  background-color: var(--seacolor);
+  color: white;
+}
+
+/* 반응형 지도 스타일 개선 */
+.map-container-responsive {
+  width: 100%;
+  padding: var(--spacing-md);
+}
+
+.map-container-responsive .map {
+  width: 100%;
+  height: 280px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.map-container-responsive .map-radio__container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.map-container-responsive .place-type__map {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-height: var(--touch-target-min);
+}
+
+.map-container-responsive .place-type__map:hover {
+  background: white;
+}
+
+.map-container-responsive .place-type__map input[type="radio"] {
+  margin: 0;
+}
+
+.map-container-responsive .check-geolocation {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 8px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--seacolor);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.map-container-responsive .check-geolocation:hover {
+  background: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.map-container-responsive .check-geolocation.touch-optimized {
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+}
+
+.map-container-responsive .marker__detail {
+  position: fixed;
+  bottom: 80px;
+  left: var(--spacing-md);
+  right: var(--spacing-md);
+  background: white;
+  border-radius: 12px;
+  padding: var(--spacing-md);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+}
+
+.map-container-responsive .marker__detail a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.map-container-responsive .map-explain__container {
+  margin-top: var(--spacing-md);
+  text-align: center;
+}
+
+.map-container-responsive .map-explain {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: var(--spacing-sm);
+}
+
+.map-container-responsive .map-explain__tips {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* 태블릿 이상에서의 지도 스타일 */
+@media (min-width: 768px) {
+  .map-container-responsive .map {
+    height: 400px;
+  }
+  
+  .map-container-responsive .place-type__map {
+    font-size: 1rem;
+  }
+  
+  .map-container-responsive .marker__detail {
+    position: absolute;
+    bottom: var(--spacing-lg);
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 400px;
+  }
+}
+
+/* 데스크톱에서의 지도 스타일 */
+@media (min-width: 1024px) {
+  .map-container-responsive {
+    padding: var(--spacing-xl);
+  }
+  
+  .map-container-responsive .map {
+    height: 500px;
+  }
+  
+  .map-container-responsive .check-geolocation {
+    position: relative;
+    top: auto;
+    right: auto;
+    margin: var(--spacing-md) auto 0;
+    display: block;
+  }
+}
+
+/* 카드 컴포넌트 반응형 */
+.card-responsive {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-responsive:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card-responsive .card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-responsive .card-content {
+  padding: var(--spacing-md);
+}
+
+.card-responsive .card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+  color: #333;
+}
+
+.card-responsive .card-description {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* 태블릿 이상에서의 카드 스타일 */
+@media (min-width: 768px) {
+  .card-responsive .card-image {
+    height: 240px;
+  }
+  
+  .card-responsive .card-content {
+    padding: var(--spacing-lg);
+  }
+  
+  .card-responsive .card-title {
+    font-size: 1.2rem;
+  }
+}
+
+/* 폼 요소 반응형 */
+.form-responsive {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-md);
+}
+
+.form-responsive .form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-responsive .form-label {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  font-weight: 600;
+  color: #333;
+}
+
+.form-responsive .form-input {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+  min-height: var(--touch-target-min);
+}
+
+.form-responsive .form-input:focus {
+  outline: none;
+  border-color: var(--seacolor);
+}
+
+.form-responsive .form-button {
+  background: var(--seacolor);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+}
+
+.form-responsive .form-button:hover {
+  background: #4a9eca;
+  transform: translateY(-1px);
+}
+
+.form-responsive .form-button:active {
+  transform: translateY(0);
+}
+
+/* 태블릿 이상에서의 폼 스타일 */
+@media (min-width: 768px) {
+  .form-responsive {
+    padding: var(--spacing-xl);
+  }
+  
+  .form-responsive .form-input {
+    padding: var(--spacing-lg);
+  }
+  
+  .form-responsive .form-button {
+    padding: var(--spacing-lg) var(--spacing-2xl);
+  }
+}
