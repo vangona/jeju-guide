@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { SYSTEM_PROMPT } from '../prompts/system';
 
 export default async function handler(req, res) {
   // CORS 설정
@@ -37,8 +38,7 @@ export default async function handler(req, res) {
       messages: [
         {
           role: 'system',
-          content: `당신은 제주도 여행 전문가입니다. 사용자의 질문에 대해 제주도 여행지, 맛집, 체험 등을 추천해주세요. 
-          답변은 친근하고 도움이 되는 톤으로 작성하며, 구체적인 장소명과 간단한 설명을 포함해주세요.`
+          content: SYSTEM_PROMPT
         },
         {
           role: 'user',

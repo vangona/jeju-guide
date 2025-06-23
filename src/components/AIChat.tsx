@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { marked } from 'marked';
 import '../css/AIChat.css';
 
 interface AIChatProps {
@@ -23,6 +24,58 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
   useEffect(() => {
     scrollToBottom();
   }, [messages, loading]);
+
+  // 마크다운인지 확인하는 함수
+  const isMarkdown = (text: string) => {
+    const markdownPatterns = [
+      /^#{1,6}\s/m,      // 헤더
+      /\*\*.*\*\*/,      // 볼드
+      /\*.*\*/,          // 이탤릭
+      /\[.*\]\(.*\)/,    // 링크
+      /^-\s/m,           // 리스트
+      /^\d+\.\s/m,       // 번호 리스트
+      /```/,             // 코드 블록
+      /`.*`/             // 인라인 코드
+    ];
+    return markdownPatterns.some(pattern => pattern.test(text));
+  };
+
+  // marked 설정
+  marked.setOptions({
+    breaks: true,
+    gfm: true
+  });
+
+  // 메시지 렌더링 함수
+  const renderMessage = (content: string, role: string) => {
+    if (role === 'assistant' && isMarkdown(content)) {
+      // marked.parse는 동기 함수로 string을 반환
+      const htmlContent = marked.parse(content) as string;
+      return (
+        <div 
+          className="markdown-content"
+          dangerouslySetInnerHTML={{ __html: htmlContent }}
+          style={{
+            lineHeight: '1.6',
+            wordBreak: 'break-word'
+          }}
+        />
+      );
+    }
+    
+    // 일반 텍스트는 줄바꿈을 유지하며 표시
+    return (
+      <pre style={{
+        whiteSpace: 'pre-wrap',
+        wordBreak: 'break-word',
+        fontFamily: 'inherit',
+        margin: 0,
+        lineHeight: '1.6'
+      }}>
+        {content}
+      </pre>
+    );
+  };
 
   const handleApiKeySubmit = () => {
     if (apiKey.trim()) {
@@ -226,7 +279,7 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
                     <span style={{ fontSize: '12px', fontWeight: '500', color: '#6c757d' }}>AI 가이드</span>
                   </div>
                 )}
-                {msg.content}
+                {renderMessage(msg.content, msg.role)}
               </div>
             </div>
           ))}
