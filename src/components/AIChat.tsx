@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { marked } from 'marked';
+import { searchPlacesWithVector, createContextFromPlaces } from '../utils/vectorSearch';
 import '../css/AIChat.css';
 
 interface AIChatProps {
@@ -90,11 +91,16 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
 
     const userMessage = { role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = input; // 입력값 저장
     setInput('');
     setLoading(true);
 
     try {
-      // 개발 환경에서는 localhost:3001 사용
+      // 1. 먼저 관련 장소 검색
+      const relatedPlaces = await searchPlacesWithVector(currentInput, 5);
+      const placesContext = createContextFromPlaces(relatedPlaces);
+      
+      // 2. AI에게 컨텍스트와 함께 질문
       const apiUrl = process.env.NODE_ENV === 'development' 
         ? 'http://localhost:3001/api/ai-chat' 
         : '/api/ai-chat';
@@ -102,7 +108,11 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: input, apiKey })
+        body: JSON.stringify({ 
+          query: currentInput, 
+          apiKey,
+          relatedPlaces: placesContext
+        })
       });
 
       const data = await response.json();

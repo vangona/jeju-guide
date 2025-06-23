@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { query, apiKey } = req.body;
+  const { query, apiKey, relatedPlaces } = req.body;
 
   if (!apiKey) {
     return res.status(400).json({ 
@@ -33,6 +33,12 @@ export default async function handler(req, res) {
   });
 
   try {
+    // 관련 장소 정보를 컨텍스트에 포함
+    let enhancedQuery = query;
+    if (relatedPlaces && relatedPlaces.length > 0) {
+      enhancedQuery = `사용자 질문: ${query}\n\n참고할 수 있는 제주도 장소 정보:\n${relatedPlaces}\n\n위 장소 정보를 참고하여 답변해주세요.`;
+    }
+
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
@@ -42,7 +48,7 @@ export default async function handler(req, res) {
         },
         {
           role: 'user',
-          content: query
+          content: enhancedQuery
         }
       ],
       max_tokens: 500,
