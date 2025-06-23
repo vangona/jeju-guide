@@ -51,8 +51,7 @@ const Admin = ({ userObj }: AdminProps) => {
         
         // 사용자가 등록한 모든 장소 조회
         const placesQuery = query(
-          collection(dbService, 'places'),
-          where('creatorId', '==', userObj.uid)
+          collection(dbService, 'places')
         );
         
         const querySnapshot = await getDocs(placesQuery);
