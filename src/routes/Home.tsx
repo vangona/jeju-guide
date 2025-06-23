@@ -5,6 +5,7 @@ import Map from '../components/Map';
 import Modal from '../components/Modal';
 import Navigation from '../components/Navigation';
 import LoadingSpinner from '../components/LoadingSpinner';
+import AIChat from '../components/AIChat';
 import { dbService } from '../fBase';
 import { collection, onSnapshot } from 'firebase/firestore';
 import Profile from './Profile';
@@ -25,6 +26,7 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [places, setPlaces] = useState<PlaceInfo[]>([]);
   const [viewType, setViewType] = useState('지도');
+  const [showAIChat, setShowAIChat] = useState(false);
 
   const getPlaces = async () => {
     onSnapshot(collection(dbService, 'places'), (snapshot) => {
@@ -75,6 +77,29 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
       {detail && (
         <Modal place={detail} handleModalContentChange={handleChangeDetail} />
       )}
+      <AIChat 
+        isOpen={showAIChat} 
+        onClose={() => setShowAIChat(false)} 
+      />
+      <button 
+        onClick={() => setShowAIChat(true)}
+        style={{
+          position: 'fixed',
+          bottom: '80px',
+          right: '20px',
+          width: '60px',
+          height: '60px',
+          borderRadius: '50%',
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          fontSize: '24px',
+          cursor: 'pointer',
+          zIndex: 999
+        }}
+      >
+        🤖
+      </button>
       {/* <Link to="/myplace"><button>내 여행지 목록</button></Link> */}
       <Navigation
         handleViewTypeChange={handleViewTypeChange}
