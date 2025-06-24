@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faArrowLeft, 
@@ -30,7 +30,7 @@ interface PostProps {
 }
 
 const Post = ({ userObj }: PostProps) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [showProfile, setShowProfile] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
   const [showTips, setShowTips] = useState(true);
@@ -38,9 +38,9 @@ const Post = ({ userObj }: PostProps) => {
   // 인증되지 않은 사용자 리다이렉트
   useEffect(() => {
     if (!userObj) {
-      navigate('/auth');
+      router.push('/auth');
     }
-  }, [userObj, navigate]);
+  }, [userObj, router]);
 
   // 사용자 선호도 로드
   useEffect(() => {
@@ -65,20 +65,20 @@ const Post = ({ userObj }: PostProps) => {
   const onLogOutClick = () => {
     if (window.confirm('로그아웃 하시겠습니까?')) {
       authService.signOut();
-      navigate('/');
+      router.push('/');
     }
   };
 
   const onHomeClick = () => {
-    navigate('/');
+    router.push('/');
   };
 
   const onBackClick = () => {
-    navigate(-1);
+    router.back();
   };
 
   const onAdminClick = () => {
-    navigate('/admin');
+    router.push('/admin');
   };
 
   const toggleProfile = () => {

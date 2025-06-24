@@ -3,7 +3,7 @@ import { marked } from 'marked';
 import { searchPlacesWithVector, createContextFromPlaces } from '../utils/vectorSearch';
 import PlaceCard from './PlaceCard';
 import type { PlaceInfo } from '../types';
-import '../css/AIChat.css';
+import styles from '../css/AIChat.module.css';
 
 interface AIChatProps {
   isOpen: boolean;
@@ -62,7 +62,7 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
       const htmlContent = marked.parse(content) as string;
       return (
         <div 
-          className="markdown-content"
+          className={styles.markdownContent}
           dangerouslySetInnerHTML={{ __html: htmlContent }}
           style={{
             lineHeight: '1.6',
@@ -105,7 +105,7 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
 
     try {
       // 1. 먼저 관련 장소 검색
-      const relatedPlaces = await searchPlacesWithVector(currentInput, 5);
+      const relatedPlaces = await searchPlacesWithVector(currentInput, apiKey, 5);
       const placesContext = createContextFromPlaces(relatedPlaces);
       
       // 2. AI에게 컨텍스트와 함께 질문
@@ -141,7 +141,7 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="ai-chat-modal" style={{ 
+    <div className={styles.aiChatModal} style={{ 
       position: 'fixed', 
       top: 0, 
       left: 0, 
@@ -154,7 +154,7 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
       justifyContent: 'center',
       padding: '20px'
     }}>
-      <div className="ai-chat-container" style={{ 
+      <div className={styles.aiChatContainer} style={{ 
         background: 'white',
         borderRadius: '20px',
         width: '100%',
@@ -273,7 +273,7 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
         )}
 
         {/* Messages Container */}
-        <div className="ai-chat-messages" style={{ 
+        <div className={styles.aiChatMessages} style={{ 
           flex: 1,
           padding: '20px',
           overflowY: 'auto',

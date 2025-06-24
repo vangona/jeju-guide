@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowLeft,
@@ -24,7 +24,7 @@ interface AdminProps {
 }
 
 const Admin = ({ userObj }: AdminProps) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [showProfile, setShowProfile] = useState(false);
   const [stats, setStats] = useState({
     totalPlaces: 0,
@@ -37,9 +37,9 @@ const Admin = ({ userObj }: AdminProps) => {
   // 인증되지 않은 사용자 리다이렉트
   useEffect(() => {
     if (!userObj) {
-      navigate('/auth');
+      router.push('/auth');
     }
-  }, [userObj, navigate]);
+  }, [userObj, router]);
 
   // 통계 및 최근 장소 데이터 로드
   useEffect(() => {
@@ -139,16 +139,16 @@ const Admin = ({ userObj }: AdminProps) => {
   const onLogOutClick = () => {
     if (window.confirm('로그아웃 하시겠습니까?')) {
       authService.signOut();
-      navigate('/');
+      router.push('/');
     }
   };
 
   const onHomeClick = () => {
-    navigate('/');
+    router.push('/');
   };
 
   const onBackClick = () => {
-    navigate(-1);
+    router.back();
   };
 
   const toggleProfile = () => {
@@ -156,11 +156,11 @@ const Admin = ({ userObj }: AdminProps) => {
   };
 
   const navigateToPost = () => {
-    navigate('/post');
+    router.push('/post');
   };
 
   const navigateToEdit = () => {
-    navigate('/edit');
+    router.push('/edit');
   };
 
   if (!userObj) {

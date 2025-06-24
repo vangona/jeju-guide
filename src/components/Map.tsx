@@ -7,7 +7,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { dbService } from '../fBase';
 import { collection, onSnapshot } from 'firebase/firestore';
 import Saychat from './Saychat';
@@ -285,9 +285,23 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
   }, [isMobile]);
 
   const makeMap = useCallback(() => {
-    if (!container.current || !window.kakao?.maps) {
-      setMapError('카카오 지도를 불러올 수 없습니다.');
+    if (!container.current) {
+      setMapError('지도 컨테이너를 찾을 수 없습니다.');
       setIsMapLoading(false);
+      return;
+    }
+
+    if (!window.kakao?.maps) {
+      console.log('카카오맵 API 로딩 중...');
+      // 카카오맵 API가 로드될 때까지 대기
+      const checkKakaoLoaded = () => {
+        if (window.kakao?.maps) {
+          makeMap();
+        } else {
+          setTimeout(checkKakaoLoaded, 100);
+        }
+      };
+      checkKakaoLoaded();
       return;
     }
 
@@ -483,7 +497,7 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
                     size='small'
                   />
                   <Link
-                    to={`/detail/${(currentPlace as PlaceInfo).name}`}
+                    href={`/detail/${(currentPlace as PlaceInfo).name}`}
                     className='btn-detail'
                   >
                     <FontAwesomeIcon icon={faSearchLocation} />

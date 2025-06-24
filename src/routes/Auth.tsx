@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faUser, 
@@ -15,7 +15,7 @@ import { authService } from '../fBase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 
 const Auth = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [newAccount, setNewAccount] = useState(false);
@@ -29,7 +29,7 @@ const Auth = () => {
     const unsubscribe = onAuthStateChanged(authService, (user) => {
       if (user) {
         // 로그인된 상태면 Post 페이지로 이동
-        navigate('/admin', { replace: true });
+        router.replace('/admin');
       } else {
         // 로그인되지 않은 상태면 Auth 페이지 표시
         setCheckingAuth(false);
@@ -37,7 +37,7 @@ const Auth = () => {
     });
 
     return () => unsubscribe();
-  }, [navigate]);
+  }, [router]);
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     const {
@@ -61,11 +61,11 @@ const Auth = () => {
       if (newAccount) {
         await createUserWithEmailAndPassword(authService, email, password);
         // 계정 생성 성공 후 게시글 작성으로 이동
-        navigate('/admin', { replace: true });
+        router.replace('/admin');
       } else {
         await signInWithEmailAndPassword(authService, email, password);
         // 로그인 성공 후 게시글 작성으로 이동
-        navigate('/admin', { replace: true });
+        router.replace('/admin');
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -109,7 +109,7 @@ const Auth = () => {
   };
 
   const goHome = () => {
-    navigate('/');
+    router.push('/');
   };
 
   // 인증 상태 확인 중일 때 로딩 화면 표시

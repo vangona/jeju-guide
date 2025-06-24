@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faMap, 
@@ -48,11 +48,11 @@ const Navigation = ({
           <span className='nav__label'>{item.label}</span>
         </button>
       ))}
-      <Link to='/myplace' className='nav__component nav__component--link'>
+      <Link href='/myplace' className='nav__component nav__component--link'>
         <FontAwesomeIcon icon={faHeart} />
         <span className='nav__label'>My</span>
       </Link>
-      <Link to='/tips' className='nav__component nav__component--link'>
+      <Link href='/tips' className='nav__component nav__component--link'>
         <FontAwesomeIcon icon={faLightbulb} />
         <span className='nav__label'>Tips</span>
       </Link>

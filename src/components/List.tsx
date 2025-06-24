@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSearch,
@@ -93,7 +93,7 @@ const List = ({ places, isMobile }: ListProps) => {
         <div key={place.id || index} className="place__card">
           <div className="place__card-header">
             <h3 className="place__name">
-              <Link to={`/detail/${place.name}`} state={{ from: '목록' }}>
+              <Link href={`/detail/${place.name}`}>
                 {place.name}
               </Link>
             </h3>
@@ -129,8 +129,7 @@ const List = ({ places, isMobile }: ListProps) => {
           
           <div className="place__actions">
             <Link 
-              to={`/detail/${place.name}`} 
-              state={{ from: '목록' }}
+              href={`/detail/${place.name}`}
               className="place__detail-btn"
             >
               <FontAwesomeIcon icon={faEye} />
@@ -159,8 +158,7 @@ const List = ({ places, isMobile }: ListProps) => {
             <tr key={place.id || index}>
               <td className='list__table-name list__table-content'>
                 <Link
-                  to={`/detail/${place.name}`}
-                  state={{ from: '목록' }}
+                  href={`/detail/${place.name}`}
                 >
                   {place.name}
                 </Link>

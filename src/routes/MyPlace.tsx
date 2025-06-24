@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faArrowLeft, 
@@ -16,7 +17,7 @@ import AddMyPlace from '../components/AddMyPlace';
 import Navigation from '../components/Navigation';
 
 const MyPlace = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [myPlaceArray, setMyPlaceArray] = useState<PlaceInfo[]>([]);
   const [filteredPlaces, setFilteredPlaces] = useState<PlaceInfo[]>([]);
   const [filterType, setFilterType] = useState('전체');
@@ -24,17 +25,17 @@ const MyPlace = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const clickBackBtn = () => {
-    navigate(-1);
+    router.back();
   };
 
   const goHome = () => {
-    navigate('/');
+    router.push('/');
   };
 
   // Navigation handlers
   const handleViewTypeChange = (newViewType: string) => {
     if (newViewType === '지도' || newViewType === '목록') {
-      navigate('/');
+      router.push('/');
     }
   };
 
@@ -243,7 +244,7 @@ const MyPlace = () => {
 
                 <div className='card__actions'>
                   <Link
-                    to={`/detail/${place.name}`}
+                    href={`/detail/${place.name}`}
                     className='btn-detail'
                   >
                     <FontAwesomeIcon icon={faSearchLocation} />

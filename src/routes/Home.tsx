@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import List from '../components/List';
 import Map from '../components/Map';
 import Modal from '../components/Modal';
@@ -11,17 +10,12 @@ import { collection, onSnapshot } from 'firebase/firestore';
 import Profile from './Profile';
 import type { PlaceInfo, UserObj } from '../types';
 
-interface LocationState {
-  prevViewType: string;
-}
-
 interface HomeProps {
   isMobile: boolean;
   userObj: UserObj | null;
 }
 
 const Home = ({ isMobile, userObj }: HomeProps) => {
-  const location = useLocation();
   const [detail, setDetail] = useState<PlaceInfo | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [places, setPlaces] = useState<PlaceInfo[]>([]);
@@ -49,10 +43,6 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
 
   useEffect(() => {
     getPlaces();
-    const locationState = location.state as LocationState | null;
-    if (locationState) {
-      setViewType(locationState.prevViewType);
-    }
   }, []);
   return (
     <div className='home__container'>

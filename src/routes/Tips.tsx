@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -17,20 +17,20 @@ import { faInstagram as faInstagramBrand, faFacebook as faFacebookBrand, faGithu
 import Navigation from '../components/Navigation';
 
 const Tips = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const clickBackBtn = () => {
-    navigate(-1);
+    router.back();
   };
 
   const goHome = () => {
-    navigate('/');
+    router.push('/');
   };
 
   // Navigation handlers
   const handleViewTypeChange = (newViewType: string) => {
     if (newViewType === '지도' || newViewType === '목록') {
-      navigate('/');
+      router.push('/');
     }
   };
 

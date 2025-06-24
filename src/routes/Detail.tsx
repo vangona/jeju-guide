@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowLeft,
@@ -29,29 +29,25 @@ interface LocationState {
 }
 
 const Detail = () => {
-  const { place } = useParams<{ place?: string }>();
-  const location = useLocation();
-  const locationState = location.state as LocationState | null;
-  let from = '지도';
-  if (locationState) {
-    from = locationState.from;
-  }
-  const navigate = useNavigate();
+  const router = useRouter();
+  const { place } = router.query;
+  const from = (router.query.prevViewType as string) || '지도';
   const [detailPlace, setDetailPlace] = useState<PlaceInfo>();
   const [detailLoading, setDetailLoading] = useState(false);
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
   const [copied, setCopied] = useState(false);
 
   const onBackClick = () => {
-    navigate('/', {
-      state: {
+    router.push({
+      pathname: '/',
+      query: {
         prevViewType: from,
       },
     });
   };
 
   const onHomeClick = () => {
-    navigate('/');
+    router.push('/');
   };
 
   const handleImageLoad = (index: number) => {
@@ -79,7 +75,8 @@ const Detail = () => {
   const getPlaceName = async () => {
     if (!place) return;
     
-    const q = query(collection(dbService, 'places'), where('name', '==', place));
+    const placeName = Array.isArray(place) ? place[0] : place;
+    const q = query(collection(dbService, 'places'), where('name', '==', placeName));
     
     onSnapshot(q, (snapshot) => {
       if (snapshot.docs.length > 0) {

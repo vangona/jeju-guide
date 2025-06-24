@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowLeft,
@@ -20,8 +20,7 @@ import { dbService, authService } from '../fBase';
 import { PlaceInfo } from '../types';
 
 const Edit = () => {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const router = useRouter();
   const [places, setPlaces] = useState<PlaceInfo[]>([]);
   const [filteredPlaces, setFilteredPlaces] = useState<PlaceInfo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,7 +46,7 @@ const Edit = () => {
       const currentUser = authService.currentUser;
       
       if (!currentUser) {
-        navigate('/auth');
+        router.push('/auth');
         return;
       }
 
@@ -200,11 +199,11 @@ const Edit = () => {
   };
 
   const goBack = () => {
-    navigate(-1);
+    router.back();
   };
 
   const goHome = () => {
-    navigate('/');
+    router.push('/');
   };
 
   if (loading) {
@@ -281,7 +280,7 @@ const Edit = () => {
               <p>새로운 장소를 등록해보세요!</p>
               <button 
                 className='btn-primary'
-                onClick={() => navigate('/post')}
+                onClick={() => router.push('/post')}
               >
                 장소 등록하기
               </button>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faTimes, 
@@ -221,8 +221,7 @@ const Modal = ({ place, handleModalContentChange }: ModalProps) => {
             )}
             
             <Link
-              to={`/detail/${place.name}`}
-              state={{ from: '지도' }}
+              href={`/detail/${place.name}`}
               className='modal-btn modal-btn--primary'
             >
               <FontAwesomeIcon icon={faInfoCircle} />
