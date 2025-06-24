@@ -13,7 +13,11 @@ import {
   faMapMarkerAlt,
   faImage,
   faLink,
-  faCalendarAlt
+  faCalendarAlt,
+  faRobot,
+  faSpinner,
+  faCheckCircle,
+  faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons';
 import { authService, dbService } from '../fBase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -33,6 +37,9 @@ const Admin = ({ userObj }: AdminProps) => {
   });
   const [recentPlaces, setRecentPlaces] = useState<PlaceInfo[]>([]);
   const [loading, setLoading] = useState(true);
+  const [vectorLoading, setVectorLoading] = useState(false);
+  const [vectorStatus, setVectorStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
+  const [vectorMessage, setVectorMessage] = useState('');
 
   // 인증되지 않은 사용자 리다이렉트
   useEffect(() => {
@@ -161,6 +168,44 @@ const Admin = ({ userObj }: AdminProps) => {
 
   const navigateToEdit = () => {
     router.push('/edit');
+  };
+
+  const generateEmbeddings = async () => {
+    setVectorLoading(true);
+    setVectorStatus('processing');
+    setVectorMessage('임베딩을 생성하고 있습니다...');
+
+    try {
+      const response = await fetch('/api/generate-embeddings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: userObj?.uid
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setVectorStatus('success');
+        setVectorMessage(`성공적으로 ${result.processedCount}개 장소의 임베딩을 생성했습니다.`);
+      } else {
+        setVectorStatus('error');
+        setVectorMessage(result.error || '임베딩 생성에 실패했습니다.');
+      }
+    } catch (error) {
+      setVectorStatus('error');
+      setVectorMessage('서버 오류가 발생했습니다.');
+    } finally {
+      setVectorLoading(false);
+      // 3초 후 상태 초기화
+      setTimeout(() => {
+        setVectorStatus('idle');
+        setVectorMessage('');
+      }, 3000);
+    }
   };
 
   if (!userObj) {
@@ -292,6 +337,36 @@ const Admin = ({ userObj }: AdminProps) => {
               <div className='action__content'>
                 <h4>장소 관리</h4>
                 <p>등록된 장소들을 수정하거나 삭제할 수 있습니다</p>
+              </div>
+            </button>
+
+            <button 
+              className='action__card action__card--vector'
+              onClick={generateEmbeddings}
+              disabled={vectorLoading}
+            >
+              <div className='action__icon'>
+                <FontAwesomeIcon 
+                  icon={vectorLoading ? faSpinner : faRobot} 
+                  spin={vectorLoading}
+                />
+              </div>
+              <div className='action__content'>
+                <h4>Vector Search 관리</h4>
+                <p>AI 검색을 위한 임베딩을 생성합니다</p>
+                {vectorMessage && (
+                  <div className={`vector-status vector-status--${vectorStatus}`}>
+                    <FontAwesomeIcon 
+                      icon={
+                        vectorStatus === 'success' ? faCheckCircle :
+                        vectorStatus === 'error' ? faExclamationTriangle :
+                        faSpinner
+                      }
+                      spin={vectorStatus === 'processing'}
+                    />
+                    <span>{vectorMessage}</span>
+                  </div>
+                )}
               </div>
             </button>
           </div>

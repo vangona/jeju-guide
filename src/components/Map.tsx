@@ -1,6 +1,5 @@
 import {
   faLocationArrow,
-  faMousePointer,
   faMapMarkerAlt,
   faSearchLocation,
   faFilter,
@@ -232,7 +231,6 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
       const markerEl = marker.getImage();
       if (markerEl) {
         // Add a subtle scale animation on click
-        const markerPosition = marker.getPosition();
         const clickFeedback = document.createElement('div');
         clickFeedback.className = 'marker-click-feedback';
         clickFeedback.style.cssText = `

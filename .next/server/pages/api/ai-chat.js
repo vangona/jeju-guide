@@ -1,0 +1,13 @@
+"use strict";(()=>{var e={};e.id=880,e.ids=[880],e.modules={2003:(e,t,n)=>{n.a(e,async(e,r)=>{try{n.r(t),n.d(t,{default:()=>i});var o=n(7984),s=n(9448),a=e([o]);async function i(e,t){if(t.setHeader("Access-Control-Allow-Credentials",!0),t.setHeader("Access-Control-Allow-Origin","*"),t.setHeader("Access-Control-Allow-Methods","GET,OPTIONS,PATCH,DELETE,POST,PUT"),t.setHeader("Access-Control-Allow-Headers","X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"),"OPTIONS"===e.method)return void t.status(200).end();if("POST"!==e.method)return t.status(405).json({error:"Method not allowed"});let{query:n,apiKey:r,relatedPlaces:a}=e.body;if(!r)return t.status(400).json({message:"OpenAI API 키가 필요합니다."});let i=new o.default({apiKey:r});try{let e=n;a&&a.length>0&&(e=`사용자 질문: ${n}
+
+참고할 수 있는 제주도 장소 정보:
+${a}
+
+위 장소 정보를 참고하여 답변해주세요.`);let r=await i.chat.completions.create({model:"gpt-4o-mini",messages:[{role:"system",content:s.SYSTEM_PROMPT},{role:"user",content:e}],max_tokens:500,temperature:.7}),o=r.choices[0]?.message?.content||"죄송합니다. 답변을 생성할 수 없습니다.";return t.status(200).json({message:o,recommendedPlaces:[]})}catch(e){return console.error("OpenAI API Error:",e),t.status(500).json({message:"죄송합니다. 현재 AI 서비스에 문제가 있습니다. 잠시 후 다시 시도해주세요."})}}o=(a.then?(await a)():a)[0],r()}catch(e){r(e)}})},3480:(e,t,n)=>{e.exports=n(5600)},5600:e=>{e.exports=require("next/dist/compiled/next-server/pages-api.runtime.prod.js")},6435:(e,t)=>{Object.defineProperty(t,"M",{enumerable:!0,get:function(){return function e(t,n){return n in t?t[n]:"then"in t&&"function"==typeof t.then?t.then(t=>e(t,n)):"function"==typeof t&&"default"===n?t:void 0}}})},7300:(e,t,n)=>{n.a(e,async(e,r)=>{try{n.r(t),n.d(t,{config:()=>l,default:()=>u,routeModule:()=>d});var o=n(3480),s=n(8667),a=n(6435),i=n(2003),c=e([i]);i=(c.then?(await c)():c)[0];let u=(0,a.M)(i,"default"),l=(0,a.M)(i,"config"),d=new o.PagesAPIRouteModule({definition:{kind:s.A.PAGES_API,page:"/api/ai-chat",pathname:"/api/ai-chat",bundlePath:"",filename:""},userland:i});r()}catch(e){r(e)}})},7984:e=>{e.exports=import("openai")},8667:(e,t)=>{Object.defineProperty(t,"A",{enumerable:!0,get:function(){return n}});var n=function(e){return e.PAGES="PAGES",e.PAGES_API="PAGES_API",e.APP_PAGE="APP_PAGE",e.APP_ROUTE="APP_ROUTE",e.IMAGE="IMAGE",e}({})},9448:e=>{e.exports={SYSTEM_PROMPT:`당신은 제주도 여행 전문가입니다. 사용자의 질문에 대해 제주도 여행지, 맛집, 체험 등을 추천해주세요. 
+
+답변 작성 시 지침:
+1. 친근하고 도움이 되는 톤으로 작성
+2. 구체적인 장소명과 간단한 설명 포함
+3. 필요한 경우 마크다운을 사용하여 가독성 향상 (예: **강조**, 목록, 제목 등)
+4. 답변이 구조화되어야 할 때는 마크다운을 적극 활용
+5. 간단한 답변은 일반 텍스트로도 충분`}}};var t=require("../../webpack-api-runtime.js");t.C(e);var n=t(t.s=7300);module.exports=n})();

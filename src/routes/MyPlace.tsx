@@ -181,6 +181,7 @@ const MyPlace = () => {
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
                 className='filter__select'
+                style={{ color: 'black' }}
               >
                 <option value='전체'>전체 타입</option>
                 {getUniqueTypes().map(type => (
@@ -237,7 +238,7 @@ const MyPlace = () => {
                   {place.address && (
                     <div className='place__address'>
                       <FontAwesomeIcon icon={faMapMarkerAlt} className='address-icon' />
-                      <span>{place.address}</span>
+                      <span>{place.addressDetail}</span>
                     </div>
                   )}
                 </div>
