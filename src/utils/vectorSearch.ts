@@ -11,7 +11,7 @@ const createEmbedding = async (text: string, apiKey: string): Promise<number[]> 
       'Authorization': `Bearer ${apiKey}`
     },
     body: JSON.stringify({
-      model: 'text-embedding-ada-002',
+      model: 'text-embedding-3-small',
       input: text
     })
   });
@@ -25,7 +25,7 @@ const createEmbedding = async (text: string, apiKey: string): Promise<number[]> 
 };
 
 // 기본 텍스트 검색 (폴백용)
-const searchPlacesWithText = async (searchQuery: string, maxResults: number = 5) => {
+const searchPlacesWithText = async (searchQuery: string, maxResults: number = 3) => {
   try {
     const placesRef = collection(dbService, 'places');
     const searchLower = searchQuery.toLowerCase();
@@ -77,23 +77,41 @@ const searchPlacesWithText = async (searchQuery: string, maxResults: number = 5)
   }
 };
 
-// Firestore Native Vector Search 함수
+// Pinecone Vector Search 함수
 export const searchPlacesWithVector = async (
   searchQuery: string, 
   apiKey: string,
-  maxResults: number = 5
+  maxResults: number = 3
 ): Promise<PlaceInfo[]> => {
   try {
-    // 1. 검색 쿼리의 임베딩 생성
-    const queryEmbedding = await createEmbedding(searchQuery, apiKey);
+    // Vercel Functions를 통해 Pinecone 검색 수행
+    const apiUrl = process.env.NODE_ENV === 'development' 
+      ? 'http://localhost:3000/api/vector-search'
+      : '/api/vector-search';
     
-    // 2. Firestore Vector Search 쿼리
-    // 주의: Firestore의 findNearest는 아직 웹 SDK에서 지원되지 않음
-    // Extension을 통해 수행하거나 Cloud Function을 사용해야 함
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        query: searchQuery, 
+        apiKey,
+        limit: maxResults
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Vector search API failed');
+    }
+
+    const data = await response.json();
     
-    // 임시로 텍스트 검색으로 폴백
-    return searchPlacesWithText(searchQuery, maxResults);
+    if (data.success && data.places) {
+      return data.places;
+    } else {
+      throw new Error('Vector search returned no results');
+    }
   } catch (error) {
+    console.warn('Vector search failed, falling back to text search:', error);
     // 벡터 검색 실패 시 기본 텍스트 검색으로 폴백
     return searchPlacesWithText(searchQuery, maxResults);
   }

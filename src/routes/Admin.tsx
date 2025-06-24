@@ -17,7 +17,12 @@ import {
   faRobot,
   faSpinner,
   faCheckCircle,
-  faExclamationTriangle
+  faExclamationTriangle,
+  faKey,
+  faEye,
+  faEyeSlash,
+  faLock,
+  faSave
 } from '@fortawesome/free-solid-svg-icons';
 import { authService, dbService } from '../fBase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -40,6 +45,9 @@ const Admin = ({ userObj }: AdminProps) => {
   const [vectorLoading, setVectorLoading] = useState(false);
   const [vectorStatus, setVectorStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
   const [vectorMessage, setVectorMessage] = useState('');
+  const [adminApiKey, setAdminApiKey] = useState('');
+  const [showApiKeyInput, setShowApiKeyInput] = useState(false);
+  const [showApiKeyPassword, setShowApiKeyPassword] = useState(false);
 
   // 인증되지 않은 사용자 리다이렉트
   useEffect(() => {
@@ -47,6 +55,16 @@ const Admin = ({ userObj }: AdminProps) => {
       router.push('/auth');
     }
   }, [userObj, router]);
+
+  // 저장된 Admin API 키 로드
+  useEffect(() => {
+    const savedKey = localStorage.getItem('admin_openai_api_key');
+    if (savedKey) {
+      setAdminApiKey(savedKey);
+    } else {
+      setShowApiKeyInput(true);
+    }
+  }, []);
 
   // 통계 및 최근 장소 데이터 로드
   useEffect(() => {
@@ -170,19 +188,61 @@ const Admin = ({ userObj }: AdminProps) => {
     router.push('/edit');
   };
 
+  const handleApiKeySubmit = () => {
+    if (adminApiKey.trim()) {
+      localStorage.setItem('admin_openai_api_key', adminApiKey);
+      setShowApiKeyInput(false);
+    }
+  };
+
   const generateEmbeddings = async () => {
+    // OpenAI API 키 확인
+    if (!adminApiKey.trim()) {
+      setShowApiKeyInput(true);
+      setVectorStatus('error');
+      setVectorMessage('OpenAI API 키를 먼저 설정해주세요.');
+      setTimeout(() => {
+        setVectorStatus('idle');
+        setVectorMessage('');
+      }, 3000);
+      return;
+    }
+
     setVectorLoading(true);
     setVectorStatus('processing');
-    setVectorMessage('임베딩을 생성하고 있습니다...');
+    setVectorMessage('Firebase에서 장소 데이터를 가져오고 있습니다...');
 
     try {
+      // 1. Firebase에서 모든 장소 데이터 가져오기
+      const placesQuery = query(collection(dbService, 'places'));
+      const querySnapshot = await getDocs(placesQuery);
+      const places: PlaceInfo[] = [];
+      
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        places.push({
+          id: doc.id,
+          ...data
+        } as PlaceInfo);
+      });
+
+      if (places.length === 0) {
+        setVectorStatus('error');
+        setVectorMessage('처리할 장소 데이터가 없습니다.');
+        return;
+      }
+
+      setVectorMessage(`${places.length}개 장소의 임베딩을 생성하고 있습니다...`);
+
+      // 2. API로 장소 데이터 전송하여 임베딩 생성
       const response = await fetch('/api/generate-embeddings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userId: userObj?.uid
+          places: places,
+          apiKey: adminApiKey
         }),
       });
 
@@ -200,11 +260,11 @@ const Admin = ({ userObj }: AdminProps) => {
       setVectorMessage('서버 오류가 발생했습니다.');
     } finally {
       setVectorLoading(false);
-      // 3초 후 상태 초기화
+      // 5초 후 상태 초기화
       setTimeout(() => {
         setVectorStatus('idle');
         setVectorMessage('');
-      }, 3000);
+      }, 5000);
     }
   };
 
@@ -312,6 +372,97 @@ const Admin = ({ userObj }: AdminProps) => {
           </div>
         </div>
 
+        {/* API Key Setup */}
+        <div className='admin__api-setup'>
+          <h3 className='section__title'>
+            <FontAwesomeIcon icon={faRobot} />
+            Vector Search 설정
+          </h3>
+          
+          <div className='api-key__container'>
+            {showApiKeyInput ? (
+              <div className='api-key__input-section'>
+                <div className='api-key__header'>
+                  <FontAwesomeIcon icon={faKey} className='api-key__icon' />
+                  <h4 className='api-key__title'>OpenAI API 키 설정</h4>
+                </div>
+                
+                <div className='api-key__input-wrapper'>
+                  <div className='api-key__input-container'>
+                    <FontAwesomeIcon icon={faLock} className='api-key__input-icon' />
+                    <input
+                      type={showApiKeyPassword ? "text" : "password"}
+                      value={adminApiKey}
+                      onChange={(e) => setAdminApiKey(e.target.value)}
+                      placeholder="sk-proj-xxxxx... (OpenAI API 키를 입력하세요)"
+                      className='api-key__input'
+                      onKeyPress={(e) => e.key === 'Enter' && handleApiKeySubmit()}
+                    />
+                    <button 
+                      type="button"
+                      onClick={() => setShowApiKeyPassword(!showApiKeyPassword)}
+                      className='api-key__visibility-btn'
+                      title={showApiKeyPassword ? "키 숨기기" : "키 보기"}
+                    >
+                      <FontAwesomeIcon icon={showApiKeyPassword ? faEyeSlash : faEye} />
+                    </button>
+                  </div>
+                  
+                  <div className='api-key__actions'>
+                    <button 
+                      onClick={handleApiKeySubmit}
+                      className='api-key__submit-btn'
+                      disabled={!adminApiKey.trim()}
+                    >
+                      <FontAwesomeIcon icon={faSave} />
+                      저장
+                    </button>
+                    <button 
+                      onClick={() => {
+                        setShowApiKeyInput(false);
+                        setAdminApiKey(localStorage.getItem('admin_openai_api_key') || '');
+                      }}
+                      className='api-key__cancel-btn'
+                    >
+                      취소
+                    </button>
+                  </div>
+                </div>
+                
+                <div className='api-key__help'>
+                  <div className='api-key__help-item'>
+                    <FontAwesomeIcon icon={faExclamationTriangle} className='help-icon' />
+                    <span>Vector Search 기능을 사용하려면 OpenAI API 키가 필요합니다.</span>
+                  </div>
+                  <div className='api-key__help-item'>
+                    <FontAwesomeIcon icon={faCheckCircle} className='help-icon' />
+                    <span>키는 브라우저에 안전하게 저장되며 서버로 전송되지 않습니다.</span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className='api-key__status'>
+                <div className='api-key__status-card'>
+                  <div className='api-key__status-icon'>
+                    <FontAwesomeIcon icon={faCheckCircle} />
+                  </div>
+                  <div className='api-key__status-info'>
+                    <h4>OpenAI API 키가 설정되었습니다</h4>
+                    <p>Vector Search 기능을 사용할 수 있습니다</p>
+                  </div>
+                  <button 
+                    onClick={() => setShowApiKeyInput(true)}
+                    className='api-key__change-btn'
+                  >
+                    <FontAwesomeIcon icon={faEdit} />
+                    변경
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Quick Actions */}
         <div className='admin__actions'>
           <h3 className='section__title'>
@@ -343,7 +494,7 @@ const Admin = ({ userObj }: AdminProps) => {
             <button 
               className='action__card action__card--vector'
               onClick={generateEmbeddings}
-              disabled={vectorLoading}
+              disabled={vectorLoading || !adminApiKey.trim()}
             >
               <div className='action__icon'>
                 <FontAwesomeIcon 

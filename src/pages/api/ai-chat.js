@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { SYSTEM_PROMPT } from '../../../prompts/system';
+import { SYSTEM_PROMPT } from '../../../prompts/system.js';
 
 export default async function handler(req, res) {
   // CORS 설정

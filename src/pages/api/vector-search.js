@@ -1,21 +1,5 @@
 import OpenAI from 'openai';
-import admin from 'firebase-admin';
-
-// Firebase Admin 초기화
-if (!admin.apps.length) {
-  // Vercel 환경 변수에서 서비스 계정 정보 가져오기
-  const serviceAccount = {
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-  };
-
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-  });
-}
-
-const db = admin.firestore();
+import { Pinecone } from '@pinecone-database/pinecone';
 
 export default async function handler(req, res) {
   // CORS 설정
@@ -49,55 +33,42 @@ export default async function handler(req, res) {
   try {
     // 1. 검색 쿼리의 임베딩 생성
     const embeddingResponse = await openai.embeddings.create({
-      model: 'text-embedding-ada-002',
+      model: 'text-embedding-3-small',
       input: searchQuery
     });
     
     const queryVector = embeddingResponse.data[0].embedding;
 
-    // 2. Firestore에서 모든 장소 가져오기 (임베딩이 있는 것만)
-    const placesSnapshot = await db.collection('places')
-      .where('embedding', '!=', null)
-      .get();
-
-    // 3. 코사인 유사도 계산
-    const calculateCosineSimilarity = (vec1, vec2) => {
-      let dotProduct = 0;
-      let norm1 = 0;
-      let norm2 = 0;
-      
-      for (let i = 0; i < vec1.length; i++) {
-        dotProduct += vec1[i] * vec2[i];
-        norm1 += vec1[i] * vec1[i];
-        norm2 += vec2[i] * vec2[i];
-      }
-      
-      return dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
-    };
-
-    // 4. 각 장소의 유사도 계산
-    const placesWithSimilarity = [];
-    placesSnapshot.forEach(doc => {
-      const data = doc.data();
-      if (data.embedding && Array.isArray(data.embedding)) {
-        const similarity = calculateCosineSimilarity(queryVector, data.embedding);
-        placesWithSimilarity.push({
-          id: doc.id,
-          ...data,
-          similarity
-        });
-      }
+    // 2. Pinecone 클라이언트 초기화
+    const pinecone = new Pinecone({
+      apiKey: process.env.PINECONE_API_KEY,
     });
 
-    // 5. 유사도순으로 정렬하고 상위 N개 반환
-    const topPlaces = placesWithSimilarity
-      .sort((a, b) => b.similarity - a.similarity)
-      .slice(0, limit)
-      .map(({ similarity, embedding, ...place }) => place); // embedding 제거
+    const indexName = process.env.PINECONE_INDEX_NAME || 'jeju-guide';
+    const index = pinecone.index(indexName);
+
+    // 3. Pinecone에서 유사한 벡터 검색
+    const searchResponse = await index.query({
+      vector: queryVector,
+      topK: limit,
+      includeValues: false,
+      includeMetadata: true,
+    });
+
+    // 4. Pinecone 메타데이터에서 장소 정보 추출
+    const places = searchResponse.matches.map(match => ({
+      id: match.id,
+      name: match.metadata.name,
+      type: match.metadata.type,
+      description: match.metadata.description,
+      address: match.metadata.address,
+      addressDetail: match.metadata.address, // 호환성을 위해
+      score: match.score
+    }));
 
     return res.status(200).json({
       success: true,
-      places: topPlaces
+      places: places
     });
 
   } catch (error) {

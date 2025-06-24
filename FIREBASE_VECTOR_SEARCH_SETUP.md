@@ -17,7 +17,7 @@
 - **OpenAI API Key**: 환경 변수로 설정
 
 ### 선택적 설정:
-- **Model**: `text-embedding-ada-002`
+- **Model**: `text-embedding-3-small`
 - **Batch size**: 100
 - **Index management collection**: `vector_indexes`
 

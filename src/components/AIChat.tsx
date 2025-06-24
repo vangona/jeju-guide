@@ -22,8 +22,8 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
     { role: 'assistant', content: '안녕하세요! 제주도 여행에 대해 궁금한 것이 있으시면 물어보세요!' }
   ]);
   const [loading, setLoading] = useState(false);
-  const [apiKey, setApiKey] = useState(localStorage.getItem('openai_api_key') || '');
-  const [showApiKeyInput, setShowApiKeyInput] = useState(!apiKey);
+  const [apiKey, setApiKey] = useState('');
+  const [showApiKeyInput, setShowApiKeyInput] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -33,6 +33,20 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
   useEffect(() => {
     scrollToBottom();
   }, [messages, loading]);
+
+  // 관리자 API 키 확인
+  useEffect(() => {
+    const adminKey = localStorage.getItem('admin_openai_api_key');
+    const userKey = localStorage.getItem('openai_api_key');
+    
+    if (adminKey) {
+      setApiKey(adminKey);
+    } else if (userKey) {
+      setApiKey(userKey);
+    } else {
+      setShowApiKeyInput(true);
+    }
+  }, []);
 
   // 마크다운인지 확인하는 함수
   const isMarkdown = (text: string) => {
@@ -105,12 +119,12 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
 
     try {
       // 1. 먼저 관련 장소 검색
-      const relatedPlaces = await searchPlacesWithVector(currentInput, apiKey, 5);
+      const relatedPlaces = await searchPlacesWithVector(currentInput, apiKey, 3);
       const placesContext = createContextFromPlaces(relatedPlaces);
       
       // 2. AI에게 컨텍스트와 함께 질문
       const apiUrl = process.env.NODE_ENV === 'development' 
-        ? 'http://localhost:3001/api/ai-chat' 
+        ? 'http://localhost:3000/api/ai-chat' 
         : '/api/ai-chat';
       
       const response = await fetch(apiUrl, {
@@ -123,16 +137,33 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
         })
       });
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
       const aiMessage: Message = { 
         role: 'assistant', 
-        content: data.message,
+        content: data.message || '죄송합니다. 답변을 생성할 수 없습니다.',
         places: relatedPlaces.length > 0 ? relatedPlaces : undefined
       };
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
-      const errorMessage = { role: 'assistant', content: '죄송합니다. 오류가 발생했습니다.' };
-      setMessages(prev => [...prev, errorMessage]);
+      console.error('AI Chat Error:', error);
+      let errorMessage = '죄송합니다. 오류가 발생했습니다.';
+      
+      if (error instanceof Error) {
+        if (error.message.includes('Failed to fetch')) {
+          errorMessage = 'API 서버에 연결할 수 없습니다. 네트워크 연결을 확인해주세요.';
+        } else if (error.message.includes('401')) {
+          errorMessage = 'OpenAI API 키가 유효하지 않습니다. 설정을 확인해주세요.';
+        } else if (error.message.includes('429')) {
+          errorMessage = 'API 요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요.';
+        }
+      }
+      
+      const errorMsg = { role: 'assistant', content: errorMessage };
+      setMessages(prev => [...prev, errorMsg]);
     } finally {
       setLoading(false);
     }
@@ -231,6 +262,9 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
                 OpenAI API 키를 입력하세요
               </p>
             </div>
+            <p style={{ margin: '0 0 12px 0', fontSize: '12px', color: '#6c757d' }}>
+              💡 관리자가 이미 설정한 경우 별도 입력이 불필요합니다
+            </p>
             <input
               type="password"
               value={apiKey}

@@ -1,24 +1,5 @@
 import OpenAI from 'openai';
-import admin from 'firebase-admin';
 import { Pinecone } from '@pinecone-database/pinecone';
-
-// Firebase Admin 초기화
-if (!admin.apps.length) {
-  const serviceAccount = {
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-  };
-
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-  });
-}
-
-const db = admin.firestore();
-
-// Admin 사용자 UID 목록 (환경변수로 관리)
-const ADMIN_UIDS = process.env.ADMIN_UIDS ? process.env.ADMIN_UIDS.split(',') : [];
 
 export default async function handler(req, res) {
   // CORS 설정
@@ -40,40 +21,37 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { userId } = req.body;
+    const { places, apiKey } = req.body;
 
-    // 관리자 권한 확인
-    if (!ADMIN_UIDS.includes(userId)) {
-      return res.status(403).json({ error: 'Unauthorized: Admin access required' });
+    if (!places || !Array.isArray(places)) {
+      return res.status(400).json({ error: 'Places data is required' });
     }
 
-    // OpenAI 클라이언트 초기화 (임베딩 생성용)
+    if (!apiKey) {
+      return res.status(400).json({ error: 'OpenAI API key is required' });
+    }
+
+    // OpenAI 클라이언트 초기화
     const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: apiKey,
     });
 
-    // 모든 장소 데이터 가져오기
-    const placesSnapshot = await db.collection('places').get();
-    const places = [];
-
-    placesSnapshot.forEach((doc) => {
-      const data = doc.data();
-      places.push({
-        id: doc.id,
-        ...data,
-      });
+    // Pinecone 클라이언트 초기화
+    const pinecone = new Pinecone({
+      apiKey: process.env.PINECONE_API_KEY,
     });
+
+    const indexName = process.env.PINECONE_INDEX_NAME || 'jeju-guide';
+    
+    // Pinecone 인덱스 가져오기
+    const index = pinecone.index(indexName);
 
     let processedCount = 0;
+    const vectors = [];
 
     // 각 장소에 대해 임베딩 생성
     for (const place of places) {
       try {
-        // 이미 임베딩이 있는 경우 스킵
-        if (place.embedding && place.embedding.length > 0) {
-          continue;
-        }
-
         // 검색용 텍스트 생성 (장소명, 설명, 주소, 타입 결합)
         const searchText = [
           place.name || '',
@@ -88,29 +66,46 @@ export default async function handler(req, res) {
 
         // OpenAI 임베딩 생성
         const embeddingResponse = await openai.embeddings.create({
-          model: 'text-embedding-ada-002',
+          model: 'text-embedding-3-small',
           input: searchText,
         });
 
         const embedding = embeddingResponse.data[0].embedding;
 
-        // Firestore에 임베딩 저장
-        await db.collection('places').doc(place.id).update({
-          embedding: embedding,
-          embeddingText: searchText,
-          embeddingUpdatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        // Pinecone에 저장할 벡터 데이터 준비
+        vectors.push({
+          id: place.id,
+          values: embedding,
+          metadata: {
+            name: place.name,
+            type: place.type,
+            description: place.description.substring(0, 500), // 메타데이터 크기 제한
+            address: place.addressDetail || place.address || '',
+            searchText: searchText.substring(0, 1000), // 검색 텍스트 저장
+          }
         });
 
         processedCount++;
         
+        // 50개씩 배치로 처리 (더 작은 배치로 안정성 증대)
+        if (vectors.length >= 50) {
+          await index.upsert(vectors);
+          vectors.length = 0; // 배열 초기화
+        }
+        
         // API 레이트 리미트 방지를 위한 딜레이
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 200));
 
       } catch (error) {
         console.error(`Error processing place ${place.id}:`, error);
         // 개별 장소 처리 실패는 전체 프로세스를 중단하지 않음
         continue;
       }
+    }
+
+    // 남은 벡터들 처리
+    if (vectors.length > 0) {
+      await index.upsert(vectors);
     }
 
     res.status(200).json({
