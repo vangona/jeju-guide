@@ -1,7 +1,28 @@
-import { getFunctions, httpsCallable } from 'firebase/functions';
 import { dbService } from '../fBase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import type { PlaceInfo } from '../types';
+
+// OpenAI Embeddings 생성 함수
+const createEmbedding = async (text: string, apiKey: string): Promise<number[]> => {
+  const response = await fetch('https://api.openai.com/v1/embeddings', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`
+    },
+    body: JSON.stringify({
+      model: 'text-embedding-ada-002',
+      input: text
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to create embedding');
+  }
+
+  const data = await response.json();
+  return data.data[0].embedding;
+};
 
 // 기본 텍스트 검색 (폴백용)
 const searchPlacesWithText = async (searchQuery: string, maxResults: number = 5) => {
@@ -15,6 +36,7 @@ const searchPlacesWithText = async (searchQuery: string, maxResults: number = 5)
     
     snapshot.forEach((doc) => {
       const data = doc.data() as PlaceInfo;
+      data.id = doc.id; // 문서 ID 추가
       const name = data.name?.toLowerCase() || '';
       const description = data.description?.toLowerCase() || '';
       const address = data.address?.toLowerCase() || '';
@@ -42,6 +64,8 @@ const searchPlacesWithText = async (searchQuery: string, maxResults: number = 5)
       
       return { place, score };
     });
+
+    console.log(scoredPlaces)
     
     // 점수순으로 정렬하고 상위 결과만 반환
     return scoredPlaces
@@ -53,18 +77,22 @@ const searchPlacesWithText = async (searchQuery: string, maxResults: number = 5)
   }
 };
 
-// 벡터 검색 함수 (Firebase Extension 사용)
-export const searchPlacesWithVector = async (searchQuery: string, maxResults: number = 5) => {
+// Firestore Native Vector Search 함수
+export const searchPlacesWithVector = async (
+  searchQuery: string, 
+  apiKey: string,
+  maxResults: number = 5
+): Promise<PlaceInfo[]> => {
   try {
-    const functions = getFunctions();
-    const vectorSearch = httpsCallable(functions, 'ext-firestore-vector-search-queryCallable');
+    // 1. 검색 쿼리의 임베딩 생성
+    const queryEmbedding = await createEmbedding(searchQuery, apiKey);
     
-    const result = await vectorSearch({
-      query: searchQuery,
-      limit: maxResults
-    });
-
-    return result.data as PlaceInfo[];
+    // 2. Firestore Vector Search 쿼리
+    // 주의: Firestore의 findNearest는 아직 웹 SDK에서 지원되지 않음
+    // Extension을 통해 수행하거나 Cloud Function을 사용해야 함
+    
+    // 임시로 텍스트 검색으로 폴백
+    return searchPlacesWithText(searchQuery, maxResults);
   } catch (error) {
     // 벡터 검색 실패 시 기본 텍스트 검색으로 폴백
     return searchPlacesWithText(searchQuery, maxResults);

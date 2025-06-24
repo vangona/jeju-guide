@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { marked } from 'marked';
 import { searchPlacesWithVector, createContextFromPlaces } from '../utils/vectorSearch';
+import PlaceCard from './PlaceCard';
+import type { PlaceInfo } from '../types';
 import '../css/AIChat.css';
 
 interface AIChatProps {
@@ -8,9 +10,15 @@ interface AIChatProps {
   onClose: () => void;
 }
 
+interface Message {
+  role: string;
+  content: string;
+  places?: PlaceInfo[];
+}
+
 const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<Message[]>([
     { role: 'assistant', content: '안녕하세요! 제주도 여행에 대해 궁금한 것이 있으시면 물어보세요!' }
   ]);
   const [loading, setLoading] = useState(false);
@@ -89,7 +97,7 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
     e.preventDefault();
     if (!input.trim() || loading || !apiKey) return;
 
-    const userMessage = { role: 'user', content: input };
+    const userMessage: Message = { role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
     const currentInput = input; // 입력값 저장
     setInput('');
@@ -116,7 +124,11 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
       });
 
       const data = await response.json();
-      const aiMessage = { role: 'assistant', content: data.message };
+      const aiMessage: Message = { 
+        role: 'assistant', 
+        content: data.message,
+        places: relatedPlaces.length > 0 ? relatedPlaces : undefined
+      };
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
       const errorMessage = { role: 'assistant', content: '죄송합니다. 오류가 발생했습니다.' };
@@ -290,6 +302,31 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
                   </div>
                 )}
                 {renderMessage(msg.content, msg.role)}
+                
+                {/* 장소 카드 표시 */}
+                {msg.places && msg.places.length > 0 && (
+                  <div style={{ marginTop: '12px' }}>
+                    <div style={{ 
+                      fontSize: '12px', 
+                      fontWeight: '500', 
+                      color: '#6c757d',
+                      marginBottom: '8px'
+                    }}>
+                      📍 추천 장소 ({msg.places.length}곳)
+                    </div>
+                    {msg.places.map((place, idx) => (
+                      <PlaceCard 
+                        key={place.id || idx} 
+                        place={place}
+                        onPlaceClick={(p) => {
+                          if (p.url) {
+                            window.open(p.url, '_blank');
+                          }
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           ))}
