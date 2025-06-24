@@ -31,3 +31,170 @@
 .home-viewtype:hover {
   cursor: pointer;
 }
+
+/* AI Chat FAB Styling */
+.ai-chat-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 64px;
+  height: 64px;
+  border-radius: 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 4px 16px rgba(102, 126, 234, 0.4),
+    0 8px 32px rgba(102, 126, 234, 0.2);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0;
+}
+
+.ai-chat-fab:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 
+    0 8px 25px rgba(102, 126, 234, 0.5),
+    0 16px 40px rgba(102, 126, 234, 0.3);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.ai-chat-fab:active {
+  transform: translateY(-2px) scale(1.02);
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fab-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.fab-icon {
+  width: 28px;
+  height: 28px;
+  stroke-width: 2.5;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.ai-chat-fab:hover .fab-icon {
+  transform: scale(1.1);
+  stroke-width: 3;
+}
+
+.fab-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%) scale(0);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0;
+  }
+}
+
+.fab-tooltip {
+  position: absolute;
+  right: 72px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fab-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-left-color: rgba(0, 0, 0, 0.8);
+}
+
+.ai-chat-fab:hover .fab-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(-8px);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .ai-chat-fab {
+    bottom: 20px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 28px;
+  }
+  
+  .fab-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .fab-tooltip {
+    right: 64px;
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .ai-chat-fab {
+    transition: box-shadow 0.2s ease;
+  }
+  
+  .ai-chat-fab:hover {
+    transform: none;
+  }
+  
+  .fab-pulse {
+    animation: none;
+  }
+}
+
+/* Focus states for keyboard navigation */
+.ai-chat-fab:focus {
+  outline: none;
+  box-shadow: 
+    0 4px 16px rgba(102, 126, 234, 0.4),
+    0 8px 32px rgba(102, 126, 234, 0.2),
+    0 0 0 3px rgba(102, 126, 234, 0.3);
+}

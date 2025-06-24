@@ -1,9 +1,0 @@
-{
-  "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/admin": "pages/admin.js",
-  "/api/vector-search": "pages/api/vector-search.js",
-  "/": "pages/index.js",
-  "/api/ai-chat": "pages/api/ai-chat.js"
-}

@@ -8,6 +8,7 @@ import styles from '../css/AIChat.module.css';
 interface AIChatProps {
   isOpen: boolean;
   onClose: () => void;
+  onPlaceSelect?: (place: PlaceInfo) => void;
 }
 
 interface Message {
@@ -16,13 +17,30 @@ interface Message {
   places?: PlaceInfo[];
 }
 
-const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
+const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose, onPlaceSelect }) => {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([
     { role: 'assistant', content: '안녕하세요! 제주도 여행에 대해 궁금한 것이 있으시면 물어보세요!' }
   ]);
   const [loading, setLoading] = useState(false);
   const [apiKey, setApiKey] = useState('');
+
+  // 사용자 질문이 장소 추천을 요청하는지 판단
+  const checkIfPlaceRecommendationRequest = (input: string): boolean => {
+    const recommendationKeywords = [
+      '추천', '어디', '가볼만한', '맛집', '카페', '관광지', '숙소', '여행지',
+      '가고싶', '보고싶', '먹고싶', '방문', '구경', '놀러', '데이트',
+      '맛있는', '예쁜', '유명한', '인기', '핫플', '명소',
+      '알려줘', '알려주세요', '소개', '찾아줘', '찾아주세요',
+      '있나요', '있을까요', '뭐가 있어', '어떤 곳',
+      '장소', '곳', '위치', '스팟', '어떻게', '방법'
+    ];
+    
+    const lowerInput = input.toLowerCase();
+    return recommendationKeywords.some(keyword => 
+      lowerInput.includes(keyword) || lowerInput.includes(keyword.toLowerCase())
+    );
+  };
   const [showApiKeyInput, setShowApiKeyInput] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -118,11 +136,19 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
     setLoading(true);
 
     try {
-      // 1. 먼저 관련 장소 검색
-      const relatedPlaces = await searchPlacesWithVector(currentInput, apiKey, 3);
-      const placesContext = createContextFromPlaces(relatedPlaces);
+      // 1. 사용자 질문이 장소 추천을 요청하는지 판단
+      const isPlaceRecommendationRequest = checkIfPlaceRecommendationRequest(currentInput);
       
-      // 2. AI에게 컨텍스트와 함께 질문
+      let relatedPlaces: PlaceInfo[] = [];
+      let placesContext = '';
+      
+      // 2. 장소 추천 요청일 때만 벡터 검색 수행
+      if (isPlaceRecommendationRequest) {
+        relatedPlaces = await searchPlacesWithVector(currentInput, apiKey, 3);
+        placesContext = createContextFromPlaces(relatedPlaces);
+      }
+      
+      // 3. AI에게 컨텍스트와 함께 질문
       const apiUrl = process.env.NODE_ENV === 'development' 
         ? 'http://localhost:3000/api/ai-chat' 
         : '/api/ai-chat';
@@ -145,7 +171,7 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
       const aiMessage: Message = { 
         role: 'assistant', 
         content: data.message || '죄송합니다. 답변을 생성할 수 없습니다.',
-        places: relatedPlaces.length > 0 ? relatedPlaces : undefined
+        places: (isPlaceRecommendationRequest && relatedPlaces.length > 0) ? relatedPlaces : undefined
       };
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
@@ -353,8 +379,10 @@ const AIChat: React.FC<AIChatProps> = ({ isOpen, onClose }) => {
                         key={place.id || idx} 
                         place={place}
                         onPlaceClick={(p) => {
-                          if (p.url) {
-                            window.open(p.url, '_blank');
+                          // 카드 클릭 시 모달 열기
+                          if (onPlaceSelect) {
+                            onPlaceSelect(p);
+                            onClose(); // AI Chat 닫기
                           }
                         }}
                       />

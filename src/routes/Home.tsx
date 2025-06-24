@@ -40,10 +40,16 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
     setViewType(newViewType);
   };
 
+  const handlePlaceSelect = (place: PlaceInfo) => {
+    // AI Chat에서 장소 선택 시 모달 열기
+    setDetail(place);
+  };
+
 
   useEffect(() => {
     getPlaces();
   }, []);
+
   return (
     <div className='home__container'>
       <div className='vertical'>
@@ -69,26 +75,32 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
       )}
       <AIChat 
         isOpen={showAIChat} 
-        onClose={() => setShowAIChat(false)} 
+        onClose={() => setShowAIChat(false)}
+        onPlaceSelect={handlePlaceSelect}
       />
       <button 
         onClick={() => setShowAIChat(true)}
-        style={{
-          position: 'fixed',
-          bottom: '80px',
-          right: '20px',
-          width: '60px',
-          height: '60px',
-          borderRadius: '50%',
-          backgroundColor: '#007bff',
-          color: 'white',
-          border: 'none',
-          fontSize: '24px',
-          cursor: 'pointer',
-          zIndex: 999
-        }}
+        className="ai-chat-fab"
+        title="AI 여행 가이드와 채팅하기"
       >
-        🤖
+        <div className="fab-icon-container">
+          <svg 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            className="fab-icon"
+          >
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            <circle cx="9" cy="10" r="1"/>
+            <circle cx="15" cy="10" r="1"/>
+            <path d="M9 14c.5.5 2 1 3 1s2.5-.5 3-1"/>
+          </svg>
+          <div className="fab-pulse"></div>
+        </div>
+        <span className="fab-tooltip">AI 가이드</span>
       </button>
       {/* <Link to="/myplace"><button>내 여행지 목록</button></Link> */}
       <Navigation

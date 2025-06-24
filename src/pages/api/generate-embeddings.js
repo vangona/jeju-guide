@@ -82,6 +82,8 @@ export default async function handler(req, res) {
             description: place.description.substring(0, 500), // 메타데이터 크기 제한
             address: place.addressDetail || place.address || '',
             searchText: searchText.substring(0, 1000), // 검색 텍스트 저장
+            lat: place.geocode && place.geocode['1'] ? place.geocode['1'] : null,
+            lng: place.geocode && place.geocode['0'] ? place.geocode['0'] : null,
           }
         });
 

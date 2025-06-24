@@ -7,9 +7,44 @@ interface PlaceCardProps {
 }
 
 const PlaceCard: React.FC<PlaceCardProps> = ({ place, onPlaceClick }) => {
+  
   const handleClick = () => {
     if (onPlaceClick) {
       onPlaceClick(place);
+    }
+  };
+
+  const handleMapClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    // 모달 열기 - onPlaceClick과 동일한 동작
+    if (onPlaceClick) {
+      onPlaceClick(place);
+    }
+  };
+
+  const handleWebsiteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (place.url) {
+      window.open(place.url, '_blank');
+    }
+  };
+
+  const handleShareClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const shareText = `${place.name}\n${place.address}\n${place.description}`;
+    
+    if (navigator.share) {
+      navigator.share({
+        title: place.name,
+        text: shareText,
+        url: place.url || `https://map.kakao.com/link/search/${encodeURIComponent(place.name)}`
+      });
+    } else {
+      // 클립보드에 복사
+      navigator.clipboard.writeText(shareText).then(() => {
+        alert('장소 정보가 클립보드에 복사되었습니다!');
+      });
     }
   };
 
@@ -108,7 +143,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, onPlaceClick }) => {
             marginTop: '8px',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            justifyContent: 'space-between'
           }}>
             <span style={{
               fontSize: '11px',
@@ -123,21 +158,82 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, onPlaceClick }) => {
                place.type === 'tourist' ? '관광지' :
                place.type === 'landscape' ? '자연경관' : '기타'}
             </span>
-            {place.url && (
-              <a 
-                href={place.url} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
+            
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button
+                onClick={handleMapClick}
                 style={{
+                  background: 'none',
+                  border: 'none',
+                  padding: '4px 8px',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
                   fontSize: '11px',
                   color: '#667eea',
-                  textDecoration: 'none'
+                  backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                  transition: 'all 0.2s'
                 }}
+                onMouseOver={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(102, 126, 234, 0.2)';
+                }}
+                onMouseOut={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(102, 126, 234, 0.1)';
+                }}
+                title="지도에서 보기"
               >
-                🔗 웹사이트
-              </a>
-            )}
+                🗺️ 지도
+              </button>
+              
+              {place.url && (
+                <button
+                  onClick={handleWebsiteClick}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: '4px 8px',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontSize: '11px',
+                    color: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseOver={(e) => {
+                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(40, 167, 69, 0.2)';
+                  }}
+                  onMouseOut={(e) => {
+                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(40, 167, 69, 0.1)';
+                  }}
+                  title="웹사이트 방문"
+                >
+                  🔗 사이트
+                </button>
+              )}
+              
+              <button
+                onClick={handleShareClick}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  padding: '4px 8px',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '11px',
+                  color: '#ff6b6b',
+                  backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                  transition: 'all 0.2s'
+                }}
+                onMouseOver={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(255, 107, 107, 0.2)';
+                }}
+                onMouseOut={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(255, 107, 107, 0.1)';
+                }}
+                title="공유하기"
+              >
+                📤 공유
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -420,6 +420,7 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
     }
   }, [type, places, makeMarker]);
 
+
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(dbService, 'chats'), (snapshot) => {
       const chatArray = snapshot.docs.map((doc) => ({

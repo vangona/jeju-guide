@@ -63,6 +63,10 @@ export default async function handler(req, res) {
       description: match.metadata.description,
       address: match.metadata.address,
       addressDetail: match.metadata.address, // 호환성을 위해
+      geocode: {
+        '0': match.metadata.lng, // 경도
+        '1': match.metadata.lat  // 위도
+      },
       score: match.score
     }));
 
