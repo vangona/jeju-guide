@@ -38,6 +38,34 @@ const AIChat: React.FC<AIChatProps> = ({
   const [loading, setLoading] = useState(false);
   const [apiKey, setApiKey] = useState('');
 
+  // ESC 키 이벤트 리스너
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscapeKey);
+      // 모달이 열렸을 때 body 스크롤 방지
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+      // 모달이 닫힐 때 body 스크롤 복원
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen, onClose]);
+
+  // 백드롭 클릭 핸들러
+  const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.target === event.currentTarget) {
+      onClose();
+    }
+  };
+
   // 사용자 질문이 장소 추천을 요청하는지 판단
   const checkIfPlaceRecommendationRequest = (input: string): boolean => {
     const recommendationKeywords = [
@@ -255,6 +283,7 @@ const AIChat: React.FC<AIChatProps> = ({
   return (
     <div
       className={styles.aiChatModal}
+      onClick={handleBackdropClick}
       style={{
         position: 'fixed',
         top: 0,
@@ -271,6 +300,7 @@ const AIChat: React.FC<AIChatProps> = ({
     >
       <div
         className={styles.aiChatContainer}
+        onClick={(e) => e.stopPropagation()}
         style={{
           background: 'white',
           borderRadius: '20px',

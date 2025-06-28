@@ -96,14 +96,14 @@ const AddMyPlace = ({
 
   const getLabel = () => {
     if (isAdded) return '저장됨';
-    return '여행 계획에 추가';
+    return '내 장소에 추가';
   };
 
   return (
     <button
       className={getButtonClass()}
       onClick={handleAddToMyPlace}
-      aria-label={isAdded ? '여행 계획에서 제거' : '여행 계획에 추가'}
+      aria-label={isAdded ? '내 장소에서 제거' : '내 장소에 추가'}
       title={getLabel()}
     >
       <FontAwesomeIcon icon={getIcon()} />

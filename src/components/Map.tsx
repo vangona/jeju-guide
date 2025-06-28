@@ -140,21 +140,21 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
     };
   };
 
-  const clickMobileHandler = (
-    map: KakaoMap,
-    overlay: KakaoOverlay,
-    place: PlaceInfo,
-  ) => {
-    return function () {
-      if (preOverlayRef.current) {
-        preOverlayRef.current.setMap(null);
-      }
-      overlay.setMap(map);
-      setCurrentPlace(place);
-      setMouseState(true);
-      preOverlayRef.current = overlay;
-    };
-  };
+  // const clickMobileHandler = (
+  //   map: KakaoMap,
+  //   overlay: KakaoOverlay,
+  //   place: PlaceInfo,
+  // ) => {
+  //   return function () {
+  //     if (preOverlayRef.current) {
+  //       preOverlayRef.current.setMap(null);
+  //     }
+  //     overlay.setMap(map);
+  //     setCurrentPlace(place);
+  //     setMouseState(true);
+  //     preOverlayRef.current = overlay;
+  //   };
+  // };
 
   const removeOverlay = (overlay: KakaoOverlay) => {
     return function () {
@@ -261,7 +261,7 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
       if (isMobile) {
         window.kakao.maps.event.addListener(marker, 'click', () => {
           addClickFeedback();
-          clickMobileHandler(mapRef.current!, overlay, place)();
+          clickHandler(place)();
         });
         window.kakao.maps.event.addListener(
           mapRef.current,
