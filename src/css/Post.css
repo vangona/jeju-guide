@@ -14,27 +14,47 @@
   width: 100%;
   height: 100%;
   z-index: -1;
-  background: linear-gradient(135deg, var(--seacolor, #9ebad0) 0%, rgba(158, 186, 208, 0.9) 50%, #b8c9d8 100%);
+  background: linear-gradient(
+    135deg,
+    var(--seacolor, #9ebad0) 0%,
+    rgba(158, 186, 208, 0.9) 50%,
+    #b8c9d8 100%
+  );
 }
 
 .post__wave {
   position: absolute;
   width: 200%;
   height: 100%;
-  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.03) 50%, transparent 70%);
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.03) 50%,
+    transparent 70%
+  );
   animation: wave 8s linear infinite;
 }
 
 .post__wave:nth-child(2) {
   animation-delay: -2s;
   animation-duration: 12s;
-  background: linear-gradient(-45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%);
+  background: linear-gradient(
+    -45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.02) 50%,
+    transparent 70%
+  );
 }
 
 .post__wave:nth-child(3) {
   animation-delay: -4s;
   animation-duration: 15s;
-  background: linear-gradient(60deg, transparent 40%, rgba(255, 255, 255, 0.015) 50%, transparent 60%);
+  background: linear-gradient(
+    60deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.015) 50%,
+    transparent 60%
+  );
 }
 
 @keyframes wave {
@@ -409,7 +429,6 @@
   animation: slideDown 0.3s ease;
 }
 
-
 .tips__swiper {
   padding: 0 1rem 2rem;
 }
@@ -509,7 +528,7 @@
 
 /* Success Message */
 .success-message {
-  background: linear-gradient(135deg, #4CAF50, #45a049);
+  background: linear-gradient(135deg, #4caf50, #45a049);
   color: white;
   padding: 1rem 1.5rem;
   border-radius: 12px;
@@ -697,7 +716,7 @@
   position: relative;
 }
 
-.file-upload-area input[type="file"] {
+.file-upload-area input[type='file'] {
   position: absolute;
   opacity: 0;
   width: 100%;
@@ -887,110 +906,110 @@
   .post__nav {
     padding: 0 0.75rem;
   }
-  
+
   .post__title {
     font-size: 1.2rem;
   }
-  
+
   .title-icon {
     font-size: 1.2rem;
   }
-  
+
   .nav-btn span {
     display: none;
   }
-  
+
   .nav-btn {
     padding: 8px 12px;
     min-width: 44px;
   }
-  
+
   .user-profile-btn {
     padding: 8px 12px;
     max-width: 150px;
   }
-  
+
   .user-name {
     font-size: 0.8rem;
   }
-  
+
   .profile__dropdown {
     min-width: 250px;
     padding: 1.25rem;
   }
-  
+
   .intro__content {
     flex-direction: column;
     text-align: center;
     gap: 1.5rem;
   }
-  
+
   .intro__text {
     text-align: center;
   }
-  
+
   .intro__text h2 {
     font-size: 1.5rem;
   }
-  
+
   .intro__text p {
     font-size: 1rem;
   }
-  
+
   .intro__icon {
     width: 70px;
     height: 70px;
     font-size: 1.8rem;
   }
-  
+
   .post__intro {
     padding: 2rem 1.5rem;
   }
-  
+
   .post__form-container {
     padding: 1.5rem;
   }
-  
+
   /* PostForm Mobile Responsive */
   .form-section {
     padding: 1.5rem;
   }
-  
+
   .section-header h3 {
     font-size: 1.1rem;
   }
-  
+
   .file-upload-label {
     padding: 2rem 1.5rem;
   }
-  
+
   .file-upload-label svg {
     font-size: 2.5rem;
   }
-  
+
   .tip__card {
     height: 160px;
     padding: 1.5rem 1rem;
   }
-  
+
   .tip__icon {
     font-size: 2rem;
   }
-  
+
   .tip__title {
     font-size: 1rem;
   }
-  
+
   .tip__description {
     font-size: 0.85rem;
   }
-  
+
   /* Mobile toggle buttons */
   .toggle-btn {
     padding: 0.875rem 1.25rem;
     font-size: 0.9rem;
   }
-  
+
   .toggle-btn svg:first-child {
     font-size: 1rem;
   }
@@ -1000,72 +1019,72 @@
   .post__content {
     padding: 0 0.75rem 2rem;
   }
-  
+
   .post__header {
     margin-bottom: 1.5rem;
   }
-  
+
   .post__intro {
     padding: 1.5rem 1rem;
     margin-bottom: 2rem;
   }
-  
+
   .intro__text h2 {
     font-size: 1.3rem;
   }
-  
+
   .intro__text p {
     font-size: 0.95rem;
   }
-  
+
   .profile__dropdown {
     right: -0.5rem;
     min-width: calc(100vw - 2rem);
     max-width: 300px;
   }
-  
+
   .post__form-container {
     padding: 1.25rem;
   }
-  
+
   /* Mobile PostForm */
   .form-section {
     padding: 1.25rem;
     margin-bottom: 1rem;
   }
-  
+
   .section-header {
     margin-bottom: 1rem;
     padding-bottom: 0.75rem;
   }
-  
+
   .section-header h3 {
     font-size: 1rem;
   }
-  
+
   .file-upload-label {
     padding: 1.5rem 1rem;
   }
-  
+
   .file-upload-label svg {
     font-size: 2rem;
   }
-  
+
   .file-upload-label span {
     font-size: 1rem;
   }
-  
+
   .submit-btn {
     padding: 16px 24px;
     font-size: 1rem;
   }
-  
+
   /* Mobile toggle buttons */
   .toggle-btn {
     padding: 0.75rem 1rem;
     font-size: 0.85rem;
   }
-  
+
   .toggle-btn span {
     font-size: 0.85rem;
   }

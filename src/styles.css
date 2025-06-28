@@ -1,21 +1,21 @@
-@import "css/variables.css";
-@import "css/Home.css";
-@import "css/Auth.css";
-@import "css/Post.css";
-@import "css/Map.css";
-@import "css/Map-detail.css";
-@import "css/List.css";
-@import "css/Pagination.css";
-@import "css/Detail.css";
-@import "css/Tips.css";
-@import "css/Modal.css";
-@import "css/Navigation.css";
-@import "css/Profile.css";
-@import "css/AddMyPlace.css";
-@import "css/MyPlace.css";
-@import "css/Edit.css";
-@import "css/Admin.css";
-@import "css/LoadingSpinner.css";
+@import 'css/variables.css';
+@import 'css/Home.css';
+@import 'css/Auth.css';
+@import 'css/Post.css';
+@import 'css/Map.css';
+@import 'css/Map-detail.css';
+@import 'css/List.css';
+@import 'css/Pagination.css';
+@import 'css/Detail.css';
+@import 'css/Tips.css';
+@import 'css/Modal.css';
+@import 'css/Navigation.css';
+@import 'css/Profile.css';
+@import 'css/AddMyPlace.css';
+@import 'css/MyPlace.css';
+@import 'css/Edit.css';
+@import 'css/Admin.css';
+@import 'css/LoadingSpinner.css';
 
 html,
 body {
@@ -45,6 +45,14 @@ body {
   box-sizing: border-box;
   padding-top: 20px;
   padding-bottom: 90px;
+}
+
+/* Mobile optimizations for app container */
+@media (max-width: 680px) {
+  .app__container {
+    padding-top: 12px;
+    padding-bottom: 80px;
+  }
 }
 
 .vertical {

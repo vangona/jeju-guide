@@ -1,7 +1,11 @@
 /* Edit Page */
 .edit__page {
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--seacolor, #9ebad0) 0%, rgba(158, 186, 208, 0.8) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--seacolor, #9ebad0) 0%,
+    rgba(158, 186, 208, 0.8) 100%
+  );
   padding-bottom: 2rem;
 }
 
@@ -142,7 +146,8 @@
 }
 
 .edit__page {
-  .search__input, .filter__select {
+  .search__input,
+  .filter__select {
     width: 100%;
     padding: 12px 12px 12px 40px;
     background: rgba(255, 255, 255, 0.15);
@@ -552,70 +557,70 @@
   .edit__nav {
     padding: 0 0.75rem;
   }
-  
+
   .edit__title {
     font-size: 1.1rem;
   }
-  
+
   .nav-btn span {
     display: none;
   }
-  
+
   .nav-btn {
     padding: 6px 10px;
     min-width: 40px;
   }
-  
+
   .edit__places {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .edit__controls {
     flex-direction: column;
     padding: 1rem;
   }
-  
+
   .search__container,
   .filter__container {
     min-width: auto;
   }
-  
+
   .place__card {
     padding: 1rem;
   }
-  
+
   .place__header {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .place__actions {
     justify-content: stretch;
   }
-  
+
   .btn-edit,
   .btn-delete {
     flex: 1;
     justify-content: center;
   }
-  
+
   .edit__modal {
     margin: 10px;
     max-height: 95vh;
   }
-  
+
   .modal__header,
   .modal__content,
   .modal__footer {
     padding: 16px;
   }
-  
+
   .modal__footer {
     flex-direction: column;
   }
-  
+
   .btn-cancel,
   .btn-save {
     width: 100%;
@@ -627,7 +632,7 @@
   .edit__content {
     padding: 0 0.75rem;
   }
-  
+
   .place__name {
     font-size: 1.1rem;
   }

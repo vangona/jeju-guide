@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faUser, 
-  faLock, 
-  faEye, 
+import {
+  faUser,
+  faLock,
+  faEye,
   faEyeSlash,
   faSpinner,
   faHome,
   faUserPlus,
-  faSignInAlt
+  faSignInAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { authService } from '../fBase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+} from 'firebase/auth';
 
 const Auth = () => {
   const router = useRouter();
@@ -71,7 +75,7 @@ const Auth = () => {
       if (error instanceof Error) {
         // Firebase 에러 메시지를 한국어로 변환
         let errorMessage = '';
-        
+
         if (error.message.includes('user-not-found')) {
           errorMessage = '등록되지 않은 이메일입니다.';
         } else if (error.message.includes('wrong-password')) {
@@ -83,11 +87,12 @@ const Auth = () => {
         } else if (error.message.includes('invalid-email')) {
           errorMessage = '유효하지 않은 이메일 형식입니다.';
         } else if (error.message.includes('too-many-requests')) {
-          errorMessage = '너무 많은 시도가 있었습니다. 잠시 후 다시 시도해주세요.';
+          errorMessage =
+            '너무 많은 시도가 있었습니다. 잠시 후 다시 시도해주세요.';
         } else {
           errorMessage = '로그인에 실패했습니다. 다시 시도해주세요.';
         }
-        
+
         setError(errorMessage);
       } else {
         setError('알 수 없는 오류가 발생했습니다.');
@@ -121,15 +126,17 @@ const Auth = () => {
           <div className='auth__wave'></div>
           <div className='auth__wave'></div>
         </div>
-        
+
         <div className='auth__container'>
           <div className='auth__card'>
             <div className='auth__header'>
               <h1 className='auth__title'>제주 가이드</h1>
-              <p className='auth__subtitle'>로그인 상태를 확인하고 있습니다...</p>
+              <p className='auth__subtitle'>
+                로그인 상태를 확인하고 있습니다...
+              </p>
             </div>
             <div className='auth__loading'>
-              <FontAwesomeIcon icon={faSpinner} spin size="2x" />
+              <FontAwesomeIcon icon={faSpinner} spin size='2x' />
             </div>
           </div>
         </div>
@@ -144,7 +151,7 @@ const Auth = () => {
         <div className='auth__wave'></div>
         <div className='auth__wave'></div>
       </div>
-      
+
       <div className='auth__container'>
         <button className='auth__home-btn' onClick={goHome}>
           <FontAwesomeIcon icon={faHome} />
@@ -155,7 +162,9 @@ const Auth = () => {
           <div className='auth__header'>
             <h1 className='auth__title'>제주 가이드</h1>
             <p className='auth__subtitle'>
-              {newAccount ? '새 계정을 만들어 시작하세요' : '계정에 로그인하세요'}
+              {newAccount
+                ? '새 계정을 만들어 시작하세요'
+                : '계정에 로그인하세요'}
             </p>
           </div>
 
@@ -185,7 +194,9 @@ const Auth = () => {
                   required
                   value={password}
                   onChange={onChange}
-                  autoComplete={newAccount ? 'new-password' : 'current-password'}
+                  autoComplete={
+                    newAccount ? 'new-password' : 'current-password'
+                  }
                 />
                 <button
                   type='button'
@@ -215,7 +226,9 @@ const Auth = () => {
                 </>
               ) : (
                 <>
-                  <FontAwesomeIcon icon={newAccount ? faUserPlus : faSignInAlt} />
+                  <FontAwesomeIcon
+                    icon={newAccount ? faUserPlus : faSignInAlt}
+                  />
                   <span>{newAccount ? '계정 만들기' : '로그인'}</span>
                 </>
               )}

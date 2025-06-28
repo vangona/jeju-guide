@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { authService } from '../fBase';
 import type { UserObj } from '../types';
+import Head from 'next/head';
 import '../styles.css';
 import '../styles/components.css';
 import '../styles/responsive.css';
 import '../styles/touch-optimization.css';
+import '../styles/mobile-optimizations.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [init, setInit] = useState(false);
@@ -47,9 +49,15 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <Head>
+        <meta
+          name='viewport'
+          content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
+        />
+      </Head>
       {init ? (
-        <Component 
-          {...pageProps} 
+        <Component
+          {...pageProps}
           isLoggedIn={isLoggedIn}
           userObj={userObj}
           isMobile={isMobile}

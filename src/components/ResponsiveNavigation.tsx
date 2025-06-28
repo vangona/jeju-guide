@@ -43,7 +43,8 @@ const ResponsiveNavigation = ({
       label: '지도',
       icon: faMap,
       onClick: () => handleViewTypeChange('지도'),
-      isActive: location.pathname === '/' && location.search.includes('view=map'),
+      isActive:
+        location.pathname === '/' && location.search.includes('view=map'),
       showAlways: true,
     },
     {
@@ -51,7 +52,8 @@ const ResponsiveNavigation = ({
       label: '목록',
       icon: faList,
       onClick: () => handleViewTypeChange('목록'),
-      isActive: location.pathname === '/' && location.search.includes('view=list'),
+      isActive:
+        location.pathname === '/' && location.search.includes('view=list'),
       showAlways: true,
     },
     {
@@ -83,7 +85,7 @@ const ResponsiveNavigation = ({
 
   // 표시할 아이템 필터링
   const getVisibleItems = () => {
-    return navigationItems.filter(item => {
+    return navigationItems.filter((item) => {
       if (item.requiresAuth && !isLoggedIn) return false;
       return item.showAlways || deviceInfo.isMobile;
     });
@@ -93,8 +95,12 @@ const ResponsiveNavigation = ({
 
   // 모바일 네비게이션 렌더링
   const renderMobileNavigation = () => (
-    <nav className="nav-responsive mobile-navigation" role="navigation" aria-label="주요 내비게이션">
-      <div className="nav-items">
+    <nav
+      className='nav-responsive mobile-navigation'
+      role='navigation'
+      aria-label='주요 내비게이션'
+    >
+      <div className='nav-items'>
         {visibleItems.map((item) => (
           <div
             key={item.id}
@@ -103,21 +109,21 @@ const ResponsiveNavigation = ({
             {item.link ? (
               <Link
                 to={item.link}
-                className="nav-link touch-target"
+                className='nav-link touch-target'
                 aria-label={item.label}
               >
-                <FontAwesomeIcon icon={item.icon} className="nav-icon" />
-                <span className="nav-label">{item.label}</span>
+                <FontAwesomeIcon icon={item.icon} className='nav-icon' />
+                <span className='nav-label'>{item.label}</span>
               </Link>
             ) : (
               <button
                 onClick={item.onClick}
-                className="nav-button touch-target"
+                className='nav-button touch-target'
                 aria-label={item.label}
-                type="button"
+                type='button'
               >
-                <FontAwesomeIcon icon={item.icon} className="nav-icon" />
-                <span className="nav-label">{item.label}</span>
+                <FontAwesomeIcon icon={item.icon} className='nav-icon' />
+                <span className='nav-label'>{item.label}</span>
               </button>
             )}
           </div>
@@ -128,37 +134,37 @@ const ResponsiveNavigation = ({
 
   // 데스크톱 네비게이션 렌더링
   const renderDesktopNavigation = () => (
-    <nav className="desktop-navigation" role="navigation" aria-label="주요 내비게이션">
-      <div className="nav-brand">
-        <Link to="/" className="brand-link">
+    <nav
+      className='desktop-navigation'
+      role='navigation'
+      aria-label='주요 내비게이션'
+    >
+      <div className='nav-brand'>
+        <Link to='/' className='brand-link'>
           <h1>제주 가이드</h1>
         </Link>
       </div>
-      
-      <div className="nav-items">
+
+      <div className='nav-items'>
         {visibleItems.map((item) => (
           <div
             key={item.id}
             className={`nav-item ${item.isActive ? 'active' : ''}`}
           >
             {item.link ? (
-              <Link
-                to={item.link}
-                className="nav-link"
-                aria-label={item.label}
-              >
-                <FontAwesomeIcon icon={item.icon} className="nav-icon" />
-                <span className="nav-label">{item.label}</span>
+              <Link to={item.link} className='nav-link' aria-label={item.label}>
+                <FontAwesomeIcon icon={item.icon} className='nav-icon' />
+                <span className='nav-label'>{item.label}</span>
               </Link>
             ) : (
               <button
                 onClick={item.onClick}
-                className="nav-button"
+                className='nav-button'
                 aria-label={item.label}
-                type="button"
+                type='button'
               >
-                <FontAwesomeIcon icon={item.icon} className="nav-icon" />
-                <span className="nav-label">{item.label}</span>
+                <FontAwesomeIcon icon={item.icon} className='nav-icon' />
+                <span className='nav-label'>{item.label}</span>
               </button>
             )}
           </div>
@@ -169,42 +175,54 @@ const ResponsiveNavigation = ({
 
   // 태블릿 네비게이션 렌더링
   const renderTabletNavigation = () => (
-    <nav className="tablet-navigation" role="navigation" aria-label="주요 내비게이션">
-      <div className="nav-container">
-        <div className="nav-brand">
-          <Link to="/" className="brand-link">
+    <nav
+      className='tablet-navigation'
+      role='navigation'
+      aria-label='주요 내비게이션'
+    >
+      <div className='nav-container'>
+        <div className='nav-brand'>
+          <Link to='/' className='brand-link'>
             제주 가이드
           </Link>
         </div>
-        
-        <div className="nav-items">
-          {visibleItems.slice(0, 6).map((item) => ( // 태블릿에서는 최대 6개 아이템
-            <div
-              key={item.id}
-              className={`nav-item ${item.isActive ? 'active' : ''}`}
-            >
-              {item.link ? (
-                <Link
-                  to={item.link}
-                  className="nav-link"
-                  aria-label={item.label}
-                >
-                  <FontAwesomeIcon icon={item.icon} className="nav-icon" />
-                  {!deviceInfo.isMobile && <span className="nav-label">{item.label}</span>}
-                </Link>
-              ) : (
-                <button
-                  onClick={item.onClick}
-                  className="nav-button"
-                  aria-label={item.label}
-                  type="button"
-                >
-                  <FontAwesomeIcon icon={item.icon} className="nav-icon" />
-                  {!deviceInfo.isMobile && <span className="nav-label">{item.label}</span>}
-                </button>
-              )}
-            </div>
-          ))}
+
+        <div className='nav-items'>
+          {visibleItems.slice(0, 6).map(
+            (
+              item, // 태블릿에서는 최대 6개 아이템
+            ) => (
+              <div
+                key={item.id}
+                className={`nav-item ${item.isActive ? 'active' : ''}`}
+              >
+                {item.link ? (
+                  <Link
+                    to={item.link}
+                    className='nav-link'
+                    aria-label={item.label}
+                  >
+                    <FontAwesomeIcon icon={item.icon} className='nav-icon' />
+                    {!deviceInfo.isMobile && (
+                      <span className='nav-label'>{item.label}</span>
+                    )}
+                  </Link>
+                ) : (
+                  <button
+                    onClick={item.onClick}
+                    className='nav-button'
+                    aria-label={item.label}
+                    type='button'
+                  >
+                    <FontAwesomeIcon icon={item.icon} className='nav-icon' />
+                    {!deviceInfo.isMobile && (
+                      <span className='nav-label'>{item.label}</span>
+                    )}
+                  </button>
+                )}
+              </div>
+            ),
+          )}
         </div>
       </div>
     </nav>
@@ -214,11 +232,11 @@ const ResponsiveNavigation = ({
   if (deviceInfo.isMobile) {
     return renderMobileNavigation();
   }
-  
+
   if (deviceInfo.isTablet) {
     return renderTabletNavigation();
   }
-  
+
   return renderDesktopNavigation();
 };
 

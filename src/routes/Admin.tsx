@@ -22,7 +22,7 @@ import {
   faEye,
   faEyeSlash,
   faLock,
-  faSave
+  faSave,
 } from '@fortawesome/free-solid-svg-icons';
 import { authService, dbService } from '../fBase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -38,12 +38,14 @@ const Admin = ({ userObj }: AdminProps) => {
   const [stats, setStats] = useState({
     totalPlaces: 0,
     recentPlaces: 0,
-    placesThisMonth: 0
+    placesThisMonth: 0,
   });
   const [recentPlaces, setRecentPlaces] = useState<PlaceInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [vectorLoading, setVectorLoading] = useState(false);
-  const [vectorStatus, setVectorStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
+  const [vectorStatus, setVectorStatus] = useState<
+    'idle' | 'processing' | 'success' | 'error'
+  >('idle');
   const [vectorMessage, setVectorMessage] = useState('');
   const [adminApiKey, setAdminApiKey] = useState('');
   const [showApiKeyInput, setShowApiKeyInput] = useState(false);
@@ -73,20 +75,18 @@ const Admin = ({ userObj }: AdminProps) => {
 
       try {
         setLoading(true);
-        
+
         // 사용자가 등록한 모든 장소 조회
-        const placesQuery = query(
-          collection(dbService, 'places')
-        );
-        
+        const placesQuery = query(collection(dbService, 'places'));
+
         const querySnapshot = await getDocs(placesQuery);
         const allPlaces: PlaceInfo[] = [];
-        
+
         querySnapshot.forEach((doc) => {
           const data = doc.data();
           allPlaces.push({
             id: doc.id,
-            ...data
+            ...data,
           } as PlaceInfo);
         });
 
@@ -97,12 +97,15 @@ const Admin = ({ userObj }: AdminProps) => {
 
         // 장소 데이터에서 생성 시간을 추출하여 통계 계산
         const getCreatedAtDate = (place: PlaceInfo): Date | null => {
-          const placeData = place as PlaceInfo & { 
-            createdAt?: number | { toDate?: () => Date } 
+          const placeData = place as PlaceInfo & {
+            createdAt?: number | { toDate?: () => Date };
           };
-          
+
           if (placeData.createdAt) {
-            if (typeof placeData.createdAt === 'object' && placeData.createdAt.toDate) {
+            if (
+              typeof placeData.createdAt === 'object' &&
+              placeData.createdAt.toDate
+            ) {
               // Firestore Timestamp 객체
               return placeData.createdAt.toDate();
             } else if (typeof placeData.createdAt === 'number') {
@@ -110,47 +113,46 @@ const Admin = ({ userObj }: AdminProps) => {
               return new Date(placeData.createdAt);
             }
           }
-          
+
           return null;
         };
 
-        const placesThisMonth = allPlaces.filter(place => {
+        const placesThisMonth = allPlaces.filter((place) => {
           const createdAt = getCreatedAtDate(place);
-          
+
           // createdAt이 없으면 이번 달로 간주 (새로 등록된 것으로 가정)
           if (!createdAt) {
             return true;
           }
-          
+
           return createdAt >= thisMonthStart;
         }).length;
 
-        const recentPlaces = allPlaces.filter(place => {
+        const recentPlaces = allPlaces.filter((place) => {
           const createdAt = getCreatedAtDate(place);
-          
+
           // createdAt이 없으면 최근으로 간주
           if (!createdAt) {
             return true;
           }
-          
+
           return createdAt >= lastWeekStart;
         }).length;
 
         setStats({
           totalPlaces: allPlaces.length,
           recentPlaces,
-          placesThisMonth
+          placesThisMonth,
         });
 
         // 최근 5개 장소
         setRecentPlaces(allPlaces.slice(0, 5));
-
       } catch (error) {
         // 오류 처리
         setStats({
           totalPlaces: 0,
           recentPlaces: 0,
-          placesThisMonth: 0
+          placesThisMonth: 0,
         });
         setRecentPlaces([]);
       } finally {
@@ -217,12 +219,12 @@ const Admin = ({ userObj }: AdminProps) => {
       const placesQuery = query(collection(dbService, 'places'));
       const querySnapshot = await getDocs(placesQuery);
       const places: PlaceInfo[] = [];
-      
+
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         places.push({
           id: doc.id,
-          ...data
+          ...data,
         } as PlaceInfo);
       });
 
@@ -232,7 +234,9 @@ const Admin = ({ userObj }: AdminProps) => {
         return;
       }
 
-      setVectorMessage(`${places.length}개 장소의 임베딩을 생성하고 있습니다...`);
+      setVectorMessage(
+        `${places.length}개 장소의 임베딩을 생성하고 있습니다...`,
+      );
 
       // 2. API로 장소 데이터 전송하여 임베딩 생성
       const response = await fetch('/api/generate-embeddings', {
@@ -242,7 +246,7 @@ const Admin = ({ userObj }: AdminProps) => {
         },
         body: JSON.stringify({
           places: places,
-          apiKey: adminApiKey
+          apiKey: adminApiKey,
         }),
       });
 
@@ -250,7 +254,9 @@ const Admin = ({ userObj }: AdminProps) => {
 
       if (response.ok) {
         setVectorStatus('success');
-        setVectorMessage(`성공적으로 ${result.processedCount}개 장소의 임베딩을 생성했습니다.`);
+        setVectorMessage(
+          `성공적으로 ${result.processedCount}개 장소의 임베딩을 생성했습니다.`,
+        );
       } else {
         setVectorStatus('error');
         setVectorMessage(result.error || '임베딩 생성에 실패했습니다.');
@@ -286,7 +292,7 @@ const Admin = ({ userObj }: AdminProps) => {
             <FontAwesomeIcon icon={faArrowLeft} />
             <span>뒤로</span>
           </button>
-          
+
           <div className='admin__title-section'>
             <FontAwesomeIcon icon={faCog} className='title-icon' />
             <h1 className='admin__title'>관리자 대시보드</h1>
@@ -295,9 +301,11 @@ const Admin = ({ userObj }: AdminProps) => {
           <div className='admin__user-section'>
             <button className='user-profile-btn' onClick={toggleProfile}>
               <FontAwesomeIcon icon={faUser} />
-              <span className='user-name'>{userObj.displayName || '사용자'}</span>
+              <span className='user-name'>
+                {userObj.displayName || '사용자'}
+              </span>
             </button>
-            
+
             {showProfile && (
               <div className='profile__dropdown'>
                 <div className='profile__info'>
@@ -309,17 +317,22 @@ const Admin = ({ userObj }: AdminProps) => {
                     )}
                   </div>
                   <div className='profile__details'>
-                    <p className='profile__name'>{userObj.displayName || '익명 사용자'}</p>
+                    <p className='profile__name'>
+                      {userObj.displayName || '익명 사용자'}
+                    </p>
                     <p className='profile__email'>{userObj.uid}</p>
                   </div>
                 </div>
-                
+
                 <div className='profile__actions'>
                   <button className='profile__action' onClick={onHomeClick}>
                     <FontAwesomeIcon icon={faHome} />
                     <span>홈으로</span>
                   </button>
-                  <button className='profile__action profile__action--logout' onClick={onLogOutClick}>
+                  <button
+                    className='profile__action profile__action--logout'
+                    onClick={onLogOutClick}
+                  >
                     <FontAwesomeIcon icon={faSignOutAlt} />
                     <span>로그아웃</span>
                   </button>
@@ -350,7 +363,7 @@ const Admin = ({ userObj }: AdminProps) => {
               <p>총 등록 장소</p>
             </div>
           </div>
-          
+
           <div className='stats__card'>
             <div className='stats__icon'>
               <FontAwesomeIcon icon={faCalendarAlt} />
@@ -360,7 +373,7 @@ const Admin = ({ userObj }: AdminProps) => {
               <p>이번 달 등록</p>
             </div>
           </div>
-          
+
           <div className='stats__card'>
             <div className='stats__icon'>
               <FontAwesomeIcon icon={faChartBar} />
@@ -378,7 +391,7 @@ const Admin = ({ userObj }: AdminProps) => {
             <FontAwesomeIcon icon={faRobot} />
             Vector Search 설정
           </h3>
-          
+
           <div className='api-key__container'>
             {showApiKeyInput ? (
               <div className='api-key__input-section'>
@@ -386,30 +399,37 @@ const Admin = ({ userObj }: AdminProps) => {
                   <FontAwesomeIcon icon={faKey} className='api-key__icon' />
                   <h4 className='api-key__title'>OpenAI API 키 설정</h4>
                 </div>
-                
+
                 <div className='api-key__input-wrapper'>
                   <div className='api-key__input-container'>
-                    <FontAwesomeIcon icon={faLock} className='api-key__input-icon' />
+                    <FontAwesomeIcon
+                      icon={faLock}
+                      className='api-key__input-icon'
+                    />
                     <input
-                      type={showApiKeyPassword ? "text" : "password"}
+                      type={showApiKeyPassword ? 'text' : 'password'}
                       value={adminApiKey}
                       onChange={(e) => setAdminApiKey(e.target.value)}
-                      placeholder="sk-proj-xxxxx... (OpenAI API 키를 입력하세요)"
+                      placeholder='sk-proj-xxxxx... (OpenAI API 키를 입력하세요)'
                       className='api-key__input'
-                      onKeyPress={(e) => e.key === 'Enter' && handleApiKeySubmit()}
+                      onKeyPress={(e) =>
+                        e.key === 'Enter' && handleApiKeySubmit()
+                      }
                     />
-                    <button 
-                      type="button"
+                    <button
+                      type='button'
                       onClick={() => setShowApiKeyPassword(!showApiKeyPassword)}
                       className='api-key__visibility-btn'
-                      title={showApiKeyPassword ? "키 숨기기" : "키 보기"}
+                      title={showApiKeyPassword ? '키 숨기기' : '키 보기'}
                     >
-                      <FontAwesomeIcon icon={showApiKeyPassword ? faEyeSlash : faEye} />
+                      <FontAwesomeIcon
+                        icon={showApiKeyPassword ? faEyeSlash : faEye}
+                      />
                     </button>
                   </div>
-                  
+
                   <div className='api-key__actions'>
-                    <button 
+                    <button
                       onClick={handleApiKeySubmit}
                       className='api-key__submit-btn'
                       disabled={!adminApiKey.trim()}
@@ -417,10 +437,12 @@ const Admin = ({ userObj }: AdminProps) => {
                       <FontAwesomeIcon icon={faSave} />
                       저장
                     </button>
-                    <button 
+                    <button
                       onClick={() => {
                         setShowApiKeyInput(false);
-                        setAdminApiKey(localStorage.getItem('admin_openai_api_key') || '');
+                        setAdminApiKey(
+                          localStorage.getItem('admin_openai_api_key') || '',
+                        );
                       }}
                       className='api-key__cancel-btn'
                     >
@@ -428,15 +450,27 @@ const Admin = ({ userObj }: AdminProps) => {
                     </button>
                   </div>
                 </div>
-                
+
                 <div className='api-key__help'>
                   <div className='api-key__help-item'>
-                    <FontAwesomeIcon icon={faExclamationTriangle} className='help-icon' />
-                    <span>Vector Search 기능을 사용하려면 OpenAI API 키가 필요합니다.</span>
+                    <FontAwesomeIcon
+                      icon={faExclamationTriangle}
+                      className='help-icon'
+                    />
+                    <span>
+                      Vector Search 기능을 사용하려면 OpenAI API 키가
+                      필요합니다.
+                    </span>
                   </div>
                   <div className='api-key__help-item'>
-                    <FontAwesomeIcon icon={faCheckCircle} className='help-icon' />
-                    <span>키는 브라우저에 안전하게 저장되며 서버로 전송되지 않습니다.</span>
+                    <FontAwesomeIcon
+                      icon={faCheckCircle}
+                      className='help-icon'
+                    />
+                    <span>
+                      키는 브라우저에 안전하게 저장되며 서버로 전송되지
+                      않습니다.
+                    </span>
                   </div>
                 </div>
               </div>
@@ -450,7 +484,7 @@ const Admin = ({ userObj }: AdminProps) => {
                     <h4>OpenAI API 키가 설정되었습니다</h4>
                     <p>Vector Search 기능을 사용할 수 있습니다</p>
                   </div>
-                  <button 
+                  <button
                     onClick={() => setShowApiKeyInput(true)}
                     className='api-key__change-btn'
                   >
@@ -469,9 +503,12 @@ const Admin = ({ userObj }: AdminProps) => {
             <FontAwesomeIcon icon={faCog} />
             빠른 작업
           </h3>
-          
+
           <div className='actions__grid'>
-            <button className='action__card action__card--primary' onClick={navigateToPost}>
+            <button
+              className='action__card action__card--primary'
+              onClick={navigateToPost}
+            >
               <div className='action__icon'>
                 <FontAwesomeIcon icon={faPlus} />
               </div>
@@ -481,7 +518,10 @@ const Admin = ({ userObj }: AdminProps) => {
               </div>
             </button>
 
-            <button className='action__card action__card--secondary' onClick={navigateToEdit}>
+            <button
+              className='action__card action__card--secondary'
+              onClick={navigateToEdit}
+            >
               <div className='action__icon'>
                 <FontAwesomeIcon icon={faEdit} />
               </div>
@@ -491,14 +531,14 @@ const Admin = ({ userObj }: AdminProps) => {
               </div>
             </button>
 
-            <button 
+            <button
               className='action__card action__card--vector'
               onClick={generateEmbeddings}
               disabled={vectorLoading || !adminApiKey.trim()}
             >
               <div className='action__icon'>
-                <FontAwesomeIcon 
-                  icon={vectorLoading ? faSpinner : faRobot} 
+                <FontAwesomeIcon
+                  icon={vectorLoading ? faSpinner : faRobot}
                   spin={vectorLoading}
                 />
               </div>
@@ -506,12 +546,16 @@ const Admin = ({ userObj }: AdminProps) => {
                 <h4>Vector Search 관리</h4>
                 <p>AI 검색을 위한 임베딩을 생성합니다</p>
                 {vectorMessage && (
-                  <div className={`vector-status vector-status--${vectorStatus}`}>
-                    <FontAwesomeIcon 
+                  <div
+                    className={`vector-status vector-status--${vectorStatus}`}
+                  >
+                    <FontAwesomeIcon
                       icon={
-                        vectorStatus === 'success' ? faCheckCircle :
-                        vectorStatus === 'error' ? faExclamationTriangle :
-                        faSpinner
+                        vectorStatus === 'success'
+                          ? faCheckCircle
+                          : vectorStatus === 'error'
+                            ? faExclamationTriangle
+                            : faSpinner
                       }
                       spin={vectorStatus === 'processing'}
                     />
@@ -530,7 +574,7 @@ const Admin = ({ userObj }: AdminProps) => {
               <FontAwesomeIcon icon={faMapMarkerAlt} />
               최근 등록한 장소
             </h3>
-            
+
             <div className='recent__list'>
               {recentPlaces.map((place) => (
                 <div key={place.id} className='recent__item'>
@@ -538,21 +582,21 @@ const Admin = ({ userObj }: AdminProps) => {
                     <h4 className='recent__name'>{place.name}</h4>
                     <span className='recent__type'>{place.type}</span>
                     <p className='recent__description'>
-                      {place.description.length > 100 
-                        ? `${place.description.slice(0, 100)}...` 
-                        : place.description
-                      }
+                      {place.description.length > 100
+                        ? `${place.description.slice(0, 100)}...`
+                        : place.description}
                     </p>
                   </div>
-                  
+
                   <div className='recent__meta'>
-                    {place.attachmentUrlArray && place.attachmentUrlArray.length > 0 && (
-                      <div className='recent__badge'>
-                        <FontAwesomeIcon icon={faImage} />
-                        <span>{place.attachmentUrlArray.length}</span>
-                      </div>
-                    )}
-                    
+                    {place.attachmentUrlArray &&
+                      place.attachmentUrlArray.length > 0 && (
+                        <div className='recent__badge'>
+                          <FontAwesomeIcon icon={faImage} />
+                          <span>{place.attachmentUrlArray.length}</span>
+                        </div>
+                      )}
+
                     {place.url && (
                       <div className='recent__badge'>
                         <FontAwesomeIcon icon={faLink} />
@@ -568,8 +612,8 @@ const Admin = ({ userObj }: AdminProps) => {
 
       {/* 배경 클릭으로 프로필 드롭다운 닫기 */}
       {showProfile && (
-        <div 
-          className='profile__backdrop' 
+        <div
+          className='profile__backdrop'
           onClick={() => setShowProfile(false)}
         />
       )}

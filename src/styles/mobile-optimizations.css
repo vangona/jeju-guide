@@ -1,0 +1,188 @@
+/* Mobile Optimizations for Jeju Guide */
+
+/* Base mobile styles */
+@media (max-width: 768px) {
+  /* Remove horizontal scrolling */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Adjust main container padding for navigation */
+  .home__container {
+    padding-bottom: 80px; /* Account for bottom navigation */
+  }
+
+  /* Map container optimizations */
+  .map__container {
+    height: calc(100vh - 65px); /* Full height minus navigation */
+    align-items: flex-start;
+  }
+
+  /* List view optimizations */
+  .list__container {
+    padding: 10px;
+    padding-bottom: 80px;
+  }
+
+  /* Modal full screen on mobile */
+  .modal__container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  /* AI Chat full screen on mobile */
+  .ai-chat-modal {
+    padding: 0 !important;
+  }
+
+  /* FAB positioning adjustment */
+  .ai-chat-fab {
+    bottom: 85px !important; /* Above navigation */
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 375px) {
+  /* Smaller text and spacing */
+  body {
+    font-size: 14px;
+  }
+
+  .home__title {
+    font-size: 1.5rem;
+    margin: 2rem 0 1rem 0;
+  }
+}
+
+/* Landscape orientation handling */
+@media (max-width: 768px) and (orientation: landscape) {
+  /* Reduce vertical spacing */
+  .nav__container {
+    height: 55px;
+  }
+
+  .ai-chat-fab {
+    bottom: 65px !important;
+  }
+
+  /* Adjust modal height */
+  .modal__container {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
+
+/* iOS specific fixes */
+@supports (-webkit-touch-callout: none) {
+  /* Prevent iOS bounce effect */
+  .home__container {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .vertical {
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Fix for iOS keyboard */
+  input,
+  textarea {
+    font-size: 16px; /* Prevents zoom on focus */
+  }
+}
+
+/* Android specific fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  /* Improve tap targets */
+  button,
+  a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Performance optimizations */
+@media (max-width: 768px) {
+  /* Reduce animations on mobile */
+  * {
+    animation-duration: 0.2s !important;
+  }
+
+  /* Optimize shadows */
+  .placeCard,
+  .modal__container,
+  .ai-chat-fab {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  /* Disable hover effects on touch devices */
+  @media (hover: none) {
+    .placeCard:hover,
+    .nav__component:hover,
+    .ai-chat-fab:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
+/* Accessibility improvements for mobile */
+@media (max-width: 768px) {
+  /* Larger touch targets */
+  .nav__component {
+    min-width: 60px;
+    min-height: 50px;
+  }
+
+  /* Better contrast */
+  .nav__label {
+    font-weight: 500;
+  }
+
+  /* Focus indicators */
+  button:focus,
+  a:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+  }
+}
+
+/* Loading states for mobile */
+@media (max-width: 768px) {
+  .loading-spinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Text optimization for readability */
+@media (max-width: 768px) {
+  p,
+  span,
+  div {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Prevent text from being too small */
+  * {
+    min-font-size: 12px;
+  }
+}

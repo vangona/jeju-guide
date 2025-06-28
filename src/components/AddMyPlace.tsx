@@ -11,7 +11,13 @@ interface AddMyPlaceProps {
   onRemoveConfirm?: (place: PlaceInfo) => Promise<boolean>;
 }
 
-const AddMyPlace = ({ place, size = 'medium', showLabel = false, onUpdate, onRemoveConfirm }: AddMyPlaceProps) => {
+const AddMyPlace = ({
+  place,
+  size = 'medium',
+  showLabel = false,
+  onUpdate,
+  onRemoveConfirm,
+}: AddMyPlaceProps) => {
   const [isAdded, setIsAdded] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -21,7 +27,7 @@ const AddMyPlace = ({ place, size = 'medium', showLabel = false, onUpdate, onRem
     if (placeLocalArray) {
       const parsedPlaceArray = JSON.parse(placeLocalArray);
       const isPlaceAdded = parsedPlaceArray.some(
-        (localplace: PlaceInfo) => localplace.name === place.name
+        (localplace: PlaceInfo) => localplace.name === place.name,
       );
       setIsAdded(isPlaceAdded);
     }
@@ -34,31 +40,40 @@ const AddMyPlace = ({ place, size = 'medium', showLabel = false, onUpdate, onRem
         const shouldRemove = await onRemoveConfirm(place);
         if (!shouldRemove) return;
       }
-      
+
       const placeLocalArray = localStorage.getItem('micheltain_myplace');
       if (placeLocalArray) {
         const parsedPlaceArray = JSON.parse(placeLocalArray);
         const filteredArray = parsedPlaceArray.filter(
-          (localplace: PlaceInfo) => localplace.name !== place.name
+          (localplace: PlaceInfo) => localplace.name !== place.name,
         );
-        localStorage.setItem('micheltain_myplace', JSON.stringify(filteredArray));
+        localStorage.setItem(
+          'micheltain_myplace',
+          JSON.stringify(filteredArray),
+        );
         setIsAdded(false);
         onUpdate?.();
       }
     } else {
       // 새로 추가
       const placeLocalArray = localStorage.getItem('micheltain_myplace');
-      const parsedPlaceArray = placeLocalArray ? JSON.parse(placeLocalArray) : [];
-      
-      if (!parsedPlaceArray.some((localplace: PlaceInfo) => localplace.name === place.name)) {
+      const parsedPlaceArray = placeLocalArray
+        ? JSON.parse(placeLocalArray)
+        : [];
+
+      if (
+        !parsedPlaceArray.some(
+          (localplace: PlaceInfo) => localplace.name === place.name,
+        )
+      ) {
         localStorage.setItem(
           'micheltain_myplace',
-          JSON.stringify([...parsedPlaceArray, place])
+          JSON.stringify([...parsedPlaceArray, place]),
         );
         setIsAdded(true);
         setIsAnimating(true);
         onUpdate?.();
-        
+
         // 애니메이션 효과
         setTimeout(() => setIsAnimating(false), 600);
       }
@@ -92,7 +107,7 @@ const AddMyPlace = ({ place, size = 'medium', showLabel = false, onUpdate, onRem
       title={getLabel()}
     >
       <FontAwesomeIcon icon={getIcon()} />
-      {showLabel && <span className="add-my-place-label">{getLabel()}</span>}
+      {showLabel && <span className='add-my-place-label'>{getLabel()}</span>}
     </button>
   );
 };

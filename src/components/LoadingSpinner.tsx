@@ -6,10 +6,10 @@ interface LoadingSpinnerProps {
   fullScreen?: boolean;
 }
 
-const LoadingSpinner = ({ 
-  size = 'medium', 
-  message = '로딩 중...', 
-  fullScreen = false 
+const LoadingSpinner = ({
+  size = 'medium',
+  message = '로딩 중...',
+  fullScreen = false,
 }: LoadingSpinnerProps) => {
   const getSpinnerClass = () => {
     let baseClass = 'loading-spinner';
@@ -20,15 +20,13 @@ const LoadingSpinner = ({
 
   return (
     <div className={getSpinnerClass()}>
-      <div className="loading-spinner__container">
-        <div className="loading-spinner__circle">
-          <div className="loading-spinner__wave"></div>
-          <div className="loading-spinner__wave"></div>
-          <div className="loading-spinner__wave"></div>
+      <div className='loading-spinner__container'>
+        <div className='loading-spinner__circle'>
+          <div className='loading-spinner__wave'></div>
+          <div className='loading-spinner__wave'></div>
+          <div className='loading-spinner__wave'></div>
         </div>
-        {message && (
-          <p className="loading-spinner__message">{message}</p>
-        )}
+        {message && <p className='loading-spinner__message'>{message}</p>}
       </div>
     </div>
   );

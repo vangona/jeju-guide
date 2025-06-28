@@ -139,12 +139,7 @@
 .skeleton-shimmer {
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    #f0f0f0 0%,
-    #e0e0e0 50%,
-    #f0f0f0 100%
-  );
+  background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
   position: relative;
@@ -460,63 +455,63 @@
   .modal-overlay {
     padding: 16px;
   }
-  
+
   .modal-content {
     max-width: 100%;
     max-height: 95vh;
     border-radius: 16px;
   }
-  
+
   .modal-header {
     padding: 16px 20px 12px;
   }
-  
+
   /* Mobile Swiper adjustments */
   .modal-swiper {
     height: 250px;
   }
-  
+
   .modal-swiper .swiper-button-next,
   .modal-swiper .swiper-button-prev {
     width: 35px;
     height: 35px;
     margin-top: -17.5px;
   }
-  
+
   .modal-swiper .swiper-button-next:after,
   .modal-swiper .swiper-button-prev:after {
     font-size: 14px;
   }
-  
+
   .image-count {
     top: 8px;
     right: 8px;
     padding: 4px 8px;
     font-size: 0.75rem;
   }
-  
+
   .modal-title {
     font-size: 1.2rem;
   }
-  
+
   .modal-body {
     padding: 0 20px 16px;
     max-height: calc(95vh - 180px);
   }
-  
+
   .modal-image {
     max-height: 250px;
   }
-  
+
   .modal-footer {
     padding: 12px 20px 20px;
   }
-  
+
   .modal-actions {
     flex-direction: column;
     gap: 8px;
   }
-  
+
   .modal-btn {
     width: 100%;
     justify-content: center;
@@ -528,27 +523,27 @@
   .modal-overlay {
     padding: 12px;
   }
-  
+
   .modal-content {
     border-radius: 12px;
   }
-  
+
   .modal-header {
     padding: 12px 16px 8px;
   }
-  
+
   .modal-title {
     font-size: 1.1rem;
   }
-  
+
   .modal-body {
     padding: 0 16px 12px;
   }
-  
+
   .modal-footer {
     padding: 8px 16px 16px;
   }
-  
+
   .modal-image {
     max-height: 200px;
   }

@@ -15,7 +15,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { dbService } from '../fBase';
 import { collection, onSnapshot } from 'firebase/firestore';
-import { useResponsive, useContainerQuery, useNetworkOptimization } from '../hooks/useResponsive';
+import {
+  useResponsive,
+  useContainerQuery,
+  useNetworkOptimization,
+} from '../hooks/useResponsive';
 import Saychat from './Saychat';
 import type { PlaceInfo } from '../types';
 
@@ -27,20 +31,25 @@ interface ResponsiveMapProps {
   chatState: boolean;
 }
 
-const ResponsiveMap = ({ places, handleChangeDetail, chatState }: ResponsiveMapProps) => {
+const ResponsiveMap = ({
+  places,
+  handleChangeDetail,
+  chatState,
+}: ResponsiveMapProps) => {
   const [type, setType] = useState('전체');
   const [mouseState, setMouseState] = useState(false);
   const [currentPlace, setCurrentPlace] = useState({});
   const [geoLat, setGeoLat] = useState('');
   const [geoLon, setGeoLon] = useState('');
-  
+
   // 반응형 처리
   const deviceInfo = useResponsive();
   const networkInfo = useNetworkOptimization();
   const container = useRef(null);
   const mapContainerRef = useRef(null);
-  const { containerWidth, isContainerMobile } = useContainerQuery(mapContainerRef);
-  
+  const { containerWidth, isContainerMobile } =
+    useContainerQuery(mapContainerRef);
+
   let map;
   let preOverlay = '';
   let clusterer;
@@ -119,30 +128,32 @@ const ResponsiveMap = ({ places, handleChangeDetail, chatState }: ResponsiveMapP
   const showMap = () => {
     const mapOptions = getMapOptions();
     map = new kakao.maps.Map(container.current, mapOptions);
-    
+
     // 클러스터러 설정 - 모바일에서는 더 간소화
     clusterer = new kakao.maps.MarkerClusterer({
       map: map,
       averageCenter: true,
       minLevel: deviceInfo.isMobile ? 2 : 1,
       disableClickZoom: deviceInfo.hasTouch, // 터치 디바이스에서는 클릭 줌 비활성화
-      styles: [{
-        width: deviceInfo.isMobile ? '40px' : '53px',
-        height: deviceInfo.isMobile ? '40px' : '52px',
-        background: 'rgba(51, 204, 255, .8)',
-        borderRadius: '25px',
-        color: '#000',
-        textAlign: 'center',
-        fontWeight: 'bold',
-        lineHeight: deviceInfo.isMobile ? '40px' : '53px',
-      }],
+      styles: [
+        {
+          width: deviceInfo.isMobile ? '40px' : '53px',
+          height: deviceInfo.isMobile ? '40px' : '52px',
+          background: 'rgba(51, 204, 255, .8)',
+          borderRadius: '25px',
+          color: '#000',
+          textAlign: 'center',
+          fontWeight: 'bold',
+          lineHeight: deviceInfo.isMobile ? '40px' : '53px',
+        },
+      ],
     });
 
     const markers = [];
-    
+
     places
-      .filter(place => type === '전체' || place.type === type)
-      .forEach(place => {
+      .filter((place) => type === '전체' || place.type === type)
+      .forEach((place) => {
         const markerPosition = new kakao.maps.LatLng(place.lat, place.lon);
         const marker = new kakao.maps.Marker({
           position: markerPosition,
@@ -163,17 +174,21 @@ const ResponsiveMap = ({ places, handleChangeDetail, chatState }: ResponsiveMapP
         // 터치 디바이스와 데스크톱에서 다른 인터랙션 제공
         if (deviceInfo.hasTouch || deviceInfo.isMobile) {
           // 터치 디바이스: 탭으로 정보창 표시/숨김
-          kakao.maps.event.addListener(marker, 'click', clickMobileHandler(map, infoWindow, place));
+          kakao.maps.event.addListener(
+            marker,
+            'click',
+            clickMobileHandler(map, infoWindow, place),
+          );
         } else {
           // 데스크톱: 마우스 오버/아웃으로 정보창 제어
-          kakao.maps.event.addListener(marker, 'mouseover', function() {
+          kakao.maps.event.addListener(marker, 'mouseover', function () {
             infoWindow.open(map, marker);
           });
-          
-          kakao.maps.event.addListener(marker, 'mouseout', function() {
+
+          kakao.maps.event.addListener(marker, 'mouseout', function () {
             infoWindow.close();
           });
-          
+
           kakao.maps.event.addListener(marker, 'click', clickHandler(place));
         }
 
@@ -195,13 +210,13 @@ const ResponsiveMap = ({ places, handleChangeDetail, chatState }: ResponsiveMapP
         (position) => {
           setGeoLat(position.coords.latitude.toString());
           setGeoLon(position.coords.longitude.toString());
-          
+
           const moveLatLon = new kakao.maps.LatLng(
             position.coords.latitude,
-            position.coords.longitude
+            position.coords.longitude,
           );
           map.setCenter(moveLatLon);
-          
+
           // 모바일에서는 현재 위치로 이동 시 적절한 줌 레벨 설정
           if (deviceInfo.isMobile) {
             map.setLevel(6);
@@ -214,7 +229,7 @@ const ResponsiveMap = ({ places, handleChangeDetail, chatState }: ResponsiveMapP
           enableHighAccuracy: !networkInfo.isSlowConnection, // 느린 연결에서는 정확도보다 속도 우선
           timeout: networkInfo.isSlowConnection ? 10000 : 5000,
           maximumAge: 300000, // 5분 캐시
-        }
+        },
       );
     }
   };
@@ -228,15 +243,15 @@ const ResponsiveMap = ({ places, handleChangeDetail, chatState }: ResponsiveMapP
   const mapSize = getMapSize();
 
   return (
-    <div className="map__container" ref={mapContainerRef}>
-      <div className="map-container-responsive">
+    <div className='map__container' ref={mapContainerRef}>
+      <div className='map-container-responsive'>
         {/* 지도 타입 선택 - 모바일에서는 더 간소화 */}
-        <div className="map-radio__container">
+        <div className='map-radio__container'>
           {['전체', '관광지', '맛집', '카페', '숙소'].map((placeType) => (
-            <label key={placeType} className="place-type__map">
+            <label key={placeType} className='place-type__map'>
               <input
-                type="radio"
-                name="placeType"
+                type='radio'
+                name='placeType'
                 value={placeType}
                 checked={type === placeType}
                 onChange={(e) => setType(e.target.value)}
@@ -249,18 +264,18 @@ const ResponsiveMap = ({ places, handleChangeDetail, chatState }: ResponsiveMapP
         {/* 지도 컨테이너 */}
         <div
           ref={container}
-          className="map"
+          className='map'
           style={mapSize}
-          role="application"
-          aria-label="제주도 관광지 지도"
+          role='application'
+          aria-label='제주도 관광지 지도'
         />
 
         {/* 현재 위치 버튼 - 터치 최적화 */}
         <button
           className={`check-geolocation touch-target ${deviceInfo.hasTouch ? 'touch-optimized' : ''}`}
           onClick={handleCurrentLocation}
-          aria-label="현재 위치로 이동"
-          type="button"
+          aria-label='현재 위치로 이동'
+          type='button'
         >
           <FontAwesomeIcon icon={faLocationArrow} />
           {!deviceInfo.isMobile && ' 현재 위치'}
@@ -268,7 +283,7 @@ const ResponsiveMap = ({ places, handleChangeDetail, chatState }: ResponsiveMapP
 
         {/* 모바일에서 선택된 장소 정보 표시 */}
         {deviceInfo.isMobile && mouseState && (
-          <div className="marker__detail">
+          <div className='marker__detail'>
             <Link
               to={`/detail/${currentPlace.id}`}
               onClick={() => setMouseState(false)}
@@ -284,17 +299,19 @@ const ResponsiveMap = ({ places, handleChangeDetail, chatState }: ResponsiveMapP
         )}
 
         {/* 설명 텍스트 - 반응형 */}
-        <div className="map-explain__container">
-          <div className="explain-box">
-            <div className="map-explain">
-              {deviceInfo.isMobile 
+        <div className='map-explain__container'>
+          <div className='explain-box'>
+            <div className='map-explain'>
+              {deviceInfo.isMobile
                 ? '마커를 탭하여 정보를 확인하세요.'
-                : '마커에 마우스를 올려 정보를 확인하고, 클릭하면 상세 정보를 볼 수 있습니다.'
-              }
+                : '마커에 마우스를 올려 정보를 확인하고, 클릭하면 상세 정보를 볼 수 있습니다.'}
             </div>
             {!networkInfo.isSlowConnection && (
-              <div className="map-explain__tips">
-                💡 {deviceInfo.isMobile ? '핀치로 확대/축소' : '마우스 휠로 확대/축소'}
+              <div className='map-explain__tips'>
+                💡{' '}
+                {deviceInfo.isMobile
+                  ? '핀치로 확대/축소'
+                  : '마우스 휠로 확대/축소'}
               </div>
             )}
           </div>

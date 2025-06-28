@@ -17,7 +17,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, var(--seacolor, #9ebad0) 0%, rgba(158, 186, 208, 0.8) 50%, #667eea 100%);
+  background: linear-gradient(
+    135deg,
+    var(--seacolor, #9ebad0) 0%,
+    rgba(158, 186, 208, 0.8) 50%,
+    #667eea 100%
+  );
   z-index: -2;
 }
 
@@ -47,7 +52,8 @@
 }
 
 @keyframes wave {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0%);
   }
   50% {
@@ -213,9 +219,16 @@
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
 }
 
 /* Submit Button */
@@ -297,34 +310,34 @@
   .auth__page {
     padding: 16px;
   }
-  
+
   .auth__container {
     max-width: 100%;
   }
-  
+
   .auth__home-btn {
     position: static;
     margin-bottom: 20px;
     align-self: flex-start;
   }
-  
+
   .auth__card {
     padding: 1.5rem;
     border-radius: 16px;
   }
-  
+
   .auth__title {
     font-size: 1.75rem;
   }
-  
+
   .auth__input {
     padding: 14px 14px 14px 44px;
   }
-  
+
   .auth__input-icon {
     left: 14px;
   }
-  
+
   .auth__toggle-password {
     right: 14px;
   }
@@ -334,7 +347,7 @@
   .auth__card {
     padding: 1.25rem;
   }
-  
+
   .auth__title {
     font-size: 1.5rem;
   }
@@ -347,7 +360,7 @@
   .auth__error {
     animation: none;
   }
-  
+
   .auth__submit-btn,
   .auth__home-btn,
   .auth__toggle-password,

@@ -64,7 +64,7 @@
     padding: 6px 8px;
     border-radius: 8px;
   }
-  
+
   .nav__component:hover {
     background-color: rgba(158, 186, 208, 0.15);
   }
@@ -114,13 +114,45 @@
 @media (max-width: 680px) {
   .nav__container {
     height: 65px;
+    border-radius: 0;
+    background-color: rgba(255, 255, 255, 0.98);
   }
-  
+
   .nav__label {
     font-size: 0.7rem;
   }
-  
+
   .nav__component svg {
     font-size: 18px;
+  }
+
+  .nav__component {
+    padding: 6px 2px;
+  }
+
+  .nav__component--active::after {
+    width: 24px;
+    height: 2px;
+  }
+}
+
+/* 아이폰 X 이상 Safe Area 대응 */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .nav__container {
+    padding-bottom: env(safe-area-inset-bottom);
+    height: calc(65px + env(safe-area-inset-bottom));
+  }
+}
+
+/* 터치 최적화 */
+@media (hover: none) and (pointer: coarse) {
+  .nav__component {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .nav__component:active {
+    background-color: rgba(158, 186, 208, 0.2);
+    transform: scale(0.95);
   }
 }

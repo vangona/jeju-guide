@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faTimes, 
-  faExternalLinkAlt, 
+import {
+  faTimes,
+  faExternalLinkAlt,
   faInfoCircle,
   faMapMarkerAlt,
   faCopy,
-  faCheck
+  faCheck,
 } from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Zoom } from 'swiper/modules';
@@ -39,7 +39,9 @@ const Modal = ({ place, handleModalContentChange }: ModalProps) => {
 
   const copyAddress = async () => {
     try {
-      await navigator.clipboard.writeText(place.addressDetail || place.address || '');
+      await navigator.clipboard.writeText(
+        place.addressDetail || place.address || '',
+      );
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
@@ -56,7 +58,7 @@ const Modal = ({ place, handleModalContentChange }: ModalProps) => {
   };
 
   const handleImageLoad = (index: number) => {
-    setLoadedImages(prev => new Set(prev).add(index));
+    setLoadedImages((prev) => new Set(prev).add(index));
   };
 
   // Reset loaded images when place changes
@@ -73,7 +75,7 @@ const Modal = ({ place, handleModalContentChange }: ModalProps) => {
     };
 
     document.addEventListener('keydown', handleEscKey);
-    
+
     // Prevent body scroll when modal is open
     document.body.style.overflow = 'hidden';
 
@@ -84,24 +86,29 @@ const Modal = ({ place, handleModalContentChange }: ModalProps) => {
   }, [handleModalContentChange]);
 
   return (
-    <div 
-      onClick={onBackgroundClick} 
+    <div
+      onClick={onBackgroundClick}
       className='modal-overlay'
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
+      role='dialog'
+      aria-modal='true'
+      aria-labelledby='modal-title'
     >
       <div className='modal-content'>
         {/* Header */}
         <div className='modal-header'>
           <div className='modal-title-section'>
-            <FontAwesomeIcon icon={faMapMarkerAlt} className='modal-location-icon' />
-            <h2 id="modal-title" className='modal-title'>{place.name}</h2>
+            <FontAwesomeIcon
+              icon={faMapMarkerAlt}
+              className='modal-location-icon'
+            />
+            <h2 id='modal-title' className='modal-title'>
+              {place.name}
+            </h2>
           </div>
-          <button 
+          <button
             className='modal-close-btn'
             onClick={onCloseClick}
-            aria-label="모달 닫기"
+            aria-label='모달 닫기'
           >
             <FontAwesomeIcon icon={faTimes} />
           </button>
@@ -124,7 +131,7 @@ const Modal = ({ place, handleModalContentChange }: ModalProps) => {
                     className={`modal-image ${loadedImages.has(0) ? 'loaded' : 'loading'}`}
                     src={place.attachmentUrlArray[0]}
                     alt={`${place.name} 이미지`}
-                    loading="lazy"
+                    loading='lazy'
                     onLoad={() => handleImageLoad(0)}
                   />
                 </div>
@@ -135,13 +142,13 @@ const Modal = ({ place, handleModalContentChange }: ModalProps) => {
                   spaceBetween={0}
                   slidesPerView={1}
                   navigation
-                  pagination={{ 
+                  pagination={{
                     clickable: true,
-                    dynamicBullets: true
+                    dynamicBullets: true,
                   }}
                   zoom={{
                     maxRatio: 3,
-                    minRatio: 1
+                    minRatio: 1,
                   }}
                   className='modal-swiper'
                 >
@@ -157,7 +164,7 @@ const Modal = ({ place, handleModalContentChange }: ModalProps) => {
                           className={`modal-image ${loadedImages.has(index) ? 'loaded' : 'loading'}`}
                           src={imageUrl}
                           alt={`${place.name} 이미지 ${index + 1}`}
-                          loading="lazy"
+                          loading='lazy'
                           onLoad={() => handleImageLoad(index)}
                         />
                       </div>
@@ -165,7 +172,7 @@ const Modal = ({ place, handleModalContentChange }: ModalProps) => {
                   ))}
                 </Swiper>
               )}
-              
+
               {place.attachmentUrlArray.length > 1 && (
                 <div className='image-count'>
                   {place.attachmentUrlArray.length}장의 사진
@@ -175,26 +182,25 @@ const Modal = ({ place, handleModalContentChange }: ModalProps) => {
           )}
 
           {/* Place Type */}
-          {place.type && (
-            <span className='modal-place-type'>{place.type}</span>
-          )}
+          {place.type && <span className='modal-place-type'>{place.type}</span>}
 
           {/* Description */}
-          <div className='modal-description'>
-            {place.description}
-          </div>
+          <div className='modal-description'>{place.description}</div>
 
           {/* Address */}
           {place.address && (
             <div className='modal-address'>
               <div className='address-content'>
-                <FontAwesomeIcon icon={faMapMarkerAlt} className='address-icon' />
+                <FontAwesomeIcon
+                  icon={faMapMarkerAlt}
+                  className='address-icon'
+                />
                 <span className='address-text'>{place.addressDetail}</span>
               </div>
-              <button 
+              <button
                 className={`copy-btn ${copied ? 'copy-btn--copied' : ''}`}
                 onClick={copyAddress}
-                aria-label="주소 복사"
+                aria-label='주소 복사'
                 title={copied ? '복사됨!' : '주소 복사'}
               >
                 <FontAwesomeIcon icon={copied ? faCheck : faCopy} />
@@ -206,12 +212,12 @@ const Modal = ({ place, handleModalContentChange }: ModalProps) => {
         {/* Footer */}
         <div className='modal-footer'>
           <div className='modal-actions'>
-            <AddMyPlace place={place} size="medium" showLabel={true} />
-            
+            <AddMyPlace place={place} size='medium' showLabel={true} />
+
             {place.url && (
-              <a 
-                href={place.url} 
-                target='_blank' 
+              <a
+                href={place.url}
+                target='_blank'
                 rel='noreferrer'
                 className='modal-btn modal-btn--secondary'
               >
@@ -219,7 +225,7 @@ const Modal = ({ place, handleModalContentChange }: ModalProps) => {
                 <span>관련 사이트</span>
               </a>
             )}
-            
+
             <Link
               href={`/detail/${place.name}`}
               className='modal-btn modal-btn--primary'

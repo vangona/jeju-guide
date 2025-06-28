@@ -1,25 +1,23 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faMap, 
-  faList, 
+import {
+  faMap,
+  faList,
   faLightbulb,
-  faHeart 
+  faHeart,
 } from '@fortawesome/free-solid-svg-icons';
 
 interface NavigationProps {
   handleViewTypeChange: (newViewType: string) => void;
 }
 
-const Navigation = ({
-  handleViewTypeChange,
-}: NavigationProps) => {
+const Navigation = ({ handleViewTypeChange }: NavigationProps) => {
   const [activeTab, setActiveTab] = useState('지도');
 
   const handleNavClick = (type: string) => {
     setActiveTab(type);
-    
+
     switch (type) {
       case '지도':
         handleViewTypeChange('지도');

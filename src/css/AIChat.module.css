@@ -1,5 +1,6 @@
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.4;
   }
   50% {
@@ -27,22 +28,42 @@
 }
 
 /* 모바일 반응형 */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .aiChatContainer {
-    margin: 10px;
-    max-height: 90vh;
+    margin: 0;
+    max-height: calc(100vh - 85px);
+    height: calc(100vh - 85px);
+    border-radius: 16px 16px 0 0;
+    width: 100%; /* 부모의 padding으로 마진 처리 */
   }
-  
+
   .aiChatHeader {
     padding: 15px;
   }
-  
+
   .aiChatMessages {
     padding: 15px;
   }
-  
+
   .aiChatInputForm {
     padding: 15px;
+  }
+}
+
+/* 작은 모바일 화면 */
+@media (max-width: 480px) {
+  .aiChatContainer {
+    border-radius: 12px 12px 0 0; /* 더 작은 border radius */
+  }
+}
+
+/* Safe Area 대응 */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  @media (max-width: 768px) {
+    .aiChatContainer {
+      height: calc(100vh - 85px - env(safe-area-inset-bottom));
+      max-height: calc(100vh - 85px - env(safe-area-inset-bottom));
+    }
   }
 }
 
@@ -89,7 +110,8 @@
   margin: 0.5em 0;
 }
 
-.markdownContent ul, .markdownContent ol {
+.markdownContent ul,
+.markdownContent ol {
   margin: 0.5em 0;
   padding-left: 1.5em;
 }

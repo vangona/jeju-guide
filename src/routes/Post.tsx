@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faArrowLeft, 
-  faHome, 
-  faSignOutAlt, 
+import {
+  faArrowLeft,
+  faHome,
+  faSignOutAlt,
   faUser,
   faMapMarkerAlt,
   faPlus,
@@ -14,7 +14,7 @@ import {
   faChevronUp,
   faChevronDown,
   faQuestionCircle,
-  faCog
+  faCog,
 } from '@fortawesome/free-solid-svg-icons';
 import PostForm from '../components/PostForm';
 import { authService } from '../fBase';
@@ -93,18 +93,20 @@ const Post = ({ userObj }: PostProps) => {
     {
       icon: faCamera,
       title: '사진 팁',
-      description: '자연광이 좋은 시간대에 촬영하면 더 아름다운 사진을 얻을 수 있어요'
+      description:
+        '자연광이 좋은 시간대에 촬영하면 더 아름다운 사진을 얻을 수 있어요',
     },
     {
       icon: faLocation,
       title: '위치 정보',
-      description: '정확한 주소를 입력하면 다른 여행자들이 쉽게 찾을 수 있어요'
+      description: '정확한 주소를 입력하면 다른 여행자들이 쉽게 찾을 수 있어요',
     },
     {
       icon: faLightbulb,
       title: '꿀팁 공유',
-      description: '운영시간, 주차정보, 특별한 메뉴 등 실용적인 정보를 포함해보세요'
-    }
+      description:
+        '운영시간, 주차정보, 특별한 메뉴 등 실용적인 정보를 포함해보세요',
+    },
   ];
 
   return (
@@ -121,7 +123,7 @@ const Post = ({ userObj }: PostProps) => {
             <FontAwesomeIcon icon={faArrowLeft} />
             <span>뒤로</span>
           </button>
-          
+
           <div className='post__title-section'>
             <FontAwesomeIcon icon={faMapMarkerAlt} className='title-icon' />
             <h1 className='post__title'>새 장소 등록</h1>
@@ -130,9 +132,11 @@ const Post = ({ userObj }: PostProps) => {
           <div className='post__user-section'>
             <button className='user-profile-btn' onClick={toggleProfile}>
               <FontAwesomeIcon icon={faUser} />
-              <span className='user-name'>{userObj.displayName || '사용자'}</span>
+              <span className='user-name'>
+                {userObj.displayName || '사용자'}
+              </span>
             </button>
-            
+
             {showProfile && (
               <div className='profile__dropdown'>
                 <div className='profile__info'>
@@ -144,11 +148,13 @@ const Post = ({ userObj }: PostProps) => {
                     )}
                   </div>
                   <div className='profile__details'>
-                    <p className='profile__name'>{userObj.displayName || '익명 사용자'}</p>
+                    <p className='profile__name'>
+                      {userObj.displayName || '익명 사용자'}
+                    </p>
                     <p className='profile__email'>{userObj.uid}</p>
                   </div>
                 </div>
-                
+
                 <div className='profile__actions'>
                   <button className='profile__action' onClick={onHomeClick}>
                     <FontAwesomeIcon icon={faHome} />
@@ -158,7 +164,10 @@ const Post = ({ userObj }: PostProps) => {
                     <FontAwesomeIcon icon={faCog} />
                     <span>관리자</span>
                   </button>
-                  <button className='profile__action profile__action--logout' onClick={onLogOutClick}>
+                  <button
+                    className='profile__action profile__action--logout'
+                    onClick={onLogOutClick}
+                  >
                     <FontAwesomeIcon icon={faSignOutAlt} />
                     <span>로그아웃</span>
                   </button>
@@ -173,7 +182,7 @@ const Post = ({ userObj }: PostProps) => {
         {/* Collapsible Intro */}
         <div className='post__intro-section'>
           <div className='section-toggle'>
-            <button 
+            <button
               className='toggle-btn'
               onClick={toggleIntro}
               aria-label={showIntro ? '소개 숨기기' : '소개 보기'}
@@ -183,7 +192,7 @@ const Post = ({ userObj }: PostProps) => {
               <FontAwesomeIcon icon={showIntro ? faChevronUp : faChevronDown} />
             </button>
           </div>
-          
+
           {showIntro && (
             <div className='post__intro'>
               <div className='intro__content'>
@@ -192,7 +201,10 @@ const Post = ({ userObj }: PostProps) => {
                 </div>
                 <div className='intro__text'>
                   <h2>제주도의 숨겨진 보석을 공유해주세요</h2>
-                  <p>당신만 아는 특별한 장소, 맛집, 카페를 다른 여행자들과 나눠보세요!</p>
+                  <p>
+                    당신만 아는 특별한 장소, 맛집, 카페를 다른 여행자들과
+                    나눠보세요!
+                  </p>
                 </div>
               </div>
             </div>
@@ -202,7 +214,7 @@ const Post = ({ userObj }: PostProps) => {
         {/* Collapsible Tips Carousel */}
         <div className='post__tips-section'>
           <div className='section-toggle'>
-            <button 
+            <button
               className='toggle-btn'
               onClick={toggleTips}
               aria-label={showTips ? '가이드 숨기기' : '가이드 보기'}
@@ -212,7 +224,7 @@ const Post = ({ userObj }: PostProps) => {
               <FontAwesomeIcon icon={showTips ? faChevronUp : faChevronDown} />
             </button>
           </div>
-          
+
           {showTips && (
             <div className='post__tips'>
               <Swiper
@@ -258,8 +270,8 @@ const Post = ({ userObj }: PostProps) => {
 
       {/* 배경 클릭으로 프로필 드롭다운 닫기 */}
       {showProfile && (
-        <div 
-          className='profile__backdrop' 
+        <div
+          className='profile__backdrop'
           onClick={() => setShowProfile(false)}
         />
       )}

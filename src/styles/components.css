@@ -25,7 +25,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* 반응형 내비게이션 */
@@ -244,7 +246,7 @@
   background: white;
 }
 
-.map-container-responsive .place-type__map input[type="radio"] {
+.map-container-responsive .place-type__map input[type='radio'] {
   margin: 0;
 }
 
@@ -318,11 +320,11 @@
   .map-container-responsive .map {
     height: 400px;
   }
-  
+
   .map-container-responsive .place-type__map {
     font-size: 1rem;
   }
-  
+
   .map-container-responsive .marker__detail {
     position: absolute;
     bottom: var(--spacing-lg);
@@ -337,11 +339,11 @@
   .map-container-responsive {
     padding: var(--spacing-xl);
   }
-  
+
   .map-container-responsive .map {
     height: 500px;
   }
-  
+
   .map-container-responsive .check-geolocation {
     position: relative;
     top: auto;
@@ -357,7 +359,9 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .card-responsive:hover {
@@ -393,11 +397,11 @@
   .card-responsive .card-image {
     height: 240px;
   }
-  
+
   .card-responsive .card-content {
     padding: var(--spacing-lg);
   }
-  
+
   .card-responsive .card-title {
     font-size: 1.2rem;
   }
@@ -465,11 +469,11 @@
   .form-responsive {
     padding: var(--spacing-xl);
   }
-  
+
   .form-responsive .form-input {
     padding: var(--spacing-lg);
   }
-  
+
   .form-responsive .form-button {
     padding: var(--spacing-lg) var(--spacing-2xl);
   }

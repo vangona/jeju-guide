@@ -9,15 +9,15 @@ import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 import { UserObj } from '../types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faMapMarkerAlt, 
-  faCamera, 
-  faLink, 
+import {
+  faMapMarkerAlt,
+  faCamera,
+  faLink,
   faSpinner,
   faCheckCircle,
   faTimes,
   faCloudUploadAlt,
-  faImage
+  faImage,
 } from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
@@ -40,42 +40,50 @@ const PostForm = ({ userObj }: PostFormProps) => {
   const [address, setAddress] = useState('');
   const [addressDetail, setAddressDetail] = useState('');
   const [isOpenPost, setIsOpenPost] = useState(false);
-  
+
   // UI state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  // @ts-expect-error kakao maps API is not typed  
+  // @ts-expect-error kakao maps API is not typed
   const geocoder = new kakao.maps.services.Geocoder();
 
   const validateForm = () => {
-    const newErrors: {[key: string]: string} = {};
-    
+    const newErrors: { [key: string]: string } = {};
+
     if (!name.trim()) newErrors.name = '장소 이름을 입력해주세요';
     if (!addressDetail) newErrors.address = '주소를 선택해주세요';
     if (!description.trim()) newErrors.description = '장소 설명을 입력해주세요';
-    if (description.length < 10) newErrors.description = '설명을 10자 이상 입력해주세요';
-    
+    if (description.length < 10)
+      newErrors.description = '설명을 10자 이상 입력해주세요';
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const onSubmit: React.FormEventHandler = async (event) => {
     event.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     setIsSubmitting(true);
     setUploadProgress(0);
-    
+
     try {
       const attachmentUrlArray = [];
       if (attachmentArray.length > 0) {
         for (let i = 0; i < attachmentArray.length; i++) {
-          const attachmentRef = ref(storageService, `${userObj?.uid}/${name}/${uuidv4()}`);
-          const response = await uploadString(attachmentRef, attachmentArray[i], 'data_url');
+          const attachmentRef = ref(
+            storageService,
+            `${userObj?.uid}/${name}/${uuidv4()}`,
+          );
+          const response = await uploadString(
+            attachmentRef,
+            attachmentArray[i],
+            'data_url',
+          );
           const downloadURL = await getDownloadURL(response.ref);
           attachmentUrlArray.push(downloadURL);
           setUploadProgress(((i + 1) / attachmentArray.length) * 100);
@@ -97,7 +105,7 @@ const PostForm = ({ userObj }: PostFormProps) => {
       };
 
       await addDoc(collection(dbService, 'places'), placeObj);
-      
+
       // Success state
       setShowSuccess(true);
       setTimeout(() => {
@@ -113,7 +121,6 @@ const PostForm = ({ userObj }: PostFormProps) => {
         setShowSuccess(false);
         setUploadProgress(0);
       }, 2000);
-      
     } catch (error) {
       // Error adding document
       alert('등록 중 오류가 발생했습니다. 다시 시도해주세요.');
@@ -229,7 +236,7 @@ const PostForm = ({ userObj }: PostFormProps) => {
   }, [attachmentArray]);
 
   const removeImage = (index: number) => {
-    setAttachmentArray(prev => prev.filter((_, i) => i !== index));
+    setAttachmentArray((prev) => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -248,7 +255,7 @@ const PostForm = ({ userObj }: PostFormProps) => {
           <FontAwesomeIcon icon={faMapMarkerAlt} />
           <h3>기본 정보</h3>
         </div>
-        
+
         <div className='form-field'>
           <label htmlFor='place-name'>장소 이름 *</label>
           <input
@@ -281,14 +288,18 @@ const PostForm = ({ userObj }: PostFormProps) => {
           <FontAwesomeIcon icon={faMapMarkerAlt} />
           <h3>위치 정보</h3>
         </div>
-        
+
         <div className='address-input'>
           {isOpenPost && (
             <div className='postcode-container'>
               <DaumPostcode autoClose onComplete={onCompletePost} />
             </div>
           )}
-          <button type='button' onClick={onChangeOpenPost} className='address-search-btn'>
+          <button
+            type='button'
+            onClick={onChangeOpenPost}
+            className='address-search-btn'
+          >
             <FontAwesomeIcon icon={faMapMarkerAlt} />
             주소 검색하기
           </button>
@@ -305,7 +316,7 @@ const PostForm = ({ userObj }: PostFormProps) => {
                 className='readonly-input'
               />
             </div>
-            
+
             <div className='form-field'>
               <label htmlFor='place-extra-address'>상세 주소 (선택사항)</label>
               <input
@@ -318,9 +329,9 @@ const PostForm = ({ userObj }: PostFormProps) => {
             </div>
           </div>
         )}
-        
+
         {errors.address && <span className='error-text'>{errors.address}</span>}
-        
+
         <input
           className='place-geocode'
           type='hidden'
@@ -335,7 +346,7 @@ const PostForm = ({ userObj }: PostFormProps) => {
           <FontAwesomeIcon icon={faMapMarkerAlt} />
           <h3>상세 설명</h3>
         </div>
-        
+
         <div className='form-field'>
           <label htmlFor='place-description'>장소 설명 *</label>
           <textarea
@@ -351,7 +362,9 @@ const PostForm = ({ userObj }: PostFormProps) => {
               {description.length}/10 (최소)
             </span>
           </div>
-          {errors.description && <span className='error-text'>{errors.description}</span>}
+          {errors.description && (
+            <span className='error-text'>{errors.description}</span>
+          )}
         </div>
       </div>
 
@@ -361,7 +374,7 @@ const PostForm = ({ userObj }: PostFormProps) => {
           <FontAwesomeIcon icon={faCamera} />
           <h3>사진 업로드</h3>
         </div>
-        
+
         <div className='form-field'>
           <label htmlFor='place-img'>장소 사진 (최대 5장)</label>
           <div className='file-upload-area'>
@@ -424,7 +437,7 @@ const PostForm = ({ userObj }: PostFormProps) => {
           <FontAwesomeIcon icon={faLink} />
           <h3>추가 정보</h3>
         </div>
-        
+
         <div className='form-field'>
           <label htmlFor='place-url'>관련 웹사이트 (선택사항)</label>
           <input
@@ -442,20 +455,16 @@ const PostForm = ({ userObj }: PostFormProps) => {
         {isSubmitting && attachmentArray.length > 0 && (
           <div className='upload-progress'>
             <div className='progress-bar'>
-              <div 
-                className='progress-fill' 
+              <div
+                className='progress-fill'
                 style={{ width: `${uploadProgress}%` }}
               />
             </div>
             <span>이미지 업로드 중... {Math.round(uploadProgress)}%</span>
           </div>
         )}
-        
-        <button 
-          type='submit' 
-          className='submit-btn'
-          disabled={isSubmitting}
-        >
+
+        <button type='submit' className='submit-btn' disabled={isSubmitting}>
           {isSubmitting ? (
             <>
               <FontAwesomeIcon icon={faSpinner} spin />

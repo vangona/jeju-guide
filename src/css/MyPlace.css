@@ -1,6 +1,10 @@
 .myplace__container {
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--seacolor, #9ebad0) 0%, rgba(158, 186, 208, 0.8) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--seacolor, #9ebad0) 0%,
+    rgba(158, 186, 208, 0.8) 100%
+  );
   padding-bottom: 120px; /* Space for navigation */
 }
 
@@ -189,8 +193,7 @@
   font-size: 0.9rem;
 }
 
-.myplace__container
-.filter__select,
+.myplace__container .filter__select,
 .sort__select {
   flex: 1;
   background: rgba(255, 255, 255, 0.15);
@@ -337,42 +340,42 @@
   .myplace__nav {
     padding: 0 0.75rem;
   }
-  
+
   .myplace__title {
     font-size: 1.1rem;
   }
-  
+
   .nav-btn span {
     display: none;
   }
-  
+
   .nav-btn {
     padding: 6px 10px;
     min-width: 40px;
   }
-  
+
   .places__grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .myplace__controls {
     padding: 1rem;
   }
-  
+
   .controls__row {
     flex-direction: column;
   }
-  
+
   .filter__group,
   .sort__group {
     min-width: auto;
   }
-  
+
   .place__card {
     padding: 1rem;
   }
-  
+
   .card__header {
     flex-direction: column;
     align-items: flex-start;
@@ -384,19 +387,19 @@
   .myplace__content {
     padding: 0 0.75rem;
   }
-  
+
   .empty__content {
     padding: 2rem 1.5rem;
   }
-  
+
   .empty__icon {
     font-size: 3rem;
   }
-  
+
   .empty__content h3 {
     font-size: 1.3rem;
   }
-  
+
   .place__name {
     font-size: 1.1rem;
   }

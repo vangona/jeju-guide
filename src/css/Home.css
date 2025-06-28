@@ -14,6 +14,14 @@
   text-align: center;
 }
 
+/* Mobile title optimizations */
+@media (max-width: 680px) {
+  .home__title {
+    font-size: 1.8rem;
+    margin: 2rem 0 0.75rem 0;
+  }
+}
+
 /* Desktop title styling */
 @media (min-width: 768px) {
   .home__title {
@@ -45,7 +53,7 @@
   cursor: pointer;
   z-index: 1000;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 
+  box-shadow:
     0 4px 16px rgba(102, 126, 234, 0.4),
     0 8px 32px rgba(102, 126, 234, 0.2);
   overflow: hidden;
@@ -58,7 +66,7 @@
 
 .ai-chat-fab:hover {
   transform: translateY(-4px) scale(1.05);
-  box-shadow: 
+  box-shadow:
     0 8px 25px rgba(102, 126, 234, 0.5),
     0 16px 40px rgba(102, 126, 234, 0.3);
   background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
@@ -91,7 +99,8 @@
   stroke-width: 3;
 }
 
-.fab-pulse {
+.ai-chat-fab::before {
+  content: '';
   position: absolute;
   top: 50%;
   left: 50%;
@@ -101,6 +110,9 @@
   background: rgba(255, 255, 255, 0.3);
   transform: translate(-50%, -50%) scale(0);
   animation: pulse 2s infinite;
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+  pointer-events: none;
 }
 
 @keyframes pulse {
@@ -156,18 +168,19 @@
 /* Mobile optimizations */
 @media (max-width: 768px) {
   .ai-chat-fab {
-    bottom: 20px;
+    bottom: 85px;
     right: 20px;
     width: 56px;
     height: 56px;
     border-radius: 28px;
+    z-index: 1001;
   }
-  
+
   .fab-icon {
     width: 24px;
     height: 24px;
   }
-  
+
   .fab-tooltip {
     right: 64px;
     font-size: 13px;
@@ -180,20 +193,28 @@
   .ai-chat-fab {
     transition: box-shadow 0.2s ease;
   }
-  
+
   .ai-chat-fab:hover {
     transform: none;
   }
-  
-  .fab-pulse {
+
+  .ai-chat-fab::before {
     animation: none;
+  }
+}
+
+/* Optimize animation for mobile to prevent flicker */
+@media (max-width: 768px) {
+  .ai-chat-fab::before {
+    animation-duration: 3s; /* Slower animation on mobile */
+    animation-timing-function: ease-in-out;
   }
 }
 
 /* Focus states for keyboard navigation */
 .ai-chat-fab:focus {
   outline: none;
-  box-shadow: 
+  box-shadow:
     0 4px 16px rgba(102, 126, 234, 0.4),
     0 8px 32px rgba(102, 126, 234, 0.2),
     0 0 0 3px rgba(102, 126, 234, 0.3);

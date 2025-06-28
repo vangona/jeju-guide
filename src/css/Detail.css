@@ -26,7 +26,12 @@ body:has(.detail__page) {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background: linear-gradient(135deg, var(--seacolor) 0%, rgba(158, 186, 208, 0.9) 50%, #b8c9d8 100%);
+  background: linear-gradient(
+    135deg,
+    var(--seacolor) 0%,
+    rgba(158, 186, 208, 0.9) 50%,
+    #b8c9d8 100%
+  );
   overflow: hidden;
 }
 
@@ -34,7 +39,11 @@ body:has(.detail__page) {
   position: absolute;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 50%
+  );
   border-radius: 50%;
   animation: wave 15s ease-in-out infinite;
 }
@@ -61,7 +70,8 @@ body:has(.detail__page) {
 }
 
 @keyframes wave {
-  0%, 100% {
+  0%,
+  100% {
     transform: rotate(0deg) scale(1);
   }
   50% {
@@ -93,8 +103,12 @@ body:has(.detail__page) {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Floating Close Button - Bottom Right for Thumb Access */
@@ -450,12 +464,7 @@ body:has(.detail__page) {
 .skeleton-shimmer {
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    #f0f0f0 0%,
-    #e0e0e0 50%,
-    #f0f0f0 100%
-  );
+  background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
   position: relative;
@@ -653,75 +662,75 @@ body:has(.detail__page) {
     height: 52px;
     font-size: 1.3rem;
   }
-  
+
   .detail__nav {
     padding: 12px 16px;
   }
-  
+
   .detail__title {
     font-size: 1.3rem;
   }
-  
+
   .nav-btn {
     padding: 8px 12px;
     font-size: 0.8rem;
     min-width: 70px;
   }
-  
+
   .nav-btn span {
     display: none;
   }
-  
+
   .detail__content {
     padding: 16px;
   }
-  
+
   .detail__card {
     border-radius: 16px;
   }
-  
+
   .detail__header-info {
     padding: 20px 20px 12px;
   }
-  
+
   .detail__name {
     font-size: 1.5rem;
   }
-  
+
   .detail__swiper {
     height: 300px;
   }
-  
+
   .detail__swiper .swiper-button-next,
   .detail__swiper .swiper-button-prev {
     width: 40px;
     height: 40px;
     margin-top: -20px;
   }
-  
+
   .detail__swiper .swiper-button-next:after,
   .detail__swiper .swiper-button-prev:after {
     font-size: 16px;
   }
-  
+
   .image-count {
     top: 12px;
     right: 12px;
     padding: 6px 10px;
     font-size: 0.8rem;
   }
-  
+
   .detail__description-section,
   .detail__address-section {
     padding: 20px;
   }
-  
+
   .detail__actions {
     padding: 20px;
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .detail__external-link {
     width: 100%;
     justify-content: center;
@@ -736,53 +745,55 @@ body:has(.detail__page) {
     height: 48px;
     font-size: 1.2rem;
   }
-  
+
   .detail__content {
     padding: 12px;
     padding-bottom: 80px; /* Space for floating button */
   }
-  
+
   .detail__card {
     border-radius: 12px;
   }
-  
+
   .detail__header-info {
     padding: 16px 16px 10px;
   }
-  
+
   .detail__name {
     font-size: 1.3rem;
   }
-  
+
   .detail__type {
     padding: 6px 12px;
     font-size: 0.8rem;
   }
-  
+
   .detail__swiper {
     height: 250px;
   }
-  
+
   .detail__description-section,
   .detail__address-section {
     padding: 16px;
   }
-  
+
   .detail__actions {
     padding: 16px;
   }
-  
+
   .section__title {
     font-size: 1.1rem;
   }
-  
+
   .detail__description {
     font-size: 0.95rem;
   }
 }
 
 /* Zoom cursor */
-.detail__swiper .swiper-zoom-container.swiper-zoom-container-zoomed .detail__image {
+.detail__swiper
+  .swiper-zoom-container.swiper-zoom-container-zoomed
+  .detail__image {
   cursor: zoom-out;
 }
 

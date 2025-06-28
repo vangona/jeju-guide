@@ -11,7 +11,7 @@ import {
   faTag,
   faTimes,
   faCopy,
-  faCheck
+  faCheck,
 } from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Zoom } from 'swiper/modules';
@@ -47,12 +47,14 @@ const Detail = () => {
   };
 
   const handleImageLoad = (index: number) => {
-    setLoadedImages(prev => new Set(prev).add(index));
+    setLoadedImages((prev) => new Set(prev).add(index));
   };
 
   const copyAddress = async () => {
     try {
-      await navigator.clipboard.writeText(detailPlace?.addressDetail || detailPlace?.address || '');
+      await navigator.clipboard.writeText(
+        detailPlace?.addressDetail || detailPlace?.address || '',
+      );
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
@@ -70,10 +72,13 @@ const Detail = () => {
 
   const getPlaceName = async () => {
     if (!place) return;
-    
+
     const placeName = Array.isArray(place) ? place[0] : place;
-    const q = query(collection(dbService, 'places'), where('name', '==', placeName));
-    
+    const q = query(
+      collection(dbService, 'places'),
+      where('name', '==', placeName),
+    );
+
     onSnapshot(q, (snapshot) => {
       if (snapshot.docs.length > 0) {
         const placeData = snapshot.docs[0].data() as PlaceInfo;
@@ -92,7 +97,7 @@ const Detail = () => {
   useEffect(() => {
     document.body.style.overflow = 'auto';
     document.body.classList.add('detail__page-active');
-    
+
     return () => {
       document.body.style.overflow = 'hidden';
       document.body.classList.remove('detail__page-active');
@@ -124,7 +129,6 @@ const Detail = () => {
         <div className='detail__wave'></div>
       </div>
 
-
       {/* Header */}
       <header className='detail__header'>
         <div className='detail__nav'>
@@ -132,7 +136,7 @@ const Detail = () => {
             <FontAwesomeIcon icon={faArrowLeft} />
             <span>뒤로</span>
           </button>
-          
+
           <div className='detail__title-section'>
             <FontAwesomeIcon icon={faMapMarkerAlt} className='title-icon' />
             <h1 className='detail__title'>장소 상세</h1>
@@ -161,74 +165,77 @@ const Detail = () => {
             </div>
 
             {/* Images */}
-            {detailPlace?.attachmentUrlArray && detailPlace.attachmentUrlArray.length > 0 && (
-              <div className='detail__image-section'>
-                {detailPlace.attachmentUrlArray.length === 1 ? (
-                  // Single image
-                  <div className='detail__single-image'>
-                    <div className='swiper-zoom-container'>
-                      {!loadedImages.has(0) && (
-                        <div className='image-skeleton'>
-                          <div className='skeleton-shimmer'></div>
+            {detailPlace?.attachmentUrlArray &&
+              detailPlace.attachmentUrlArray.length > 0 && (
+                <div className='detail__image-section'>
+                  {detailPlace.attachmentUrlArray.length === 1 ? (
+                    // Single image
+                    <div className='detail__single-image'>
+                      <div className='swiper-zoom-container'>
+                        {!loadedImages.has(0) && (
+                          <div className='image-skeleton'>
+                            <div className='skeleton-shimmer'></div>
+                          </div>
+                        )}
+                        <img
+                          className={`detail__image ${loadedImages.has(0) ? 'loaded' : 'loading'}`}
+                          src={detailPlace.attachmentUrlArray[0]}
+                          alt={`${detailPlace.name} 이미지`}
+                          loading='lazy'
+                          onLoad={() => handleImageLoad(0)}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    // Multiple images with Swiper
+                    <div className='detail__image-gallery'>
+                      <Swiper
+                        modules={[Navigation, Pagination, Zoom]}
+                        spaceBetween={0}
+                        slidesPerView={1}
+                        navigation
+                        pagination={{
+                          clickable: true,
+                          dynamicBullets: true,
+                        }}
+                        zoom={{
+                          maxRatio: 3,
+                          minRatio: 1,
+                        }}
+                        className='detail__swiper'
+                      >
+                        {detailPlace.attachmentUrlArray.map(
+                          (imageUrl, index) => (
+                            <SwiperSlide key={index}>
+                              <div className='swiper-zoom-container'>
+                                {!loadedImages.has(index) && (
+                                  <div className='image-skeleton'>
+                                    <div className='skeleton-shimmer'></div>
+                                  </div>
+                                )}
+                                <img
+                                  className={`detail__image ${loadedImages.has(index) ? 'loaded' : 'loading'}`}
+                                  src={imageUrl}
+                                  alt={`${detailPlace.name} 이미지 ${index + 1}`}
+                                  loading='lazy'
+                                  onLoad={() => handleImageLoad(index)}
+                                />
+                              </div>
+                            </SwiperSlide>
+                          ),
+                        )}
+                      </Swiper>
+
+                      {detailPlace.attachmentUrlArray.length > 1 && (
+                        <div className='image-count'>
+                          <FontAwesomeIcon icon={faImage} />
+                          {detailPlace.attachmentUrlArray.length}장의 사진
                         </div>
                       )}
-                      <img
-                        className={`detail__image ${loadedImages.has(0) ? 'loaded' : 'loading'}`}
-                        src={detailPlace.attachmentUrlArray[0]}
-                        alt={`${detailPlace.name} 이미지`}
-                        loading="lazy"
-                        onLoad={() => handleImageLoad(0)}
-                      />
                     </div>
-                  </div>
-                ) : (
-                  // Multiple images with Swiper
-                  <div className='detail__image-gallery'>
-                    <Swiper
-                      modules={[Navigation, Pagination, Zoom]}
-                      spaceBetween={0}
-                      slidesPerView={1}
-                      navigation
-                      pagination={{ 
-                        clickable: true,
-                        dynamicBullets: true
-                      }}
-                      zoom={{
-                        maxRatio: 3,
-                        minRatio: 1
-                      }}
-                      className='detail__swiper'
-                    >
-                      {detailPlace.attachmentUrlArray.map((imageUrl, index) => (
-                        <SwiperSlide key={index}>
-                          <div className='swiper-zoom-container'>
-                            {!loadedImages.has(index) && (
-                              <div className='image-skeleton'>
-                                <div className='skeleton-shimmer'></div>
-                              </div>
-                            )}
-                            <img
-                              className={`detail__image ${loadedImages.has(index) ? 'loaded' : 'loading'}`}
-                              src={imageUrl}
-                              alt={`${detailPlace.name} 이미지 ${index + 1}`}
-                              loading="lazy"
-                              onLoad={() => handleImageLoad(index)}
-                            />
-                          </div>
-                        </SwiperSlide>
-                      ))}
-                    </Swiper>
-                    
-                    {detailPlace.attachmentUrlArray.length > 1 && (
-                      <div className='image-count'>
-                        <FontAwesomeIcon icon={faImage} />
-                        {detailPlace.attachmentUrlArray.length}장의 사진
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
+                  )}
+                </div>
+              )}
 
             {/* Description */}
             <div className='detail__description-section'>
@@ -244,13 +251,18 @@ const Detail = () => {
               <div className='detail__address-section'>
                 <div className='detail__address'>
                   <div className='address-content'>
-                    <FontAwesomeIcon icon={faMapMarkerAlt} className='address-icon' />
-                    <span className='address-text'>{detailPlace.addressDetail}</span>
+                    <FontAwesomeIcon
+                      icon={faMapMarkerAlt}
+                      className='address-icon'
+                    />
+                    <span className='address-text'>
+                      {detailPlace.addressDetail}
+                    </span>
                   </div>
-                  <button 
+                  <button
                     className={`copy-btn ${copied ? 'copy-btn--copied' : ''}`}
                     onClick={copyAddress}
-                    aria-label="주소 복사"
+                    aria-label='주소 복사'
                     title={copied ? '복사됨!' : '주소 복사'}
                   >
                     <FontAwesomeIcon icon={copied ? faCheck : faCopy} />
@@ -262,13 +274,13 @@ const Detail = () => {
             {/* Actions */}
             <div className='detail__actions'>
               {detailPlace && (
-                <AddMyPlace place={detailPlace} size="large" showLabel={true} />
+                <AddMyPlace place={detailPlace} size='large' showLabel={true} />
               )}
-              
+
               {detailPlace?.url && (
-                <a 
-                  href={detailPlace.url} 
-                  target='_blank' 
+                <a
+                  href={detailPlace.url}
+                  target='_blank'
                   rel='noreferrer'
                   className='detail__external-link'
                 >
@@ -284,12 +296,17 @@ const Detail = () => {
       {/* Footer */}
       <footer className='detail__footer'>
         <span className='copyright'>
-          &copy; {new Date().getFullYear().toString()}, 나만의 서랍장 Co. all rights reserved.
+          &copy; {new Date().getFullYear().toString()}, 나만의 서랍장 Co. all
+          rights reserved.
         </span>
       </footer>
 
       {/* Floating Close Button - Bottom Right */}
-      <button className='detail__close-btn' onClick={onBackClick} title="메인으로 돌아가기">
+      <button
+        className='detail__close-btn'
+        onClick={onBackClick}
+        title='메인으로 돌아가기'
+      >
         <FontAwesomeIcon icon={faTimes} />
       </button>
     </div>

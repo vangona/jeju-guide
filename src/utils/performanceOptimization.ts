@@ -62,7 +62,10 @@ export class AdaptiveLoadingManager {
 
   constructor() {
     this.config = this.getNetworkInfo();
-    this.networkConfig = networkConfigs[this.config.effectiveType as keyof typeof networkConfigs] || networkConfigs['4g'];
+    this.networkConfig =
+      networkConfigs[
+        this.config.effectiveType as keyof typeof networkConfigs
+      ] || networkConfigs['4g'];
     this.setupNetworkChangeListener();
   }
 
@@ -88,7 +91,10 @@ export class AdaptiveLoadingManager {
       const connection = (navigator as any).connection;
       connection.addEventListener('change', () => {
         this.config = this.getNetworkInfo();
-        this.networkConfig = networkConfigs[this.config.effectiveType as keyof typeof networkConfigs] || networkConfigs['4g'];
+        this.networkConfig =
+          networkConfigs[
+            this.config.effectiveType as keyof typeof networkConfigs
+          ] || networkConfigs['4g'];
       });
     }
   }
@@ -163,7 +169,7 @@ export class ImageOptimizer {
         },
         {
           rootMargin: '50px',
-        }
+        },
       );
     }
   }
@@ -173,7 +179,7 @@ export class ImageOptimizer {
    */
   async optimizeAndLoad(
     src: string,
-    options: ImageOptimizationOptions = {}
+    options: ImageOptimizationOptions = {},
   ): Promise<string> {
     const optimizationOptions = {
       ...this.adaptiveLoader.getImageOptimization(),
@@ -203,24 +209,24 @@ export class ImageOptimizer {
    */
   private generateOptimizedUrl(
     src: string,
-    options: ImageOptimizationOptions
+    options: ImageOptimizationOptions,
   ): string {
     // 실제 이미지 최적화 서비스 URL 생성
     // 예: Cloudinary, ImageKit 등의 서비스 활용
     const params = new URLSearchParams();
-    
+
     if (options.quality) {
       params.append('q', options.quality.toString());
     }
-    
+
     if (options.maxWidth) {
       params.append('w', options.maxWidth.toString());
     }
-    
+
     if (options.maxHeight) {
       params.append('h', options.maxHeight.toString());
     }
-    
+
     if (options.format) {
       params.append('f', options.format);
     }
@@ -273,11 +279,7 @@ export class VirtualizationManager {
   private startIndex: number = 0;
   private endIndex: number = 0;
 
-  constructor(
-    container: HTMLElement,
-    items: any[],
-    itemHeight: number = 100
-  ) {
+  constructor(container: HTMLElement, items: any[], itemHeight: number = 100) {
     this.container = container;
     this.items = items;
     this.itemHeight = itemHeight;
@@ -297,7 +299,7 @@ export class VirtualizationManager {
     this.startIndex = Math.floor(this.scrollTop / this.itemHeight);
     this.endIndex = Math.min(
       this.startIndex + this.visibleCount,
-      this.items.length
+      this.items.length,
     );
 
     this.render();
@@ -314,7 +316,7 @@ export class VirtualizationManager {
     // 실제 DOM 업데이트는 React 컴포넌트에서 처리
     this.onVisibleItemsChange?.(
       this.items.slice(this.startIndex, this.endIndex),
-      this.startIndex
+      this.startIndex,
     );
   }
 
@@ -359,7 +361,7 @@ export class CacheManager {
 
   get(key: string): any | null {
     const entry = this.cache.get(key);
-    
+
     if (!entry) {
       return null;
     }
@@ -392,7 +394,7 @@ export const performanceUtils = {
    */
   debounce<T extends (...args: any[]) => any>(
     func: T,
-    wait: number
+    wait: number,
   ): (...args: Parameters<T>) => void {
     let timeout: NodeJS.Timeout;
     return (...args: Parameters<T>) => {
@@ -406,7 +408,7 @@ export const performanceUtils = {
    */
   throttle<T extends (...args: any[]) => any>(
     func: T,
-    limit: number
+    limit: number,
   ): (...args: Parameters<T>) => void {
     let inThrottle: boolean;
     return (...args: Parameters<T>) => {
@@ -422,7 +424,7 @@ export const performanceUtils = {
    * RequestAnimationFrame 기반 쓰로틀링
    */
   rafThrottle<T extends (...args: any[]) => any>(
-    func: T
+    func: T,
   ): (...args: Parameters<T>) => void {
     let rafId: number;
     return (...args: Parameters<T>) => {
@@ -501,8 +503,8 @@ export const dynamicImporter = new DynamicImportManager();
 
 // React Hook으로 성능 최적화 제공
 export const usePerformanceOptimization = () => {
-  const [networkInfo, setNetworkInfo] = React.useState(() => 
-    adaptiveLoader.isSlowConnection()
+  const [networkInfo, setNetworkInfo] = React.useState(() =>
+    adaptiveLoader.isSlowConnection(),
   );
 
   React.useEffect(() => {
@@ -514,7 +516,7 @@ export const usePerformanceOptimization = () => {
     if (typeof navigator !== 'undefined' && 'connection' in navigator) {
       const connection = (navigator as any).connection;
       connection.addEventListener('change', updateNetworkInfo);
-      
+
       return () => {
         connection.removeEventListener('change', updateNetworkInfo);
       };

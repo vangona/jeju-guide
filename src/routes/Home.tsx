@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import List from '../components/List';
 import Map from '../components/Map';
 import Modal from '../components/Modal';
@@ -22,33 +22,38 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
   const [viewType, setViewType] = useState('지도');
   const [showAIChat, setShowAIChat] = useState(false);
 
-  const getPlaces = async () => {
-    onSnapshot(collection(dbService, 'places'), (snapshot) => {
+  const getPlaces = useCallback(() => {
+    const unsubscribe = onSnapshot(collection(dbService, 'places'), (snapshot) => {
       const placeArray = snapshot.docs.map((doc) => ({
         ...(doc.data() as PlaceInfo),
       }));
       setPlaces(placeArray);
       setLoading(true);
     });
-  };
+    return unsubscribe;
+  }, []);
 
-  const handleChangeDetail = (newDetail: PlaceInfo | null) => {
+  const handleChangeDetail = useCallback((newDetail: PlaceInfo | null) => {
     setDetail(newDetail);
-  };
+  }, []);
 
-  const handleViewTypeChange = (newViewType: string) => {
+  const handleViewTypeChange = useCallback((newViewType: string) => {
     setViewType(newViewType);
-  };
+  }, []);
 
-  const handlePlaceSelect = (place: PlaceInfo) => {
+  const handlePlaceSelect = useCallback((place: PlaceInfo) => {
     // AI Chat에서 장소 선택 시 모달 열기
     setDetail(place);
-  };
-
+  }, []);
 
   useEffect(() => {
-    getPlaces();
-  }, []);
+    const unsubscribe = getPlaces();
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, [getPlaces]);
 
   return (
     <div className='home__container'>
@@ -67,45 +72,43 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
         ) : loading === true && viewType === '프로필' ? (
           <Profile userObj={userObj} />
         ) : (
-          <LoadingSpinner message="장소 정보를 불러오고 있습니다..." />
+          <LoadingSpinner message='장소 정보를 불러오고 있습니다...' />
         )}
       </div>
       {detail && (
         <Modal place={detail} handleModalContentChange={handleChangeDetail} />
       )}
-      <AIChat 
-        isOpen={showAIChat} 
+      <AIChat
+        isOpen={showAIChat}
         onClose={() => setShowAIChat(false)}
         onPlaceSelect={handlePlaceSelect}
+        isMobile={isMobile}
       />
-      <button 
+      <button
         onClick={() => setShowAIChat(true)}
-        className="ai-chat-fab"
-        title="AI 여행 가이드와 채팅하기"
+        className='ai-chat-fab'
+        title='AI 여행 가이드와 채팅하기'
       >
-        <div className="fab-icon-container">
-          <svg 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-            className="fab-icon"
+        <div className='fab-icon-container'>
+          <svg
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            strokeWidth='2'
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            className='fab-icon'
           >
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-            <circle cx="9" cy="10" r="1"/>
-            <circle cx="15" cy="10" r="1"/>
-            <path d="M9 14c.5.5 2 1 3 1s2.5-.5 3-1"/>
+            <path d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z' />
+            <circle cx='9' cy='10' r='1' />
+            <circle cx='15' cy='10' r='1' />
+            <path d='M9 14c.5.5 2 1 3 1s2.5-.5 3-1' />
           </svg>
-          <div className="fab-pulse"></div>
         </div>
-        <span className="fab-tooltip">AI 가이드</span>
+        <span className='fab-tooltip'>AI 가이드</span>
       </button>
       {/* <Link to="/myplace"><button>내 여행지 목록</button></Link> */}
-      <Navigation
-        handleViewTypeChange={handleViewTypeChange}
-      />
+      <Navigation handleViewTypeChange={handleViewTypeChange} />
     </div>
   );
 };

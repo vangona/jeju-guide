@@ -7,7 +7,7 @@
 * {
   /* 터치 지연 제거 */
   touch-action: manipulation;
-  
+
   /* 텍스트 선택 방지 (필요한 경우만) */
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -18,7 +18,7 @@
 /* 입력 요소들은 텍스트 선택 허용 */
 input,
 textarea,
-[contenteditable="true"] {
+[contenteditable='true'] {
   -webkit-user-select: auto;
   -moz-user-select: auto;
   -ms-user-select: auto;
@@ -61,7 +61,9 @@ textarea,
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.3);
   transform: translate(-50%, -50%);
-  transition: width 0.3s ease, height 0.3s ease;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease;
   pointer-events: none;
 }
 
@@ -225,13 +227,14 @@ textarea,
   .hover-effect {
     transition: none;
   }
-  
+
   .hover-effect:active {
     background-color: rgba(0, 0, 0, 0.05);
   }
-  
+
   /* 링크의 기본 터치 하이라이트 제거 */
-  a, button {
+  a,
+  button {
     -webkit-tap-highlight-color: transparent;
   }
 }
@@ -242,13 +245,13 @@ textarea,
   ::-webkit-scrollbar {
     display: none;
   }
-  
+
   /* 터치 스크롤 최적화 */
   .scroll-container {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
-  
+
   /* 터치 영역 확장 */
   .touch-extend::before {
     content: '';
@@ -266,7 +269,7 @@ textarea,
   .touch-feedback::before {
     background: rgba(0, 0, 0, 0.5);
   }
-  
+
   .swipe-dot {
     border: 2px solid currentColor;
   }
@@ -281,7 +284,7 @@ textarea,
     transition: none !important;
     animation: none !important;
   }
-  
+
   .swipeable {
     scroll-behavior: auto;
   }
@@ -289,21 +292,39 @@ textarea,
 
 /* 제스처 가이드 애니메이션 */
 @keyframes swipe-hint {
-  0% { transform: translateX(0); }
-  50% { transform: translateX(20px); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(20px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 @keyframes pinch-hint {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes pull-hint {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(10px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 .gesture-hint-swipe {
@@ -389,7 +410,10 @@ textarea,
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.4);
   transform: translate(-50%, -50%);
-  transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
+  transition:
+    width 0.6s ease,
+    height 0.6s ease,
+    opacity 0.6s ease;
   opacity: 0;
 }
 
@@ -397,7 +421,10 @@ textarea,
   width: 300px;
   height: 300px;
   opacity: 1;
-  transition: width 0s, height 0s, opacity 0s;
+  transition:
+    width 0s,
+    height 0s,
+    opacity 0s;
 }
 
 /* iOS 스타일 스위치 (터치 최적화) */

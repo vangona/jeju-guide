@@ -52,9 +52,7 @@ const Profile = ({ userObj }: PageProps) => {
             <div className='profile__empty'>
               <FontAwesomeIcon icon={faUser} />
               <p>로그인이 필요합니다.</p>
-              <button onClick={() => router.push('/auth')}>
-                로그인
-              </button>
+              <button onClick={() => router.push('/auth')}>로그인</button>
             </div>
           )}
         </div>

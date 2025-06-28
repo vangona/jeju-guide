@@ -1,0 +1,211 @@
+.placeCard {
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  font-size: 13px;
+}
+
+.placeCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.cardContent {
+  display: flex;
+  gap: 12px;
+}
+
+.cardImage {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.cardPlaceholder {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.cardInfo {
+  flex: 1;
+  min-width: 0; /* For text truncation */
+}
+
+.cardTitle {
+  margin: 0 0 6px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardAddress {
+  margin: 0 0 4px 0;
+  font-size: 13px;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cardDescription {
+  margin: 0;
+  font-size: 13px;
+  color: #495057;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.cardFooter {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cardType {
+  font-size: 11px;
+  padding: 3px 8px;
+  background-color: #667eea;
+  color: white;
+  border-radius: 12px;
+}
+
+.cardActions {
+  display: flex;
+  gap: 8px;
+}
+
+.actionButton {
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.2s;
+}
+
+.actionButton:hover {
+  transform: scale(1.05);
+}
+
+.mapButton {
+  color: #667eea;
+  background-color: rgba(102, 126, 234, 0.1);
+}
+
+.mapButton:hover {
+  background-color: rgba(102, 126, 234, 0.2);
+}
+
+.websiteButton {
+  color: #28a745;
+  background-color: rgba(40, 167, 69, 0.1);
+}
+
+.websiteButton:hover {
+  background-color: rgba(40, 167, 69, 0.2);
+}
+
+.shareButton {
+  color: #ff6b6b;
+  background-color: rgba(255, 107, 107, 0.1);
+}
+
+.shareButton:hover {
+  background-color: rgba(255, 107, 107, 0.2);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .placeCard {
+    padding: 10px;
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+
+  .cardContent {
+    gap: 10px;
+  }
+
+  .cardImage,
+  .cardPlaceholder {
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+  }
+
+  .cardTitle {
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  .cardAddress {
+    font-size: 12px;
+  }
+
+  .cardDescription {
+    font-size: 12px;
+    -webkit-line-clamp: 1;
+  }
+
+  .cardFooter {
+    margin-top: 6px;
+  }
+
+  .cardType {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .actionButton {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+}
+
+/* Touch optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .placeCard {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .placeCard:active {
+    transform: scale(0.98);
+    transition: transform 0.1s;
+  }
+
+  .actionButton {
+    min-width: 44px;
+    min-height: 32px;
+  }
+}
+
+/* Safe area handling for iOS */
+@supports (padding-left: env(safe-area-inset-left)) {
+  .placeCard {
+    margin-left: env(safe-area-inset-left);
+    margin-right: env(safe-area-inset-right);
+  }
+}

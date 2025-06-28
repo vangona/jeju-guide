@@ -13,9 +13,17 @@ import {
   faSave,
   faTimes,
   faImage,
-  faLink
+  faLink,
 } from '@fortawesome/free-solid-svg-icons';
-import { collection, getDocs, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+} from 'firebase/firestore';
 import { dbService, authService } from '../fBase';
 import { PlaceInfo } from '../types';
 
@@ -37,32 +45,30 @@ const Edit = () => {
     description: '',
     address: '',
     url: '',
-    attachmentUrlArray: ['']
+    attachmentUrlArray: [''],
   });
 
   const fetchPlaces = async () => {
     try {
       setLoading(true);
       const currentUser = authService.currentUser;
-      
+
       if (!currentUser) {
         router.push('/auth');
         return;
       }
 
       // 현재 사용자가 작성한 장소들만 가져오기
-      const q = query(
-        collection(dbService, 'places')
-      );
-      
+      const q = query(collection(dbService, 'places'));
+
       const querySnapshot = await getDocs(q);
       const placesData: PlaceInfo[] = [];
-      
+
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         placesData.push({
           id: doc.id,
-          ...data
+          ...data,
         } as PlaceInfo);
       });
 
@@ -84,15 +90,16 @@ const Edit = () => {
     let filtered = places;
 
     if (searchTerm) {
-      filtered = filtered.filter(place =>
-        place.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        place.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        place.address.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (place) =>
+          place.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          place.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          place.address.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
     if (filterType !== '전체') {
-      filtered = filtered.filter(place => place.type === filterType);
+      filtered = filtered.filter((place) => place.type === filterType);
     }
 
     setFilteredPlaces(filtered);
@@ -106,38 +113,40 @@ const Edit = () => {
       description: place.description,
       address: place.address || '',
       url: place.url || '',
-      attachmentUrlArray: place.attachmentUrlArray || ['']
+      attachmentUrlArray: place.attachmentUrlArray || [''],
     });
   };
 
   const handleFormChange = (field: string, value: string) => {
-    setEditForm(prev => ({
+    setEditForm((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
   const handleImageUrlChange = (index: number, value: string) => {
-    setEditForm(prev => ({
+    setEditForm((prev) => ({
       ...prev,
-      attachmentUrlArray: prev.attachmentUrlArray.map((url, i) => 
-        i === index ? value : url
-      )
+      attachmentUrlArray: prev.attachmentUrlArray.map((url, i) =>
+        i === index ? value : url,
+      ),
     }));
   };
 
   const addImageUrl = () => {
-    setEditForm(prev => ({
+    setEditForm((prev) => ({
       ...prev,
-      attachmentUrlArray: [...prev.attachmentUrlArray, '']
+      attachmentUrlArray: [...prev.attachmentUrlArray, ''],
     }));
   };
 
   const removeImageUrl = (index: number) => {
     if (editForm.attachmentUrlArray.length > 1) {
-      setEditForm(prev => ({
+      setEditForm((prev) => ({
         ...prev,
-        attachmentUrlArray: prev.attachmentUrlArray.filter((_, i) => i !== index)
+        attachmentUrlArray: prev.attachmentUrlArray.filter(
+          (_, i) => i !== index,
+        ),
       }));
     }
   };
@@ -147,21 +156,23 @@ const Edit = () => {
 
     try {
       setUpdateLoading(true);
-      
+
       const updatedData = {
         ...editForm,
-        attachmentUrlArray: editForm.attachmentUrlArray.filter(url => url.trim() !== ''),
-        updatedAt: Date.now()
+        attachmentUrlArray: editForm.attachmentUrlArray.filter(
+          (url) => url.trim() !== '',
+        ),
+        updatedAt: Date.now(),
       };
 
       await updateDoc(doc(dbService, 'places', editingPlace.id!), updatedData);
-      
+
       // 로컬 상태 업데이트
-      setPlaces(prev => prev.map(place => 
-        place.id === editingPlace.id 
-          ? { ...place, ...updatedData }
-          : place
-      ));
+      setPlaces((prev) =>
+        prev.map((place) =>
+          place.id === editingPlace.id ? { ...place, ...updatedData } : place,
+        ),
+      );
 
       setEditingPlace(null);
       setError('');
@@ -174,13 +185,17 @@ const Edit = () => {
   };
 
   const handleDelete = async (place: PlaceInfo) => {
-    if (!window.confirm(`"${place.name}"을(를) 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없습니다.`)) {
+    if (
+      !window.confirm(
+        `"${place.name}"을(를) 삭제하시겠습니까?\n\n이 작업은 되돌릴 수 없습니다.`,
+      )
+    ) {
       return;
     }
 
     try {
       await deleteDoc(doc(dbService, 'places', place.id!));
-      setPlaces(prev => prev.filter(p => p.id !== place.id));
+      setPlaces((prev) => prev.filter((p) => p.id !== place.id));
     } catch (error) {
       // console.error('삭제 실패:', error);
       setError('장소 삭제에 실패했습니다.');
@@ -188,9 +203,9 @@ const Edit = () => {
   };
 
   const getUniqueTypes = () => {
-    const types = places.map(place => place.type);
+    const types = places.map((place) => place.type);
     const uniqueTypes: string[] = [];
-    types.forEach(type => {
+    types.forEach((type) => {
       if (!uniqueTypes.includes(type)) {
         uniqueTypes.push(type);
       }
@@ -210,7 +225,7 @@ const Edit = () => {
     return (
       <div className='edit__page'>
         <div className='edit__loading'>
-          <FontAwesomeIcon icon={faSpinner} spin size="2x" />
+          <FontAwesomeIcon icon={faSpinner} spin size='2x' />
           <p>장소 정보를 불러오고 있습니다...</p>
         </div>
       </div>
@@ -264,8 +279,10 @@ const Edit = () => {
               className='filter__select'
             >
               <option value='전체'>전체 타입</option>
-              {getUniqueTypes().map(type => (
-                <option key={type} value={type}>{type}</option>
+              {getUniqueTypes().map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
               ))}
             </select>
           </div>
@@ -278,7 +295,7 @@ const Edit = () => {
               <FontAwesomeIcon icon={faMapMarkerAlt} className='empty__icon' />
               <h3>등록된 장소가 없습니다</h3>
               <p>새로운 장소를 등록해보세요!</p>
-              <button 
+              <button
                 className='btn-primary'
                 onClick={() => router.push('/post')}
               >
@@ -294,10 +311,9 @@ const Edit = () => {
                     <span className='place__type'>{place.type}</span>
                   </div>
                   <p className='place__description'>
-                    {place.description.length > 100 
-                      ? `${place.description.slice(0, 100)}...` 
-                      : place.description
-                    }
+                    {place.description.length > 100
+                      ? `${place.description.slice(0, 100)}...`
+                      : place.description}
                   </p>
                   {place.address && (
                     <div className='place__address'>
@@ -306,16 +322,16 @@ const Edit = () => {
                     </div>
                   )}
                 </div>
-                
+
                 <div className='place__actions'>
-                  <button 
+                  <button
                     className='btn-edit'
                     onClick={() => handleEdit(place)}
                   >
                     <FontAwesomeIcon icon={faEdit} />
                     <span>수정</span>
                   </button>
-                  <button 
+                  <button
                     className='btn-delete'
                     onClick={() => handleDelete(place)}
                   >
@@ -335,7 +351,7 @@ const Edit = () => {
           <div className='edit__modal'>
             <div className='modal__header'>
               <h2>장소 정보 수정</h2>
-              <button 
+              <button
                 className='modal__close'
                 onClick={() => setEditingPlace(null)}
               >
@@ -373,7 +389,9 @@ const Edit = () => {
                 <label>설명</label>
                 <textarea
                   value={editForm.description}
-                  onChange={(e) => handleFormChange('description', e.target.value)}
+                  onChange={(e) =>
+                    handleFormChange('description', e.target.value)
+                  }
                   placeholder='장소에 대한 설명을 입력하세요'
                   rows={4}
                 />
@@ -406,7 +424,9 @@ const Edit = () => {
                     <input
                       type='url'
                       value={url}
-                      onChange={(e) => handleImageUrlChange(index, e.target.value)}
+                      onChange={(e) =>
+                        handleImageUrlChange(index, e.target.value)
+                      }
                       placeholder='이미지 URL을 입력하세요'
                     />
                     {editForm.attachmentUrlArray.length > 1 && (

@@ -51,15 +51,28 @@ export class TouchGestureHandler {
   }
 
   private init() {
-    this.element.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false });
-    this.element.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
-    this.element.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: false });
-    this.element.addEventListener('touchcancel', this.handleTouchCancel.bind(this));
+    this.element.addEventListener(
+      'touchstart',
+      this.handleTouchStart.bind(this),
+      { passive: false },
+    );
+    this.element.addEventListener(
+      'touchmove',
+      this.handleTouchMove.bind(this),
+      { passive: false },
+    );
+    this.element.addEventListener('touchend', this.handleTouchEnd.bind(this), {
+      passive: false,
+    });
+    this.element.addEventListener(
+      'touchcancel',
+      this.handleTouchCancel.bind(this),
+    );
   }
 
   private handleTouchStart(event: TouchEvent) {
     const touches = event.touches;
-    
+
     if (touches.length === 1) {
       // 단일 터치
       const touch = touches[0];
@@ -107,8 +120,9 @@ export class TouchGestureHandler {
       if (this.isPulling && this.options.onPullToRefresh) {
         this.pullCurrentY = touch.clientY;
         const pullDistance = this.pullCurrentY - this.pullStartY;
-        
-        if (pullDistance > 80) { // 80px 이상 당기면 새로고침
+
+        if (pullDistance > 80) {
+          // 80px 이상 당기면 새로고침
           this.addPullToRefreshIndicator();
         }
       }
@@ -121,7 +135,7 @@ export class TouchGestureHandler {
       // 핀치 제스처 처리
       this.currentDistance = this.getDistance(touches[0], touches[1]);
       const scale = this.currentDistance / this.initialDistance;
-      
+
       if (this.options.onPinch) {
         this.options.onPinch(scale);
       }
@@ -156,9 +170,13 @@ export class TouchGestureHandler {
       }
 
       // 스와이프 제스처 감지
-      if (distance > (this.options.threshold || 50) && velocity > (this.options.velocity || 0.3)) {
-        const angle = Math.atan2(Math.abs(deltaY), Math.abs(deltaX)) * 180 / Math.PI;
-        
+      if (
+        distance > (this.options.threshold || 50) &&
+        velocity > (this.options.velocity || 0.3)
+      ) {
+        const angle =
+          (Math.atan2(Math.abs(deltaY), Math.abs(deltaX)) * 180) / Math.PI;
+
         if (angle < 45) {
           // 수평 스와이프
           if (deltaX > 0) {
@@ -214,7 +232,9 @@ export class TouchGestureHandler {
   }
 
   private addPullToRefreshIndicator() {
-    let indicator = this.element.querySelector('.pull-to-refresh-indicator') as HTMLElement;
+    let indicator = this.element.querySelector(
+      '.pull-to-refresh-indicator',
+    ) as HTMLElement;
     if (!indicator) {
       indicator = document.createElement('div');
       indicator.className = 'pull-to-refresh-indicator';
@@ -257,7 +277,7 @@ export class TouchGestureHandler {
 // React Hook으로 터치 제스처 사용
 export const useTouchGestures = (
   elementRef: React.RefObject<HTMLElement>,
-  options: TouchGestureOptions
+  options: TouchGestureOptions,
 ) => {
   React.useEffect(() => {
     if (!elementRef.current) return;
@@ -322,9 +342,9 @@ export const touchUtils = {
   enableScrollSnap: (element: HTMLElement, direction: 'x' | 'y' = 'x') => {
     element.style.scrollSnapType = `${direction} mandatory`;
     element.style.scrollBehavior = 'smooth';
-    
+
     const children = Array.from(element.children) as HTMLElement[];
-    children.forEach(child => {
+    children.forEach((child) => {
       child.style.scrollSnapAlign = 'start';
     });
   },
@@ -351,11 +371,14 @@ export const touristAppGestures = {
   /**
    * 지도 제스처 설정
    */
-  mapGestures: (mapElement: HTMLElement, callbacks: {
-    onPinchZoom?: (scale: number) => void;
-    onPanMove?: (deltaX: number, deltaY: number) => void;
-    onDoubleTap?: () => void;
-  }) => {
+  mapGestures: (
+    mapElement: HTMLElement,
+    callbacks: {
+      onPinchZoom?: (scale: number) => void;
+      onPanMove?: (deltaX: number, deltaY: number) => void;
+      onDoubleTap?: () => void;
+    },
+  ) => {
     return new TouchGestureHandler(mapElement, {
       onPinch: callbacks.onPinchZoom,
       onTap: (event) => {
@@ -369,11 +392,14 @@ export const touristAppGestures = {
   /**
    * 이미지 갤러리 제스처
    */
-  galleryGestures: (galleryElement: HTMLElement, callbacks: {
-    onSwipeNext?: () => void;
-    onSwipePrev?: () => void;
-    onPinchZoom?: (scale: number) => void;
-  }) => {
+  galleryGestures: (
+    galleryElement: HTMLElement,
+    callbacks: {
+      onSwipeNext?: () => void;
+      onSwipePrev?: () => void;
+      onPinchZoom?: (scale: number) => void;
+    },
+  ) => {
     return new TouchGestureHandler(galleryElement, {
       onSwipeLeft: callbacks.onSwipeNext,
       onSwipeRight: callbacks.onSwipePrev,
@@ -386,11 +412,14 @@ export const touristAppGestures = {
   /**
    * 리스트 아이템 제스처 (스와이프 액션)
    */
-  listItemGestures: (itemElement: HTMLElement, callbacks: {
-    onSwipeDelete?: () => void;
-    onSwipeFavorite?: () => void;
-    onLongPressMenu?: () => void;
-  }) => {
+  listItemGestures: (
+    itemElement: HTMLElement,
+    callbacks: {
+      onSwipeDelete?: () => void;
+      onSwipeFavorite?: () => void;
+      onLongPressMenu?: () => void;
+    },
+  ) => {
     return new TouchGestureHandler(itemElement, {
       onSwipeLeft: callbacks.onSwipeDelete,
       onSwipeRight: callbacks.onSwipeFavorite,

@@ -83,19 +83,21 @@ export const useBreakpoint = (breakpoint: Breakpoint) => {
   });
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia(`(min-width: ${BREAKPOINTS[breakpoint]}px)`);
-    
+    const mediaQuery = window.matchMedia(
+      `(min-width: ${BREAKPOINTS[breakpoint]}px)`,
+    );
+
     const handleChange = (e: MediaQueryListEvent) => {
       setMatches(e.matches);
     };
 
     setMatches(mediaQuery.matches);
-    
+
     // 최신 브라우저
     if (mediaQuery.addEventListener) {
       mediaQuery.addEventListener('change', handleChange);
       return () => mediaQuery.removeEventListener('change', handleChange);
-    } 
+    }
     // 구형 브라우저 지원
     else {
       mediaQuery.addListener(handleChange);
@@ -134,14 +136,16 @@ export const useResponsiveValue = <T>(values: {
   if (width >= BREAKPOINTS.mobile && values.mobile !== undefined) {
     return values.mobile;
   }
-  
+
   return values.default;
 };
 
 /**
  * 컨테이너 쿼리를 위한 훅 (실험적)
  */
-export const useContainerQuery = (containerRef: React.RefObject<HTMLElement>) => {
+export const useContainerQuery = (
+  containerRef: React.RefObject<HTMLElement>,
+) => {
   const [containerWidth, setContainerWidth] = useState(0);
 
   useEffect(() => {
@@ -163,7 +167,9 @@ export const useContainerQuery = (containerRef: React.RefObject<HTMLElement>) =>
   return {
     containerWidth,
     isContainerMobile: containerWidth < BREAKPOINTS.tablet,
-    isContainerTablet: containerWidth >= BREAKPOINTS.tablet && containerWidth < BREAKPOINTS.desktop,
+    isContainerTablet:
+      containerWidth >= BREAKPOINTS.tablet &&
+      containerWidth < BREAKPOINTS.desktop,
     isContainerDesktop: containerWidth >= BREAKPOINTS.desktop,
   };
 };
@@ -172,7 +178,7 @@ export const useContainerQuery = (containerRef: React.RefObject<HTMLElement>) =>
 function getDeviceInfo(): DeviceInfo {
   const width = window.innerWidth;
   const height = window.innerHeight;
-  
+
   return {
     isMobile: width < BREAKPOINTS.tablet,
     isTablet: width >= BREAKPOINTS.tablet && width < BREAKPOINTS.desktop,
@@ -181,8 +187,9 @@ function getDeviceInfo(): DeviceInfo {
     height,
     orientation: width > height ? 'landscape' : 'portrait',
     hasTouch: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
-    isStandalone: window.matchMedia('(display-mode: standalone)').matches ||
-                  (window.navigator as any).standalone === true,
+    isStandalone:
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as any).standalone === true,
   };
 }
 
@@ -238,7 +245,7 @@ export const useNetworkOptimization = () => {
     }
 
     const connection = (navigator as any).connection;
-    
+
     const handleConnectionChange = () => {
       setConnectionInfo({
         effectiveType: connection.effectiveType || '4g',
@@ -256,11 +263,13 @@ export const useNetworkOptimization = () => {
 
   return {
     ...connectionInfo,
-    isSlowConnection: connectionInfo.effectiveType === 'slow-2g' || 
-                     connectionInfo.effectiveType === '2g' ||
-                     connectionInfo.saveData,
-    shouldOptimizeImages: connectionInfo.saveData || 
-                         connectionInfo.effectiveType === 'slow-2g' || 
-                         connectionInfo.effectiveType === '2g',
+    isSlowConnection:
+      connectionInfo.effectiveType === 'slow-2g' ||
+      connectionInfo.effectiveType === '2g' ||
+      connectionInfo.saveData,
+    shouldOptimizeImages:
+      connectionInfo.saveData ||
+      connectionInfo.effectiveType === 'slow-2g' ||
+      connectionInfo.effectiveType === '2g',
   };
 };

@@ -9,7 +9,7 @@ import {
   faEye,
   faListUl,
   faThLarge,
-  faSort
+  faSort,
 } from '@fortawesome/free-solid-svg-icons';
 import { PlaceInfo } from '../types';
 import Pagination from './Pagination';
@@ -62,7 +62,7 @@ const List = ({ places, isMobile }: ListProps) => {
   useEffect(() => {
     document.body.style.overflow = 'auto';
     document.body.classList.add('list__page-active');
-    
+
     return () => {
       document.body.style.overflow = 'hidden';
       document.body.classList.remove('list__page-active');
@@ -78,7 +78,7 @@ const List = ({ places, isMobile }: ListProps) => {
 
   const filteredPlaces = places.filter((place) => {
     const matchesType = place.type === type || type === '전체';
-    const matchesSearch = 
+    const matchesSearch =
       place.name.includes(value) ||
       place.addressDetail.includes(value) ||
       place.description.includes(value);
@@ -88,54 +88,48 @@ const List = ({ places, isMobile }: ListProps) => {
   const paginatedPlaces = currentPosts(filteredPlaces);
 
   const renderCards = () => (
-    <div className="list__cards-grid">
+    <div className='list__cards-grid'>
       {paginatedPlaces.map((place, index) => (
-        <div key={place.id || index} className="place__card">
-          <div className="place__card-header">
-            <h3 className="place__name">
-              <Link href={`/detail/${place.name}`}>
-                {place.name}
-              </Link>
+        <div key={place.id || index} className='place__card'>
+          <div className='place__card-header'>
+            <h3 className='place__name'>
+              <Link href={`/detail/${place.name}`}>{place.name}</Link>
             </h3>
-            <span className="place__type">
+            <span className='place__type'>
               <FontAwesomeIcon icon={faTag} />
               {place.type}
             </span>
           </div>
-          
+
           {place.attachmentUrlArray && place.attachmentUrlArray.length > 0 && (
-            <div className="place__image">
-              <img 
-                src={place.attachmentUrlArray[0]} 
+            <div className='place__image'>
+              <img
+                src={place.attachmentUrlArray[0]}
                 alt={place.name}
-                loading="lazy"
+                loading='lazy'
               />
             </div>
           )}
-          
-          <div className="place__content">
-            <div className="place__address">
+
+          <div className='place__content'>
+            <div className='place__address'>
               <FontAwesomeIcon icon={faMapMarkerAlt} />
               <span>{place.addressDetail}</span>
             </div>
-            
-            <p className="place__description">
-              {place.description.length > 100 
-                ? `${place.description.slice(0, 100)}...` 
-                : place.description
-              }
+
+            <p className='place__description'>
+              {place.description.length > 100
+                ? `${place.description.slice(0, 100)}...`
+                : place.description}
             </p>
           </div>
-          
-          <div className="place__actions">
-            <Link 
-              href={`/detail/${place.name}`}
-              className="place__detail-btn"
-            >
+
+          <div className='place__actions'>
+            <Link href={`/detail/${place.name}`} className='place__detail-btn'>
               <FontAwesomeIcon icon={faEye} />
               자세히 보기
             </Link>
-            <AddMyPlace place={place} size="medium" showLabel={false} />
+            <AddMyPlace place={place} size='medium' showLabel={false} />
           </div>
         </div>
       ))}
@@ -143,7 +137,7 @@ const List = ({ places, isMobile }: ListProps) => {
   );
 
   const renderTable = () => (
-    <div className="list__table-container">
+    <div className='list__table-container'>
       <table className='list__table'>
         <thead>
           <tr>
@@ -157,30 +151,25 @@ const List = ({ places, isMobile }: ListProps) => {
           {paginatedPlaces.map((place, index) => (
             <tr key={place.id || index}>
               <td className='list__table-name list__table-content'>
-                <Link
-                  href={`/detail/${place.name}`}
-                >
-                  {place.name}
-                </Link>
-                <span className="table__type">
+                <Link href={`/detail/${place.name}`}>{place.name}</Link>
+                <span className='table__type'>
                   <FontAwesomeIcon icon={faTag} />
                   {place.type}
                 </span>
               </td>
-              <td className="list__table-content">
+              <td className='list__table-content'>
                 <FontAwesomeIcon icon={faMapMarkerAlt} />
                 {place.addressDetail}
               </td>
               {!isMobile && (
-                <td className="list__table-content">
-                  {place.description.length > 50 
-                    ? `${place.description.slice(0, 50)}...` 
-                    : place.description
-                  }
+                <td className='list__table-content'>
+                  {place.description.length > 50
+                    ? `${place.description.slice(0, 50)}...`
+                    : place.description}
                 </td>
               )}
-              <td className="list__add-place-cell">
-                <AddMyPlace place={place} size="small" showLabel={false} />
+              <td className='list__add-place-cell'>
+                <AddMyPlace place={place} size='small' showLabel={false} />
               </td>
             </tr>
           ))}
@@ -192,18 +181,18 @@ const List = ({ places, isMobile }: ListProps) => {
   return (
     <div className='list__container'>
       {/* Header */}
-      <div className="list__header">
-        <div className="list__title">
+      <div className='list__header'>
+        <div className='list__title'>
           <FontAwesomeIcon icon={faListUl} />
           <h2>장소 목록</h2>
-          <span className="list__count">{filteredPlaces.length}개 장소</span>
+          <span className='list__count'>{filteredPlaces.length}개 장소</span>
         </div>
-        
+
         {/* Controls */}
-        <div className="list__controls">
-          <div className="list__search">
-            <div className="search__input-wrapper">
-              <FontAwesomeIcon icon={faSearch} className="search__icon" />
+        <div className='list__controls'>
+          <div className='list__search'>
+            <div className='search__input-wrapper'>
+              <FontAwesomeIcon icon={faSearch} className='search__icon' />
               <input
                 className='search__input'
                 type='text'
@@ -213,9 +202,9 @@ const List = ({ places, isMobile }: ListProps) => {
               />
             </div>
           </div>
-          
-          <div className="list__filters">
-            <div className="filter__group">
+
+          <div className='list__filters'>
+            <div className='filter__group'>
               <FontAwesomeIcon icon={faFilter} />
               <select
                 className='filter__select'
@@ -232,9 +221,9 @@ const List = ({ places, isMobile }: ListProps) => {
                 <option value='그 외 가볼만한 곳'>그 외 가볼만한 곳</option>
               </select>
             </div>
-            
+
             {!isMobile && (
-              <div className="filter__group">
+              <div className='filter__group'>
                 <FontAwesomeIcon icon={faSort} />
                 <select
                   className='filter__select'
@@ -247,22 +236,24 @@ const List = ({ places, isMobile }: ListProps) => {
                 </select>
               </div>
             )}
-            
-            <button 
-              className="view__toggle"
+
+            <button
+              className='view__toggle'
               onClick={toggleViewMode}
               title={viewMode === 'cards' ? '테이블 보기' : '카드 보기'}
             >
-              <FontAwesomeIcon icon={viewMode === 'cards' ? faListUl : faThLarge} />
+              <FontAwesomeIcon
+                icon={viewMode === 'cards' ? faListUl : faThLarge}
+              />
             </button>
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="list__content">
+      <div className='list__content'>
         {filteredPlaces.length === 0 ? (
-          <div className="list__empty">
+          <div className='list__empty'>
             <FontAwesomeIcon icon={faSearch} />
             <h3>검색 결과가 없습니다</h3>
             <p>다른 검색어나 필터를 시도해보세요.</p>
@@ -270,7 +261,7 @@ const List = ({ places, isMobile }: ListProps) => {
         ) : (
           <>
             {viewMode === 'cards' ? renderCards() : renderTable()}
-            
+
             <Pagination
               postsPerPage={postsPerPage}
               totalPosts={filteredPlaces.length}

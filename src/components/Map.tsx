@@ -5,7 +5,7 @@ import {
   faFilter,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback, memo } from 'react';
 import Link from 'next/link';
 import { dbService } from '../fBase';
 import { collection, onSnapshot } from 'firebase/firestore';
@@ -21,6 +21,7 @@ interface KakaoMap {
   setCenter: (latlng: KakaoLatLng) => void;
   getLevel: () => number;
   setLevel: (level: number) => void;
+  relayout: () => void;
 }
 
 interface KakaoLatLng {
@@ -88,7 +89,11 @@ declare global {
         Map: new (container: HTMLElement, options: KakaoMapOptions) => KakaoMap;
         LatLng: new (lat: number, lng: number) => KakaoLatLng;
         Marker: new (options: KakaoMarkerOptions) => KakaoMarker;
-        MarkerImage: new (src: string, size: KakaoSize, options?: { offset: KakaoPoint }) => KakaoMarkerImage;
+        MarkerImage: new (
+          src: string,
+          size: KakaoSize,
+          options?: { offset: KakaoPoint },
+        ) => KakaoMarkerImage;
         Size: new (width: number, height: number) => KakaoSize;
         Point: new (x: number, y: number) => KakaoPoint;
         CustomOverlay: new (options: KakaoOverlayOptions) => KakaoOverlay;
@@ -135,7 +140,11 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
     };
   };
 
-  const clickMobileHandler = (map: KakaoMap, overlay: KakaoOverlay, place: PlaceInfo) => {
+  const clickMobileHandler = (
+    map: KakaoMap,
+    overlay: KakaoOverlay,
+    place: PlaceInfo,
+  ) => {
     return function () {
       if (preOverlayRef.current) {
         preOverlayRef.current.setMap(null);
@@ -168,72 +177,73 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
     };
   };
 
-  const makeMarker = useCallback((place: PlaceInfo) => {
-    const content = document.createElement('div');
-    content.className = 'place__infowindow';
-    content.innerHTML = `
+  const makeMarker = useCallback(
+    (place: PlaceInfo) => {
+      const content = document.createElement('div');
+      content.className = 'place__infowindow';
+      content.innerHTML = `
       <div class="infowindow__content">
         <h5 class="infowindow__title">${place.name}</h5>
         <span class="infowindow__type">${place.type}</span>
       </div>
     `;
 
-    const position = new window.kakao.maps.LatLng(
-      parseFloat(place.geocode[0]),
-      parseFloat(place.geocode[1])
-    );
-    const overlay = new window.kakao.maps.CustomOverlay({
-      content,
-      position,
-      yAnchor: 2.5,
-      clickable: true,
-    });
+      const position = new window.kakao.maps.LatLng(
+        parseFloat(place.geocode[0]),
+        parseFloat(place.geocode[1]),
+      );
+      const overlay = new window.kakao.maps.CustomOverlay({
+        content,
+        position,
+        yAnchor: 2.5,
+        clickable: true,
+      });
 
-    let imageIconLocation = '';
+      let imageIconLocation = '';
 
-    if (place.type === '맛집') {
-      imageIconLocation =
-        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/restaurant.png';
-    } else if (place.type === '카페 & 베이커리') {
-      imageIconLocation =
-        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/cafe.png';
-    } else if (place.type === '숙소') {
-      imageIconLocation =
-        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/hotel.png';
-    } else if (place.type === '술집') {
-      imageIconLocation =
-        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/drink.png';
-    } else if (place.type === '풍경') {
-      imageIconLocation =
-        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/landscape.png';
-    } else {
-      imageIconLocation =
-        'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/basic.png';
-    }
+      if (place.type === '맛집') {
+        imageIconLocation =
+          'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/restaurant.png';
+      } else if (place.type === '카페 & 베이커리') {
+        imageIconLocation =
+          'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/cafe.png';
+      } else if (place.type === '숙소') {
+        imageIconLocation =
+          'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/hotel.png';
+      } else if (place.type === '술집') {
+        imageIconLocation =
+          'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/drink.png';
+      } else if (place.type === '풍경') {
+        imageIconLocation =
+          'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/landscape.png';
+      } else {
+        imageIconLocation =
+          'https://cdn.jsdelivr.net/gh/vangona/jeju-guide@main/src/img/basic.png';
+      }
 
-    const imageSrc = imageIconLocation,
-      imageSize = new window.kakao.maps.Size(40, 40),
-      imageOption = { offset: new window.kakao.maps.Point(20, 40) };
+      const imageSrc = imageIconLocation,
+        imageSize = new window.kakao.maps.Size(40, 40),
+        imageOption = { offset: new window.kakao.maps.Point(20, 40) };
 
-    const markerImage = new window.kakao.maps.MarkerImage(
-      imageSrc,
-      imageSize,
-      imageOption,
-    );
+      const markerImage = new window.kakao.maps.MarkerImage(
+        imageSrc,
+        imageSize,
+        imageOption,
+      );
 
-    const marker = new window.kakao.maps.Marker({
-      image: markerImage,
-      position,
-    });
+      const marker = new window.kakao.maps.Marker({
+        image: markerImage,
+        position,
+      });
 
-    // Add click feedback animation
-    const addClickFeedback = () => {
-      const markerEl = marker.getImage();
-      if (markerEl) {
-        // Add a subtle scale animation on click
-        const clickFeedback = document.createElement('div');
-        clickFeedback.className = 'marker-click-feedback';
-        clickFeedback.style.cssText = `
+      // Add click feedback animation
+      const addClickFeedback = () => {
+        const markerEl = marker.getImage();
+        if (markerEl) {
+          // Add a subtle scale animation on click
+          const clickFeedback = document.createElement('div');
+          clickFeedback.className = 'marker-click-feedback';
+          clickFeedback.style.cssText = `
           position: absolute;
           width: 60px;
           height: 60px;
@@ -243,44 +253,42 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
           pointer-events: none;
           z-index: 1000;
         `;
-        document.body.appendChild(clickFeedback);
-        setTimeout(() => clickFeedback.remove(), 600);
-      }
-    };
+          document.body.appendChild(clickFeedback);
+          setTimeout(() => clickFeedback.remove(), 600);
+        }
+      };
 
-    if (isMobile) {
-      window.kakao.maps.event.addListener(
-        marker,
-        'click',
-        () => {
+      if (isMobile) {
+        window.kakao.maps.event.addListener(marker, 'click', () => {
           addClickFeedback();
           clickMobileHandler(mapRef.current!, overlay, place)();
-        },
-      );
-      window.kakao.maps.event.addListener(mapRef.current, 'click', removeOverlay(overlay));
-    } else {
-      window.kakao.maps.event.addListener(
-        marker, 
-        'click', 
-        () => {
+        });
+        window.kakao.maps.event.addListener(
+          mapRef.current,
+          'click',
+          removeOverlay(overlay),
+        );
+      } else {
+        window.kakao.maps.event.addListener(marker, 'click', () => {
           addClickFeedback();
           clickHandler(place)();
-        }
-      );
-      window.kakao.maps.event.addListener(
-        marker,
-        'mouseover',
-        mouseOverHandler(mapRef.current!, overlay),
-      );
-      window.kakao.maps.event.addListener(
-        marker,
-        'mouseout',
-        mouseOutHandler(overlay),
-      );
-    }
+        });
+        window.kakao.maps.event.addListener(
+          marker,
+          'mouseover',
+          mouseOverHandler(mapRef.current!, overlay),
+        );
+        window.kakao.maps.event.addListener(
+          marker,
+          'mouseout',
+          mouseOutHandler(overlay),
+        );
+      }
 
-    return marker;
-  }, [isMobile]);
+      return marker;
+    },
+    [isMobile],
+  );
 
   const makeMap = useCallback(() => {
     if (!container.current) {
@@ -309,14 +317,14 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
         center: new window.kakao.maps.LatLng(33.3717, 126.5602),
         level,
       };
-      
+
       mapRef.current = new window.kakao.maps.Map(container.current, options);
       clustererRef.current = new window.kakao.maps.MarkerClusterer({
         map: mapRef.current,
         averageCenter: true,
         minLevel: 9,
       });
-      
+
       setIsMapLoading(false);
       setMapError(null);
     } catch (error) {
@@ -349,7 +357,7 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
         image: markerImage,
         position: locPosition,
       });
-      
+
       if (mapRef.current) {
         locationMarker.setMap(mapRef.current);
       }
@@ -414,24 +422,55 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
         markers.push(marker);
       }
     });
-    
+
     if (markers.length > 0) {
       clustererRef.current.addMarkers(markers);
     }
   }, [type, places, makeMarker]);
 
-
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(dbService, 'chats'), (snapshot) => {
-      const chatArray = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as ChatData[];
-      paintChat(chatArray);
-    });
+    const unsubscribe = onSnapshot(
+      collection(dbService, 'chats'),
+      (snapshot) => {
+        const chatArray = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as ChatData[];
+        paintChat(chatArray);
+      },
+    );
 
     return () => unsubscribe();
   }, []);
+
+  // Handle map resizing for responsive design
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    let resizeTimeout: NodeJS.Timeout;
+    
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (mapRef.current) {
+          mapRef.current.relayout();
+        }
+      }, 250); // Debounce resize events
+    };
+
+    // Listen for window resize events with debouncing
+    window.addEventListener('resize', handleResize);
+
+    // Only trigger initial resize on mount, not on every isMobile change
+    if (mapRef.current) {
+      handleResize();
+    }
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimeout);
+    };
+  }, []); // Remove isMobile dependency to prevent continuous re-renders
   if (mapError) {
     return (
       <div className='map__container map__container--error'>
@@ -468,8 +507,8 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
                 <option value='그 외 가볼만한 곳'>그 외 가볼만한 곳</option>
               </select>
             </div>
-            <button 
-              className='check-geolocation' 
+            <button
+              className='check-geolocation'
               onClick={onClickLocation}
               title='현재 위치 표시'
             >
@@ -491,10 +530,7 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
               <div className='marker__detail-header'>
                 <h4>{(currentPlace as PlaceInfo).name}</h4>
                 <div className='marker__detail-actions'>
-                  <AddMyPlace 
-                    place={currentPlace as PlaceInfo} 
-                    size='small'
-                  />
+                  <AddMyPlace place={currentPlace as PlaceInfo} size='small' />
                   <Link
                     href={`/detail/${(currentPlace as PlaceInfo).name}`}
                     className='btn-detail'
@@ -516,4 +552,4 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
   );
 };
 
-export default Map;
+export default memo(Map);
