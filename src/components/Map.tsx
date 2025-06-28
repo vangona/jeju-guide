@@ -125,6 +125,7 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
   const [mouseState, setMouseState] = useState(false);
   const [currentPlace, setCurrentPlace] = useState<PlaceInfo | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [zoomLevel, setZoomLevel] = useState<number>(3);
   const [geoLat, setGeoLat] = useState<number>(0);
   const [geoLon, setGeoLon] = useState<number>(0);
   const [isMapLoading, setIsMapLoading] = useState<boolean>(true);
@@ -133,6 +134,7 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
   const mapRef = useRef<KakaoMap | null>(null);
   const preOverlayRef = useRef<KakaoOverlay | null>(null);
   const clustererRef = useRef<KakaoClusterer | null>(null);
+  const labelsRef = useRef<KakaoOverlay[]>([]);
 
   const clickHandler = (place: PlaceInfo) => {
     return function () {
@@ -229,6 +231,84 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
       }
     };
   };
+
+  const makePlaceLabel = useCallback(
+    (place: PlaceInfo) => {
+      // 줌 레벨 10 이상: 마커만 표시 (라벨 없음)
+      if (!isMobile || zoomLevel >= 10) return null;
+
+      const position = new window.kakao.maps.LatLng(
+        parseFloat(place.geocode['0']),
+        parseFloat(place.geocode['1']),
+      );
+
+      const labelContent = document.createElement('div');
+      labelContent.className = 'place__label-mobile';
+      
+      // 줌 레벨에 따른 콘텐츠 결정
+      let innerHTML = '';
+      
+      if (zoomLevel <= 6) {
+        // 줌 레벨 6 이하: 이름 + 카테고리 + 설명
+        const displayName = place.name.length > 20 ? 
+          place.name.substring(0, 20) + '...' : place.name;
+        const displayDescription = place.description; // 글자 수 제한 제거
+        
+        innerHTML = `
+          <div class="place__label-content-detailed">
+            <div class="place__label-name">${displayName}</div>
+            <div class="place__label-type">${place.type}</div>
+            ${displayDescription ? `<div class="place__label-description">${displayDescription}</div>` : ''}
+          </div>
+        `;
+      } else if (zoomLevel >= 7) {
+        // 줌 레벨 7 이상 9 이하: 이름만
+        const displayName = place.name.length > 15 ? 
+          place.name.substring(0, 15) + '...' : place.name;
+        
+        innerHTML = `<span class="place__label-text">${displayName}</span>`;
+      }
+      
+      labelContent.innerHTML = innerHTML;
+
+      const labelOverlay = new window.kakao.maps.CustomOverlay({
+        content: labelContent,
+        position,
+        yAnchor: -0.5, // 마커 아래쪽에 위치
+        clickable: true,
+      });
+
+      // 라벨 클릭 시 상세 정보 표시
+      labelContent.addEventListener('click', () => {
+        handleChangeDetail(place);
+      });
+
+      return labelOverlay;
+    },
+    [isMobile, zoomLevel, handleChangeDetail],
+  );
+
+  const updatePlaceLabels = useCallback(() => {
+    // 기존 라벨들 제거
+    labelsRef.current.forEach(label => label.setMap(null));
+    labelsRef.current = [];
+
+    if (!isMobile || zoomLevel >= 10 || !mapRef.current) return;
+
+    // 필터링된 장소들에 대해 라벨 생성
+    const filteredPlaces = places.filter(place => {
+      if (type === '전체') return true;
+      return place.type === type;
+    });
+
+    filteredPlaces.forEach(place => {
+      const label = makePlaceLabel(place);
+      if (label) {
+        label.setMap(mapRef.current!);
+        labelsRef.current.push(label);
+      }
+    });
+  }, [isMobile, zoomLevel, places, type, makePlaceLabel]);
 
   const makeMarker = useCallback(
     (place: PlaceInfo) => {
@@ -378,6 +458,20 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
         minLevel: 9,
       });
 
+      // 줌 레벨 변경 이벤트 리스너 추가
+      window.kakao.maps.event.addListener(mapRef.current, 'zoom_changed', () => {
+        if (mapRef.current) {
+          const currentZoom = mapRef.current.getLevel();
+          console.log('현재 줌 레벨:', currentZoom);
+          setZoomLevel(currentZoom);
+        }
+      });
+
+      // 초기 줌 레벨 설정
+      const initialZoom = mapRef.current.getLevel();
+      console.log('초기 줌 레벨:', initialZoom);
+      setZoomLevel(initialZoom);
+
       setIsMapLoading(false);
       setMapError(null);
     } catch (error) {
@@ -480,6 +574,11 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
       clustererRef.current.addMarkers(markers);
     }
   }, [type, places, makeMarker]);
+
+  // 라벨 업데이트 useEffect
+  useEffect(() => {
+    updatePlaceLabels();
+  }, [updatePlaceLabels]);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
