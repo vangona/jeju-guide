@@ -118,11 +118,6 @@
 
 /* Performance optimizations */
 @media (max-width: 768px) {
-  /* Reduce animations on mobile */
-  * {
-    animation-duration: 0.2s !important;
-  }
-
   /* Optimize shadows */
   .placeCard,
   .modal__container,
@@ -162,16 +157,6 @@
   }
 }
 
-/* Loading states for mobile */
-@media (max-width: 768px) {
-  .loading-spinner {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-}
-
 /* Text optimization for readability */
 @media (max-width: 768px) {
   p,
@@ -179,10 +164,5 @@
   div {
     word-break: break-word;
     overflow-wrap: break-word;
-  }
-
-  /* Prevent text from being too small */
-  * {
-    min-font-size: 12px;
   }
 }

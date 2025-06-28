@@ -12,7 +12,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--seacolor, #9ebad0);
+  background: linear-gradient(135deg, var(--seacolor, #9ebad0) 0%, rgba(158, 186, 208, 0.9) 100%);
+  backdrop-filter: blur(10px);
   z-index: 9999;
 }
 
@@ -23,88 +24,10 @@
   gap: 16px;
 }
 
+/* 기본 스피너 (원형 회전) */
 .loading-spinner__circle {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.loading-spinner__wave {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.8);
-  margin: 0 4px;
-  animation: wave 1.4s ease-in-out infinite both;
-}
-
-.loading-spinner__wave:nth-child(1) {
-  animation-delay: -0.32s;
-}
-
-.loading-spinner__wave:nth-child(2) {
-  animation-delay: -0.16s;
-}
-
-.loading-spinner__wave:nth-child(3) {
-  animation-delay: 0s;
-}
-
-@keyframes wave {
-  0%,
-  80%,
-  100% {
-    transform: scale(0.8);
-    opacity: 0.5;
-  }
-  40% {
-    transform: scale(1.2);
-    opacity: 1;
-  }
-}
-
-.loading-spinner__message {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin: 0;
-  text-align: center;
-}
-
-/* 크기 변형 */
-.loading-spinner--small .loading-spinner__wave {
-  width: 8px;
-  height: 8px;
-  margin: 0 2px;
-}
-
-.loading-spinner--small .loading-spinner__message {
-  font-size: 0.75rem;
-}
-
-.loading-spinner--medium .loading-spinner__wave {
-  width: 12px;
-  height: 12px;
-  margin: 0 4px;
-}
-
-.loading-spinner--large .loading-spinner__wave {
-  width: 16px;
-  height: 16px;
-  margin: 0 6px;
-}
-
-.loading-spinner--large .loading-spinner__message {
-  font-size: 1rem;
-}
-
-/* 제주도 테마 로딩 애니메이션 */
-.loading-spinner--fullscreen .loading-spinner__circle::before {
-  content: '';
-  position: absolute;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   border: 3px solid rgba(255, 255, 255, 0.2);
   border-top: 3px solid rgba(255, 255, 255, 0.8);
   border-radius: 50%;
@@ -120,13 +43,173 @@
   }
 }
 
-/* 다크 모드 대응 */
-@media (prefers-color-scheme: dark) {
-  .loading-spinner__wave {
-    background-color: rgba(158, 186, 208, 0.8);
-  }
+/* 점 애니메이션 */
+.loading-spinner__dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
 
-  .loading-spinner__message {
-    color: rgba(158, 186, 208, 0.9);
+.loading-spinner__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.8);
+  animation: dot-bounce 1.4s ease-in-out infinite both;
+}
+
+.loading-spinner__dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.loading-spinner__dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+.loading-spinner__dot:nth-child(3) {
+  animation-delay: 0s;
+}
+
+@keyframes dot-bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* 펄스 애니메이션 */
+.loading-spinner__pulse {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.8);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+}
+
+.loading-spinner__message {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* 크기 변형 */
+.loading-spinner--small .loading-spinner__circle {
+  width: 24px;
+  height: 24px;
+  border-width: 2px;
+}
+
+.loading-spinner--small .loading-spinner__dot {
+  width: 6px;
+  height: 6px;
+}
+
+.loading-spinner--small .loading-spinner__pulse {
+  width: 20px;
+  height: 20px;
+}
+
+.loading-spinner--small .loading-spinner__message {
+  font-size: 0.75rem;
+}
+
+.loading-spinner--medium .loading-spinner__circle {
+  width: 40px;
+  height: 40px;
+  border-width: 3px;
+}
+
+.loading-spinner--medium .loading-spinner__dot {
+  width: 8px;
+  height: 8px;
+}
+
+.loading-spinner--medium .loading-spinner__pulse {
+  width: 32px;
+  height: 32px;
+}
+
+.loading-spinner--large .loading-spinner__circle {
+  width: 56px;
+  height: 56px;
+  border-width: 4px;
+}
+
+.loading-spinner--large .loading-spinner__dot {
+  width: 12px;
+  height: 12px;
+}
+
+.loading-spinner--large .loading-spinner__pulse {
+  width: 48px;
+  height: 48px;
+}
+
+.loading-spinner--large .loading-spinner__message {
+  font-size: 1rem;
+}
+
+/* 풀스크린에서는 더 큰 스피너 */
+.loading-spinner--fullscreen .loading-spinner__circle {
+  width: 60px;
+  height: 60px;
+  border-width: 4px;
+}
+
+.loading-spinner--fullscreen .loading-spinner__dots {
+  gap: 8px;
+}
+
+.loading-spinner--fullscreen .loading-spinner__dot {
+  width: 12px;
+  height: 12px;
+}
+
+.loading-spinner--fullscreen .loading-spinner__pulse {
+  width: 50px;
+  height: 50px;
+}
+
+.loading-spinner--fullscreen .loading-spinner__message {
+  font-size: 1rem;
+  margin-top: 8px;
+}
+
+/* 접근성: 애니메이션 줄이기 */
+@media (prefers-reduced-motion: reduce) {
+  .loading-spinner__circle {
+    animation-duration: 2s;
+  }
+  
+  .loading-spinner__dot {
+    animation-duration: 2s;
+  }
+  
+  .loading-spinner__pulse {
+    animation-duration: 2.5s;
   }
 }

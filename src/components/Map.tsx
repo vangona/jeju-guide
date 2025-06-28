@@ -9,7 +9,6 @@ import React, { useEffect, useRef, useState, useCallback, memo } from 'react';
 import Link from 'next/link';
 import { dbService } from '../fBase';
 import { collection, onSnapshot } from 'firebase/firestore';
-import Saychat from './Saychat';
 import LoadingSpinner from './LoadingSpinner';
 import AddMyPlace from './AddMyPlace';
 import type { PlaceInfo } from '../types';
@@ -545,7 +544,6 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
               </p>
             </div>
           )}
-          {chatState && <Saychat latitude={geoLat} longitude={geoLon} />}
         </div>
       </div>
     </>

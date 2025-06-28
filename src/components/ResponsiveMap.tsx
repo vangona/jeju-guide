@@ -20,7 +20,6 @@ import {
   useContainerQuery,
   useNetworkOptimization,
 } from '../hooks/useResponsive';
-import Saychat from './Saychat';
 import type { PlaceInfo } from '../types';
 
 /* global kakao */
@@ -316,9 +315,6 @@ const ResponsiveMap = ({
             )}
           </div>
         </div>
-
-        {/* 채팅 컴포넌트 */}
-        {chatState && <Saychat />}
       </div>
     </div>
   );
