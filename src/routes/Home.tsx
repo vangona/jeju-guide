@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useRouter } from 'next/router';
 import List from '../components/List';
 import Map from '../components/Map';
 import Modal from '../components/Modal';
@@ -20,8 +21,11 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
   const [detail, setDetail] = useState<PlaceInfo | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [places, setPlaces] = useState<PlaceInfo[]>([]);
-  const [viewType, setViewType] = useState('지도');
   const [showAIChat, setShowAIChat] = useState(false);
+  const router = useRouter();
+
+  // Query string에서 뷰 타입 가져오기 (기본값: '지도')
+  const viewType = (router.query.view as string) || '지도';
 
   const getPlaces = useCallback(() => {
     const unsubscribe = onSnapshot(collection(dbService, 'places'), (snapshot) => {
@@ -39,8 +43,12 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
   }, []);
 
   const handleViewTypeChange = useCallback((newViewType: string) => {
-    setViewType(newViewType);
-  }, []);
+    // Query string 업데이트
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, view: newViewType }
+    }, undefined, { shallow: true });
+  }, [router]);
 
   const handlePlaceSelect = useCallback((place: PlaceInfo) => {
     // AI Chat에서 장소 선택 시 모달 열기
