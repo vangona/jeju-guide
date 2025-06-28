@@ -1,39 +1,46 @@
-@import 'css/variables.css';
-@import 'css/Home.css';
-@import 'css/Auth.css';
-@import 'css/Post.css';
-@import 'css/Map.css';
-@import 'css/Map-detail.css';
-@import 'css/List.css';
-@import 'css/Pagination.css';
-@import 'css/Detail.css';
-@import 'css/Tips.css';
-@import 'css/Modal.css';
-@import 'css/Navigation.css';
-@import 'css/Profile.css';
-@import 'css/AddMyPlace.css';
-@import 'css/MyPlace.css';
-@import 'css/Edit.css';
-@import 'css/Admin.css';
-@import 'css/LoadingSpinner.css';
+/* CSS @import 문들은 반드시 파일 상단에 위치해야 함 */
+@import './css/variables.css';
+@import './css/Home.css';
+@import './css/Auth.css';
+@import './css/Post.css';
+@import './css/Map.css';
+@import './css/Map-detail.css';
+@import './css/List.css';
+@import './css/Pagination.css';
+@import './css/Detail.css';
+@import './css/Tips.css';
+@import './css/Modal.css';
+@import './css/Navigation.css';
+@import './css/Profile.css';
+@import './css/AddMyPlace.css';
+@import './css/MyPlace.css';
+@import './css/Edit.css';
+@import './css/Admin.css';
+@import './css/LoadingSpinner.css';
 
-html,
-body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
+/* Tailwind CSS v4 디렉티브 */
+@import "tailwindcss";
 
-body {
-  background-color: var(--seacolor);
-  margin: 0;
-  padding: 0;
-}
-
-#root {
-  width: 100%;
-  height: 100%;
-  position: relative;
+/* Tailwind CSS와 기존 스타일 호환성을 위한 커스텀 베이스 */
+@layer base {
+  /* 기존 프로젝트의 기본 설정 유지 */
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  body {
+    background-color: var(--seacolor);
+    margin: 0;
+    padding: 0;
+  }
+  
+  #root {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
 }
 
 .app__container {

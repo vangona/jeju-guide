@@ -9,6 +9,7 @@ import { dbService } from '../fBase';
 import { collection, onSnapshot } from 'firebase/firestore';
 import Profile from './Profile';
 import type { PlaceInfo, UserObj } from '../types';
+import { cx } from '../utils';
 
 interface HomeProps {
   isMobile: boolean;
@@ -86,7 +87,7 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
       />
       <button
         onClick={() => setShowAIChat(true)}
-        className='ai-chat-fab'
+        className={cx('ai-chat-fab', { 'invisible': showAIChat })}
         title='AI 여행 가이드와 채팅하기'
       >
         <div className='fab-icon-container'>

@@ -276,8 +276,8 @@ const AIChat: React.FC<AIChatProps> = ({
           borderRadius: '20px',
           width: '100%',
           maxWidth: isMobile ? '100%' : '450px',
-          height: isMobile ? 'calc(100vh - 250px)' : 'auto', // 네비게이션 높이 고려
-          maxHeight: isMobile ? 'calc(100vh - 250px)' : '600px',
+          height: isMobile ? 'calc(100vh - 150px)' : 'auto', // 네비게이션 높이 고려
+          maxHeight: isMobile ? 'calc(100vh - 150px)' : '600px',
           display: 'flex',
           flexDirection: 'column',
           boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
