@@ -238,8 +238,8 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
       if (!isMobile || zoomLevel >= 10) return null;
 
       const position = new window.kakao.maps.LatLng(
-        parseFloat(place.geocode['0']),
-        parseFloat(place.geocode['1']),
+        parseFloat(place.geocode[0]),
+        parseFloat(place.geocode[1]),
       );
 
       const labelContent = document.createElement('div');
@@ -274,7 +274,7 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
       const labelOverlay = new window.kakao.maps.CustomOverlay({
         content: labelContent,
         position,
-        yAnchor: -0.5, // 마커 아래쪽에 위치
+        yAnchor: 1, // 라벨의 하단이 좌표점에 위치하도록 조정
         clickable: true,
       });
 
@@ -563,17 +563,22 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
     const markers: KakaoMarker[] = [];
     clustererRef.current.clear();
 
-    places.forEach((place) => {
-      if (type === '전체' || place.type === type) {
-        const marker = makeMarker(place);
-        markers.push(marker);
-      }
-    });
+    // 모바일에서 라벨이 표시되는 줌 레벨에서는 마커 숨김
+    const shouldShowMarkers = !isMobile || zoomLevel >= 10;
 
-    if (markers.length > 0) {
-      clustererRef.current.addMarkers(markers);
+    if (shouldShowMarkers) {
+      places.forEach((place) => {
+        if (type === '전체' || place.type === type) {
+          const marker = makeMarker(place);
+          markers.push(marker);
+        }
+      });
+
+      if (markers.length > 0) {
+        clustererRef.current.addMarkers(markers);
+      }
     }
-  }, [type, places, makeMarker]);
+  }, [type, places, makeMarker, isMobile, zoomLevel]);
 
   // 라벨 업데이트 useEffect
   useEffect(() => {

@@ -572,10 +572,9 @@
 
 /* 모바일 장소 라벨 스타일 */
 .place__label-mobile {
-  transform: translateX(-50%);
-  margin-top: 8px;
   cursor: pointer;
   user-select: none;
+  position: relative;
 }
 
 .place__label-text {
@@ -595,6 +594,22 @@
   max-width: 140px;
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative;
+}
+
+/* 간단한 라벨 화살표 */
+.place__label-text::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid rgba(255, 255, 255, 0.95);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 /* 상세 라벨 스타일 (줌 레벨 6+) */
@@ -611,6 +626,22 @@
   word-wrap: break-word;
   overflow-wrap: break-word;
   box-sizing: border-box;
+  position: relative;
+}
+
+/* 상세 라벨 화살표 */
+.place__label-content-detailed::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid rgba(255, 255, 255, 0.95);
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.1));
 }
 
 .place__label-name {
@@ -674,6 +705,7 @@
 .place__label-mobile:hover .place__label-description {
   display: block;
   -webkit-line-clamp: unset;
+  line-clamp: unset;
   -webkit-box-orient: unset;
   overflow: visible;
   white-space: normal;
