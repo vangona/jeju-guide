@@ -116,14 +116,15 @@ interface ChatData {
 interface MapProps {
   places: PlaceInfo[];
   isMobile: boolean;
-  handleChangeDetail: (newDetail: PlaceInfo) => void;
+  handleChangeDetail: (newDetail: PlaceInfo | null) => void;
   chatState: boolean;
 }
 
 const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
   const [type, setType] = useState('전체');
   const [mouseState, setMouseState] = useState(false);
-  const [currentPlace, setCurrentPlace] = useState({});
+  const [currentPlace, setCurrentPlace] = useState<PlaceInfo | null>(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [geoLat, setGeoLat] = useState<number>(0);
   const [geoLon, setGeoLon] = useState<number>(0);
   const [isMapLoading, setIsMapLoading] = useState<boolean>(true);
@@ -162,10 +163,55 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
     };
   };
 
-  const mouseOverHandler = (map: KakaoMap, overlay: KakaoOverlay) => {
+  const mouseOverHandler = (overlay: KakaoOverlay, place: PlaceInfo) => {
     return function () {
-      overlay.setMap(map);
+      // 기존 카카오 오버레이는 숨김
+      overlay.setMap(null);
+      
       setMouseState(true);
+      setCurrentPlace(place);
+      
+      // 마우스 이벤트 리스너 추가로 위치 추적
+      const handleMouseMove = (e: MouseEvent) => {
+        const tooltipWidth = 250;
+        const tooltipHeight = 100;
+        const padding = 16;
+        const bottomPadding = isMobile ? 80 : padding;
+        
+        let x = e.clientX + padding;
+        let y = e.clientY - tooltipHeight - padding;
+        
+        // 수직 위치 조정
+        if (y < padding) {
+          // 상단에 공간이 없으면 마우스 아래에 표시
+          y = e.clientY + padding;
+        } else if (y + tooltipHeight > window.innerHeight - bottomPadding) {
+          // 하단에 공간이 없으면 위쪽으로 조정
+          y = window.innerHeight - tooltipHeight - bottomPadding;
+        }
+        
+        // 수평 위치 조정
+        if (x + tooltipWidth > window.innerWidth - padding) {
+          // 우측에 공간이 없으면 마우스 왼쪽에 표시
+          x = e.clientX - tooltipWidth - padding;
+        } else if (x < padding) {
+          // 좌측에 공간이 없으면 오른쪽으로 조정
+          x = padding;
+        }
+        
+        setTooltipPosition({ x, y });
+      };
+      
+      // 초기 위치를 화면 중앙으로 설정
+      const initialX = window.innerWidth / 2;
+      const initialY = window.innerHeight / 2;
+      handleMouseMove({ clientX: initialX, clientY: initialY } as MouseEvent);
+      
+      // 마우스 움직임 추적
+      document.addEventListener('mousemove', handleMouseMove);
+      
+      // 클린업을 위해 이벤트 리스너 제거 함수를 저장
+      (window as any).tooltipMouseMoveHandler = handleMouseMove;
     };
   };
 
@@ -173,6 +219,14 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
     return function () {
       overlay.setMap(null);
       setMouseState(false);
+      setCurrentPlace(null);
+      
+      // 마우스 이벤트 리스너 제거
+      const handler = (window as any).tooltipMouseMoveHandler;
+      if (handler) {
+        document.removeEventListener('mousemove', handler);
+        (window as any).tooltipMouseMoveHandler = null;
+      }
     };
   };
 
@@ -275,7 +329,7 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
         window.kakao.maps.event.addListener(
           marker,
           'mouseover',
-          mouseOverHandler(mapRef.current!, overlay),
+          mouseOverHandler(overlay, place),
         );
         window.kakao.maps.event.addListener(
           marker,
@@ -546,6 +600,31 @@ const Map = ({ places, isMobile, handleChangeDetail, chatState }: MapProps) => {
           )}
         </div>
       </div>
+      
+      {/* 고정 위치 툴팁 - 데스크톱용 */}
+      {!isMobile && mouseState && currentPlace && (
+        <div
+          className="place__tooltip-fixed"
+          style={{
+            position: 'fixed',
+            left: `${tooltipPosition.x}px`,
+            top: `${tooltipPosition.y}px`,
+            zIndex: 1001,
+            pointerEvents: 'none', // 마우스 이벤트 방지
+          }}
+        >
+          <div className="place__tooltip-content">
+            <h5 className="place__tooltip-title">{currentPlace.name}</h5>
+            <span className="place__tooltip-type">{currentPlace.type}</span>
+            {currentPlace.description && (
+              <p className="place__tooltip-description">
+                {currentPlace.description.slice(0, 60)}
+                {currentPlace.description.length > 60 && '...'}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 };

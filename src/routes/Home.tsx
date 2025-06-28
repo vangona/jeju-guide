@@ -47,6 +47,7 @@ const Home = ({ isMobile, userObj }: HomeProps) => {
     setDetail(place);
   }, []);
 
+
   useEffect(() => {
     const unsubscribe = getPlaces();
     return () => {
